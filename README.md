@@ -26,7 +26,6 @@ A centralised, database-driven web application built for **Sky's Global Apps Eng
 - [Testing](#-testing)
 - [Git Workflow](#-git-workflow)
 - [Security](#-security)
-- [Deadlines](#-deadlines)
 
 ---
 
