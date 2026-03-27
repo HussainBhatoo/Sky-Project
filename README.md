@@ -46,8 +46,8 @@ Sky's engineering team registry is currently maintained in a single Excel file â
 | Student | GitHub | Allocated Feature |
 |---------|--------|-------------------|
 | Student 1 | [@username] | *(add your module)* |
-| Student 2 | @username | *(add your module)* |
-| Mohammed Suliman Roshid | [@Suliman Roshid] (https://github.com/SulimanRoshid) | *(Student 3)* |
+| Lucas Garcia Korotkov | @LucasGarcia | (https://github.com/fullysmart) | (Student 2) |
+| Mohammed Suliman Roshid | [@Suliman Roshid] (https://github.com/SulimanRoshid) | (Student 3) |
 | Student 4 | @username | *(add your module)* |
 | Student 5 | @username | *(add your module)* |
 
