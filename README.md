@@ -12,6 +12,11 @@ The **Sky Engineering Team Registry** is a centralized platform designed to mana
 - **Meeting Scheduler:** Integrated system for managing standups and project meetings.
 - **Audit & Reporting:** Exportable reports (PDF/Excel) for administrative oversight and audit logging.
 
+## 🚀 Quick Start (Local Preview)
+> **[SEE THE PREVIEW GUIDE](./PREVIEW_GUIDE.md)**
+
+Follow the link above for exact, step-by-step instructions (cloning, virtual environment, and running the server).
+
 ## 👥 Team Mapping & Responsibilities
 | Student | Name | Role/App | Shared Features |
 | :--- | :--- | :--- | :--- |

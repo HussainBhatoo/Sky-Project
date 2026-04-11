@@ -2,21 +2,56 @@
 /* Design system from Section 17 of CWK2_MASTER_PLAN.md */
 
 :root {
-    --primary: #000FF5;         /* Sky Blue */
-    --primary-dark: #000CC4;
-    --focus-blue: #007ECC;
-    --surface: #FAFAFD;
-    --surface-strong: #F3F5FF;
+    --font-size: 16px;
+
+    /* ===== SKY UI BASE COLOURS ===== */
+    --primary: #000ff5;         /* Sky Blue */
+    --primary-dark: #000cc4;
+    --focus-blue: #007ecc;
+    --surface: #fafafd;
+    --surface-strong: #f3f5ff;
+    --tint-5: rgba(0, 15, 245, 0.05);
+    --tint-10: rgba(0, 15, 245, 0.1);
+    --header-blue: #0c1b87;
     --text: #333333;
-    --text-muted: #666666;
-    --success: #007E13;
-    --warning: #F15A22;
-    --error: #DD1717;
-    --border-radius: 0.75rem;
-    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
-    --sidebar-width: 280px;
-    --header-height: 70px;
+
+    --success: #007e13;
+    --error: #dd1717;
+    --warning: #f15a22;
+
+    /* ===== SKY SPECTRUM ===== */
+    --spectrum-1: #e4563e;
+    --spectrum-2: #e70296;
+    --spectrum-3: #dc01b1;
+    --spectrum-4: #be01c4;
+    --spectrum-5: #9f11e7;
+    --spectrum-6: #3d5fdf;
+
+    --sky-spectrum: linear-gradient(
+        90deg,
+        var(--spectrum-1) 0%,
+        var(--spectrum-2) 20%,
+        var(--spectrum-3) 40%,
+        var(--spectrum-4) 60%,
+        var(--spectrum-5) 80%,
+        var(--spectrum-6) 100%
+    );
+
+    --sky-spectrum-diagonal: linear-gradient(
+        135deg,
+        var(--spectrum-1) 0%,
+        var(--spectrum-2) 20%,
+        var(--spectrum-3) 40%,
+        var(--spectrum-4) 60%,
+        var(--spectrum-5) 80%,
+        var(--spectrum-6) 100%
+    );
+
+    --glass-bg: rgba(255, 255, 255, 0.78);
+    --sidebar-width: 250px;
+    --header-height: 64px;
+    --radius: 0.75rem;
+    --font-weight-medium: 600;
 }
 
 * {
@@ -43,7 +78,7 @@ body {
 /* Sidebar */
 .sidebar {
     width: var(--sidebar-width);
-    background: linear-gradient(180deg, #020024 0%, var(--primary-dark) 50%, var(--primary) 100%);
+    background: linear-gradient(180deg, var(--header-blue) 0%, var(--primary-dark) 55%, var(--primary) 100%);
     color: white;
     position: fixed;
     height: 100vh;
@@ -53,6 +88,17 @@ body {
     display: flex;
     flex-direction: column;
     padding: 1.5rem;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 6px;
+    background: var(--sky-spectrum);
 }
 
 .sidebar-header {
@@ -109,8 +155,10 @@ body {
 
 .top-navbar {
     height: var(--header-height);
-    background: white;
-    border-bottom: 1px solid #eee;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -118,6 +166,16 @@ body {
     position: sticky;
     top: 0;
     z-index: 900;
+}
+
+.top-navbar::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 3px;
+    background: var(--sky-spectrum);
 }
 
 .search-bar {
