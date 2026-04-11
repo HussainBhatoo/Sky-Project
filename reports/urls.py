@@ -3,5 +3,6 @@ from . import views
 
 app_name = 'reports'
 
-urlpatterns = [path('', views.placeholder, name='reports_dashboard')]
-
+urlpatterns = [
+    path('', views.placeholder, name='reports_home'),
+]

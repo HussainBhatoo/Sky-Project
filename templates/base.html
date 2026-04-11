@@ -4,123 +4,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Sky Engineering Team Registry{% endblock %}</title>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    <!-- Main Style -->
+    <title>{% block title %}Sky Engineering Registry{% endblock %}</title>
+    
+    <!-- 🧬 Global Design System -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    {% block extra_css %}{% endblock %}
+    
+    <!-- 📦 Boxicons for modern iconography -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    
+    {% block extra_head %}{% endblock %}
 </head>
 <body>
+
     <div class="app-container">
-        <!-- Sidebar Navigation (Section 11.4) -->
-        <aside class="sidebar">
+        <!-- 🧭 Sidebar Navigation (Inherited by all 5 apps) -->
+        <nav class="sidebar">
             <div class="sidebar-header">
-                <span class="sky-logo">sky</span>
-                <span style="font-size: 0.8rem; opacity: 0.7;">TEAM REGISTRY</span>
+                <div class="sky-logo">SKY <span style="font-weight: 300; font-size: 0.8rem; opacity: 0.8;">| TEAM Registry</span></div>
             </div>
-            
-            <nav class="nav-links">
-                <div class="nav-item">
+
+            <ul class="nav-links">
+                <!-- 1. General Dashboard -->
+                <li class="nav-item">
                     <a href="{% url 'core:dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
-                        🏠 Dashboard
+                        <i class='bx bxs-dashboard'></i> Dashboard
                     </a>
-                </div>
-                <div class="nav-item">
-                    <a href="{% url 'teams:teams_list' %}" class="nav-link {% if 'teams' in request.path %}active{% endif %}">
-                        👥 Teams
+                </li>
+
+                <!-- 2. Student 1: Teams (Riagul) -->
+                <li class="nav-item">
+                    <a href="{% url 'teams:team_list' %}" class="nav-link {% if 'teams' in request.path %}active{% endif %}">
+                        <i class='bx bxs-group'></i> Engineering Teams
                     </a>
-                </div>
-                <div class="nav-item">
-                    <a href="{% url 'organisation:departments' %}" class="nav-link {% if 'organisation' in request.path and 'dependencies' not in request.path %}active{% endif %}">
-                        🏢 Organisation
+                </li>
+
+                <!-- 3. Student 2: Organisation (Lucas) -->
+                <li class="nav-item">
+                    <a href="{% url 'organisation:org_chart' %}" class="nav-link {% if 'organisation' in request.path %}active{% endif %}">
+                        <i class='bx bxs-institution' ></i> Organisation
                     </a>
-                </div>
-                <div class="nav-item">
-                    <a href="{% url 'organisation:dependencies' %}" class="nav-link {% if 'dependencies' in request.path %}active{% endif %}">
-                        🔗 Dependencies
-                    </a>
-                </div>
-                <div class="nav-item">
+                </li>
+
+                <!-- 4. Student 3: Messages (Suliman) -->
+                <li class="nav-item">
                     <a href="{% url 'messages_app:inbox' %}" class="nav-link {% if 'messages' in request.path %}active{% endif %}">
-                        💬 Messages
+                        <i class='bx bxs-message-square-detail' ></i> Messages Hub
                     </a>
-                </div>
-                <div class="nav-item">
-                    <a href="{% url 'schedule:schedule_home' %}" class="nav-link {% if 'schedule' in request.path %}active{% endif %}">
-                        📅 Schedule
-                    </a>
-                </div>
-                <div class="nav-item">
-                    <a href="{% url 'reports:reports_dashboard' %}" class="nav-link {% if 'reports' in request.path %}active{% endif %}">
-                        📊 Reports
-                    </a>
-                </div>
-                <div class="nav-item">
-                    <a href="{% url 'core:audit_log' %}" class="nav-link {% if 'audit-log' in request.path %}active{% endif %}">
-                        📋 Audit Log
-                    </a>
-                </div>
-                
-                {% if user.is_superuser %}
-                <div class="nav-item" style="margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1rem;">
-                    <a href="/admin/" class="nav-link">
-                        ⚙️ Admin Panel
-                    </a>
-                </div>
-                {% endif %}
-            </nav>
+                </li>
 
-            <div class="sidebar-footer" style="margin-top: auto; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1);">
-                <div style="font-size: 0.8rem; opacity: 0.6;">v1.0.0 Alpha</div>
+                <!-- 5. Student 4: Schedule (Maurya) -->
+                <li class="nav-item">
+                    <a href="{% url 'schedule:calendar' %}" class="nav-link {% if 'schedule' in request.path %}active{% endif %}">
+                        <i class='bx bxs-calendar-event' ></i> Master Schedule
+                    </a>
+                </li>
+
+                <li class="nav-divider" style="height: 1px; background: rgba(255,255,255,0.1); margin: 1rem 0;"></li>
+
+                <!-- 6. Student 5: Reports (Hussain) -->
+                <li class="nav-item">
+                    <a href="{% url 'reports:reports_home' %}" class="nav-link {% if 'reports' in request.path %}active{% endif %}">
+                        <i class='bx bxs-file-pdf' ></i> Analytics & Reports
+                    </a>
+                </li>
+            </ul>
+
+            <!-- 👤 User Footer -->
+            <div class="sidebar-footer" style="padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <div style="width: 32px; height: 32px; background: white; color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                        {{ user.username|slice:":1"|upper }}
+                    </div>
+                    <div>
+                        <p style="font-size: 0.8rem; font-weight: 600;">@{{ user.username }}</p>
+                        <a href="{% url 'logout' %}" style="font-size: 0.7rem; color: rgba(255,255,255,0.6); text-decoration: none;">Sign Out</a>
+                    </div>
+                </div>
             </div>
-        </aside>
+        </nav>
 
-        <!-- Main Wrapper -->
+        <!-- 🖥️ Main Viewport -->
         <div class="main-wrapper">
-            <!-- Top Navbar -->
+            <!-- 🔍 Top Utility Bar -->
             <header class="top-navbar">
                 <div class="search-bar">
-                    <span>🔍</span>
-                    <input type="text" placeholder="Search teams, members, etc...">
+                    <i class='bx bx-search' style="color: #999;"></i>
+                    <input type="text" placeholder="Search teams, leads or projects...">
                 </div>
-                
+
                 <div class="user-nav">
-                    <div class="notifications">
-                        <span style="font-size: 1.2rem; cursor: pointer;">🔔</span>
-                    </div>
-                    {% if user.is_authenticated %}
-                    <div class="profile" style="display: flex; align-items: center; gap: 0.75rem;">
-                        <span style="font-weight: 600;">{{ user.username }}</span>
-                        <a href="{% url 'accounts:logout' %}" style="text-decoration: none; font-size: 0.8rem; color: var(--error);">Logout</a>
-                    </div>
-                    {% else %}
-                    <div class="auth-links">
-                        <a href="{% url 'accounts:login' %}" style="text-decoration: none; color: var(--primary); font-weight: 600;">Login</a>
-                    </div>
-                    {% endif %}
+                    <div class="badge-blue">SKY EMPLOYEE</div>
+                    <i class='bx bx-bell' style="font-size: 1.25rem; color: var(--header-blue); cursor: pointer;"></i>
                 </div>
             </header>
 
-            <!-- Main Content Area -->
+            <!-- 📍 Page Content -->
             <main class="content-area animate-fade">
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }}" style="padding: 1rem; border-radius: var(--border-radius); margin-bottom: 2rem; background: var(--surface-strong); border-left: 4px solid var(--primary);">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-
                 {% block content %}
-                <!-- Child templates will fill this -->
+                <!-- Student app content goes here -->
                 {% endblock %}
             </main>
         </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="{% static 'js/main.js' %}"></script>
+    <!-- 💡 Shared Scripts -->
+    <script>
+        // Simple logic to maintain the UI feel
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("Sky Engineering Hub Loaded");
+        });
+    </script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

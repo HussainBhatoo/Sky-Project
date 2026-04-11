@@ -3,5 +3,6 @@ from . import views
 
 app_name = 'schedule'
 
-urlpatterns = [path('', views.placeholder, name='schedule_home')]
-
+urlpatterns = [
+    path('', views.placeholder, name='calendar'),
+]

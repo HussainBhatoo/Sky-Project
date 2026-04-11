@@ -1,9 +1,9 @@
 from django.urls import path
-from django.contrib.auth import views as auth_views
-
-app_name = 'accounts'
+from .views import SkyLoginView, SkySignupView, logout_view
 
 urlpatterns = [
-    path('login/', auth_views.LoginView.as_view(template_name='accounts/login.html'), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    # Auth Routes
+    path('login/', SkyLoginView.as_view(), name='login'),
+    path('signup/', SkySignupView.as_view(), name='signup'),
+    path('logout/', logout_view, name='logout'),
 ]

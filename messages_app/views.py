@@ -1,6 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 
 def placeholder(request):
-    return render(request, 'base.html')
-
+    """Temporary placeholder for student modules"""
+    return render(request, 'placeholder.html', {'app_name': 'Communications Hub'})

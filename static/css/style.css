@@ -210,20 +210,64 @@ body {
 .card {
     background: white;
     padding: 1.5rem;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-sm);
-    border: 1px solid #f0f0f0;
+    border-radius: var(--radius);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.05);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+.glass-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: var(--radius);
+    padding: 2rem;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+}
+
 .card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.spectrum-text {
+    background: var(--sky-spectrum);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+}
+
+/* Forms */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--header-blue);
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius);
+    border: 1px solid #ddd;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus {
+    border-color: var(--spectrum-2);
+    box-shadow: 0 0 0 3px rgba(231, 2, 150, 0.1);
 }
 
 .btn {
     padding: 0.75rem 1.5rem;
-    border-radius: var(--border-radius);
+    border-radius: var(--radius);
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
@@ -236,12 +280,14 @@ body {
 }
 
 .btn-primary {
-    background-color: var(--primary);
+    background: var(--sky-spectrum);
     color: white;
+    box-shadow: 0 4px 14px 0 rgba(231, 2, 150, 0.3);
 }
 
 .btn-primary:hover {
-    background-color: var(--primary-dark);
+    opacity: 0.9;
+    transform: scale(1.02);
 }
 
 .badge {
@@ -265,6 +311,7 @@ body {
 /* Utils */
 .mb-2 { margin-bottom: 2rem; }
 .text-center { text-align: center; }
+.mt-1 { margin-top: 1rem; }
 
 /* Micro-animations */
 @keyframes fadeIn {

@@ -3,5 +3,6 @@ from . import views
 
 app_name = 'messages_app'
 
-urlpatterns = [path('inbox/', views.placeholder, name='inbox')]
-
+urlpatterns = [
+    path('', views.placeholder, name='inbox'),
+]

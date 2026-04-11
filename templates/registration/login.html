@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Sky Engineering Team Registry</title>
+    <!-- Importing our Global Design System -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        /* Special styles for the Auth background (The Sky Hub look) */
+        body {
+            background: var(--sky-spectrum-diagonal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .login-container {
+            width: 100%;
+            max-width: 450px;
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        .logo-box {
+            color: white;
+            text-align: center;
+            margin-bottom: 2rem;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <!-- Dashboard Branded Header -->
+        <div class="logo-box">
+            <h1 class="sky-logo">SKY</h1>
+            <p>Team Registry & Collaboration Hub</p>
+        </div>
+
+        <!-- Glassmorphism Form Container -->
+        <div class="glass-card">
+            <h2 class="mb-2 text-center spectrum-text">Welcome Back</h2>
+            
+            <form method="post">
+                {% csrf_token %}
+                
+                <!-- Simple rendering of Django Auth Form -->
+                {% if form.errors %}
+                    <div class="badge-red mb-2 p-2 rounded" style="padding: 1rem; border-radius: 0.5rem;">
+                        Invalid credentials. Please try again.
+                    </div>
+                {% endif %}
+
+                <div class="form-group">
+                    <label for="id_username">Username</label>
+                    <input type="text" name="username" id="id_username" class="form-control" placeholder="e.g. mpatel01" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_password">Password</label>
+                    <input type="password" name="password" id="id_password" class="form-control" placeholder="••••••••" required>
+                </div>
+
+                <div class="mt-1">
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Sign In</button>
+                </div>
+            </form>
+
+            <div class="text-center mt-1">
+                <p style="font-size: 0.9rem; color: #666;">
+                    Don't have an account? <a href="{% url 'signup' %}" style="color: var(--spectrum-2); font-weight: 600;">Join the Registry</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

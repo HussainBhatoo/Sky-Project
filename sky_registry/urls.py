@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import RedirectView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -10,5 +11,5 @@ urlpatterns = [
     path('messages/', include('messages_app.urls')),
     path('schedule/', include('schedule.urls')),
     path('reports/', include('reports.urls')),
-    path('', include('accounts.urls')), # Default to accounts (login/home)
+    path('', RedirectView.as_view(url='/dashboard/', permanent=True)), # Redirect root to dashboard
 ]

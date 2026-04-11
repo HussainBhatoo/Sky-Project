@@ -3,5 +3,7 @@ from . import views
 
 app_name = 'teams'
 
-urlpatterns = [path('', views.placeholder, name='teams_list')]
+urlpatterns = [
+    path('', views.placeholder, name='team_list'),
+]
 

@@ -1,0 +1,86 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join the Registry | Sky Engineering</title>
+    <!-- Shared Design system -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        /* Shared Background with Login for Brand Recognition */
+        body {
+            background: var(--sky-spectrum-diagonal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        .signup-container {
+            width: 100%;
+            max-width: 500px;
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        .logo-box {
+            color: white;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        /* Custom formatting for the Django form assistance */
+        .form-help-text {
+            font-size: 0.8rem;
+            color: #777;
+            margin-top: 0.25rem;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="signup-container">
+        <div class="logo-box">
+            <h1 class="sky-logo">SKY</h1>
+            <p>Engineering Team Hub</p>
+        </div>
+
+        <div class="glass-card">
+            <h2 class="mb-2 text-center spectrum-text">Create Account</h2>
+            
+            <form method="post">
+                {% csrf_token %}
+                
+                <!-- We map the Django form fields to our High-Fi CSS classes -->
+                {% for field in form %}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        <input type="{{ field.field.widget.input_type|default:'text' }}" 
+                               name="{{ field.name }}" 
+                               id="{{ field.id_for_label }}" 
+                               class="form-control" 
+                               placeholder="Enter your {{ field.label|lower }}"
+                               required>
+                        {% if field.help_text %}
+                            <span class="form-help-text">{{ field.help_text|safe }}</span>
+                        {% endif %}
+                        {% for error in field.errors %}
+                            <div class="badge-red" style="margin-top: 5px; font-size: 0.75rem;">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+
+                <div class="mt-1">
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Register Official Account</button>
+                </div>
+            </form>
+
+            <div class="text-center mt-1">
+                <p style="font-size: 0.9rem; color: #666;">
+                    Already have an account? <a href="{% url 'login' %}" style="color: var(--spectrum-2); font-weight: 600;">Sign In</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

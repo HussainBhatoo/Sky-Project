@@ -3,57 +3,78 @@
 {% block title %}Dashboard | Sky Registry{% endblock %}
 
 {% block content %}
-<div class="dashboard-header mb-2">
-    <h1>System Overview</h1>
-    <p class="text-muted">Welcome to the Sky Engineering Team Registry.</p>
+<!-- 🏆 Dashboard Hero Section -->
+<div class="dashboard-header mb-2 animate-fade">
+    <h1 class="spectrum-text" style="font-size: 2.5rem;">System Overview</h1>
+    <p style="color: var(--header-blue); opacity: 0.7; font-weight: 500;">Welcome to the Sky Engineering Team Registry Management Portal.</p>
 </div>
 
+<!-- 📊 Dynamic Summary Cards -->
 <div class="grid-dashboard mb-2">
-    <div class="card">
-        <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem;">TOTAL DEPARTMENTS</div>
-        <div style="font-size: 2rem; font-weight: 800; color: var(--primary);">{{ total_depts }}</div>
+    <div class="glass-card animate-fade" style="animation-delay: 0.1s;">
+        <div style="font-size: 0.8rem; font-weight: 700; color: var(--spectrum-2); margin-bottom: 0.5rem; letter-spacing: 1px;">TOTAL DEPARTMENTS</div>
+        <div style="font-size: 2.5rem; font-weight: 800; color: var(--header-blue);">{{ total_depts }}</div>
+        <div style="margin-top: 1rem; font-size: 0.8rem; color: #888;">Registered in Sky Organisation</div>
     </div>
-    <div class="card">
-        <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem;">ACTIVE TEAMS</div>
-        <div style="font-size: 2rem; font-weight: 800; color: var(--primary);">{{ total_teams }}</div>
+    
+    <div class="glass-card animate-fade" style="animation-delay: 0.2s;">
+        <div style="font-size: 0.8rem; font-weight: 700; color: var(--spectrum-4); margin-bottom: 0.5rem; letter-spacing: 1px;">ACTIVE TEAMS</div>
+        <div style="font-size: 2.5rem; font-weight: 800; color: var(--header-blue);">{{ total_teams }}</div>
+        <div style="margin-top: 1rem; font-size: 0.8rem; color: #888;">Distributed across global hubs</div>
     </div>
-    <div class="card">
-        <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem;">TOTAL ENGINEERS</div>
-        <div style="font-size: 2rem; font-weight: 800; color: var(--primary);">{{ total_members }}</div>
+    
+    <div class="glass-card animate-fade" style="animation-delay: 0.3s;">
+        <div style="font-size: 0.8rem; font-weight: 700; color: var(--spectrum-6); margin-bottom: 0.5rem; letter-spacing: 1px;">TOTAL ENGINEERS</div>
+        <div style="font-size: 2.5rem; font-weight: 800; color: var(--header-blue);">{{ total_members }}</div>
+        <div style="margin-top: 1rem; font-size: 0.8rem; color: #888;">Total headcount in registry</div>
     </div>
 </div>
 
-<div class="row">
-    <div class="card" style="width: 100%;">
-        <div class="card-header" style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
-            <h2 style="font-size: 1.25rem;">Recent Updates</h2>
-            <a href="{% url 'core:audit_log' %}" style="font-size: 0.8rem; color: var(--primary);">View All</a>
+<!-- 📜 Recent Activity Section -->
+<div class="row animate-fade" style="animation-delay: 0.4s;">
+    <div class="card" style="width: 100%; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+        <div class="card-header" style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f0f0f0; padding-bottom: 1rem;">
+            <h2 style="font-size: 1.25rem; color: var(--header-blue);">Audit Trail & Recent Updates</h2>
+            <a href="{% url 'audit_log' %}" class="btn" style="padding: 0.5rem 1rem; font-size: 0.8rem; background: var(--surface-strong); color: var(--primary);">View Full History</a>
         </div>
         
         <table style="width: 100%; border-collapse: collapse;">
             <thead>
-                <tr style="text-align: left; border-bottom: 2px solid var(--surface-strong); color: var(--text-muted); font-size: 0.85rem;">
+                <tr style="text-align: left; color: #999; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px;">
                     <th style="padding: 1rem;">Action</th>
-                    <th style="padding: 1rem;">Entity</th>
-                    <th style="padding: 1rem;">User</th>
-                    <th style="padding: 1rem;">Time</th>
+                    <th style="padding: 1rem;">Target Entity</th>
+                    <th style="padding: 1rem;">Actor</th>
+                    <th style="padding: 1rem;">Timestamp</th>
                 </tr>
             </thead>
             <tbody>
                 {% for log in recent_updates %}
-                <tr style="border-bottom: 1px solid var(--surface-strong);">
+                <tr style="border-bottom: 1px solid #f9f9f9; transition: background 0.2s;">
                     <td style="padding: 1rem;">
                         <span class="badge {% if log.action_type == 'CREATE' %}badge-green{% elif log.action_type == 'DELETE' %}badge-red{% else %}badge-blue{% endif %}">
                             {{ log.action_type }}
                         </span>
                     </td>
-                    <td style="padding: 1rem;">{{ log.entity_type }} (ID: {{ log.entity_id }})</td>
-                    <td style="padding: 1rem;">{{ log.actor_user.username }}</td>
-                    <td style="padding: 1rem; font-size: 0.85rem; color: var(--text-muted);">{{ log.action_changed_at|date:"D, d M H:i" }}</td>
+                    <td style="padding: 1rem;">
+                        <span style="font-weight: 600; color: #444;">{{ log.entity_type }}</span>
+                        <span style="font-size: 0.8rem; color: #aaa;"> (ID: {{ log.entity_id }})</span>
+                    </td>
+                    <td style="padding: 1rem; color: #666;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="width: 24px; height: 24px; background: var(--surface-strong); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: bold; color: var(--primary);">
+                                {{ log.actor_user.username|slice:":1"|upper }}
+                            </div>
+                            @{{ log.actor_user.username }}
+                        </div>
+                    </td>
+                    <td style="padding: 1rem; font-size: 0.85rem; color: #999;">{{ log.action_changed_at|date:"D, d M H:i" }}</td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="4" style="padding: 2rem; text-align: center; color: var(--text-muted);">No activity logged yet.</td>
+                    <td colspan="4" style="padding: 3rem; text-align: center; color: #bbb;">
+                        <i class='bx bx-info-circle' style="font-size: 2rem; display: block; margin-bottom: 1rem;"></i>
+                        No activity has been logged in the portal yet.
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
