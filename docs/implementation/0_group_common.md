@@ -30,6 +30,17 @@ This document details the shared infrastructure that every teammate depends on.
 
 ---
 
+## 💾 DATA SEEDING (Importing Sky Registry)
+Before anyone starts building, you **must** import the official Sky data from the Excel file into your SQLite database.
+
+1.  **Move the Data**:
+    ```powershell
+    python scripts/populate_data.py
+    ```
+2.  **Verify**: Log into the admin panel (`localhost:8000/admin`) to see the teams populated.
+
+---
+
 ## 🚀 HOW to implement (Step-by-Step)
 
 ### 1. The Database (core/models.py)
@@ -103,7 +114,8 @@ Inject the **Sky Spectrum** gradient.
 
 ---
 
-## ✅ CHECKLIST FOR THE GROUP
+- [x] Data seeding script (`scripts/populate_data.py`) created.
+- [ ] Database populated with Sky Excel data.
 - [ ] All 13 models are migrated.
 - [ ] Superuser created (`admin / Admin1234!`).
 - [ ] Dashboard shows total counts (Teams/Depts/Users).
