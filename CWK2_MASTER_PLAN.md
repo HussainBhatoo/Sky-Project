@@ -78,15 +78,14 @@ https://trello.com/invite/b/696e18dddc44e139524ec21f/ATTI20f3cc8f34b260cf8cf6781
 | Name | Student No | GitHub Branch | Individual Feature |
 |------|-----------|---------------|-------------------|
 | **Maurya Patel** ← YOU | W2112200 | `feat/schedule` | Schedule (Student 4) + GROUP LEAD |
-| Abdul-lateef Hussain | - | `feat/accounts` | Group: Login/Register/Auth |
-| Lucas Garcia Korotkov | - | `feat/teams` | Teams (Student 1) |
-| Mohammed Suliman Roshid | - | `feat/organisation` | Organisation (Student 2) |
-| Riagul Hossain | - | `feat/messages` | Messages (Student 3) |
-| *(Student 5 = Reports)* | - | `feat/reports` | Reports — assign to whoever is Student 5 |
+| Abdul-lateef Hussain | - | `feat/reports` | Reports (Student 5) |
+| Lucas Garcia Korotkov | - | `feat/organisation` | Organisation (Student 2) |
+| Mohammed Suliman Roshid | - | `feat/messages` | Messages (Student 3) |
+| Riagul Hossain | - | `feat/teams` | Teams (Student 1) |
 
 > **Note:** We are a group of 5. From the brief allocation table for groups of 5:
-> Student 1=Teams, Student 2=Organisation, Student 3=Messages, Student 4=Schedule (Maurya),
-> Student 5=Reports. Confirm with your group who is Student 5 for Reports.
+> Student 1=Teams (Riagul), Student 2=Organisation (Lucas), Student 3=Messages (Suliman), Student 4=Schedule (Maurya),
+> Student 5=Reports (Hussain).
 
 ### CWK1 Contributions (for context)
 | Member | CWK1 Role |
@@ -210,7 +209,7 @@ Implementation: Django signals or middleware.
 
 ### INDIVIDUAL Features (Per Student)
 
-#### Student 1 — Lucas — Teams App (`teams/`)
+#### Student 1 — Riagul — Teams App (`teams/`)
 | Feature | Details |
 |---------|---------|
 | Teams List Page | Display ALL teams as cards, search bar, filter by Department + Status |
@@ -219,7 +218,7 @@ Implementation: Django signals or middleware.
 | Schedule Meeting Button | Quick link to schedule meeting for this team |
 | Skills/Tags | Display team's tech stack / skills as badge chips |
 
-#### Student 2 — Mohammed — Organisation App (`organisation/`)
+#### Student 2 — Lucas — Organisation App (`organisation/`)
 | Feature | Details |
 |---------|---------|
 | Departments List | All departments with team counts |
@@ -227,7 +226,7 @@ Implementation: Django signals or middleware.
 | Org Chart Tab | Visual hierarchy using connected nodes for departments → teams |
 | Dependencies Page | Graph View: interactive/visual dependency map (upstream + downstream), List View: table split into upstream/downstream panels, Focus team selector, Direction filter, Depth filter |
 
-#### Student 3 — Riagul — Messages App (`messages_app/`)
+#### Student 3 — Suliman — Messages App (`messages_app/`)
 | Feature | Details |
 |---------|---------|
 | Inbox | List of received messages with timestamps, clickable to read |
@@ -245,7 +244,7 @@ Implementation: Django signals or middleware.
 | Meeting Detail | View individual meeting info, agenda, link |
 | Edit/Delete Meeting | Edit existing meeting details |
 
-#### Student 5 — Reports App (`reports/`)
+#### Student 5 — Hussain — Reports App (`reports/`)
 | Feature | Details |
 |---------|---------|
 | Reports Dashboard | Overview of available reports |
@@ -404,13 +403,13 @@ Every screen designed in CWK1 high-fidelity wireframes (Figma) must be built in 
 | Login Page | GROUP | Email + password, forgot password link, sign up link |
 | Signup Page | GROUP | Full name, email, password, confirm password, password rules |
 | Dashboard | GROUP | Stat cards, recent updates, grid/list toggle, notifications |
-| Teams List | Student 1 (Lucas) | Search, filter by dept/status, team cards |
-| Team Detail | Student 1 (Lucas) | Mission, manager, contacts, members, repos, dependencies buttons |
-| Departments + Org Chart | Student 2 (Mohammed) | Tabbed: Departments tab + Org Chart tab |
-| Dependencies (Graph + List) | Student 2 (Mohammed) | Graph view with nodes, list view with upstream/downstream |
-| Messages (Inbox + Compose) | Student 3 (Riagul) | Tabbed: Inbox + Compose, sent, drafts |
+| Teams List | Student 1 (Riagul) | Search, filter by dept/status, team cards |
+| Team Detail | Student 1 (Riagul) | Mission, manager, contacts, members, repos, dependencies buttons |
+| Departments + Org Chart | Student 2 (Lucas) | Tabbed: Departments tab + Org Chart tab |
+| Dependencies (Graph + List) | Student 2 (Lucas) | Graph view with nodes, list view with upstream/downstream |
+| Messages (Inbox + Compose) | Student 3 (Suliman) | Tabbed: Inbox + Compose, sent, drafts |
 | Schedule | **Maurya (YOU)** | Upcoming list + monthly calendar + schedule meeting form |
-| Reports | Student 5 | PDF + Excel export buttons, report cards |
+| Reports | Student 5 (Hussain) | PDF + Excel export buttons, report cards |
 | Audit Log | GROUP | Table of all system actions, searchable |
 | Admin Hub | GROUP | Django admin with 8 menu items customised |
 | User Profile | GROUP | Edit name/email/username, change password |
