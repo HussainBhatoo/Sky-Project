@@ -1,7 +1,11 @@
 # 🏛️ 0. GROUP COMMON & FOUNDATION
 **The Avengers — Group H | Sky Engineering Team Registry**
 
-This document details the shared infrastructure that every teammate depends on. These files form the "skeleton" of our project.
+
+This document details the shared infrastructure that every teammate depends on. 
+
+> [!IMPORTANT]
+> Before starting your work, read the **[GROUP COLLABORATION WORKFLOW](./GROUP_WORKFLOW.md)** to understand our branching and PR process.
 
 ---
 
