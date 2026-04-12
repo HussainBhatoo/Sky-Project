@@ -31,9 +31,7 @@
     {% block extra_head %}{% endblock %}
 </head>
 <body>
-    <button id="sidebar-toggle" class="sidebar-toggle-btn" aria-label="Toggle Sidebar">
-                    <i class='bx bx-menu'></i>
-                </button>
+    <!-- Sidebar toggle moved to top-navbar left zone -->
 
     <div class="app-container">
         <!-- 🧭 Sidebar Navigation: The command center for the registry -->
@@ -108,30 +106,44 @@
             </nav>
 
         <div class="main-wrapper">
-            <!-- 🔍 High-Fi Utility Navbar: Featuring logic-ready search -->
-            <header class="top-navbar">
+            <!-- 🔍 High-Fi Utility Navbar: 3-Zone Flex Layout -->
+            <header class="top-navbar" style="display: flex; align-items: center; justify-content: space-between; height: 60px;">
                 
-                <div class="search-bar-container" id="global-search">
-                    <div class="search-bar">
-                        <i class='bx bx-search'></i>
-                        <input type="text" placeholder="Search teams, leads or projects..." id="search-input">
-                    </div>
-                    <!-- 💎 Dynamic Results Dropdown (Logic placeholder) -->
-                    <div class="search-results-dropdown" id="search-results">
-                        <!-- Populated via High-Fi JS -->
+                <!-- LEFT ZONE: Burger Menu -->
+                <div class="navbar-left">
+                    <button id="sidebar-toggle" class="sidebar-toggle-btn" aria-label="Toggle Sidebar">
+                        <i class='bx bx-menu'></i>
+                    </button>
+                </div>
+
+                <!-- MIDDLE ZONE: Centered Search Bar -->
+                <div class="navbar-middle">
+                    <div class="search-bar-container" id="global-search">
+                        <div class="search-bar">
+                            <i class='bx bx-search'></i>
+                            <input type="text" placeholder="Search teams, leads or projects..." id="search-input">
+                        </div>
+                        <!-- 💎 Dynamic Results Dropdown (Logic placeholder) -->
+                        <div class="search-results-dropdown" id="search-results">
+                            <!-- Populated via High-Fi JS -->
+                        </div>
                     </div>
                 </div>
 
-                <div class="user-nav">
-                    <span class="badge badge-blue">SKY EMPLOYEE</span>
-                    <div class="notification-bell">
+                <!-- RIGHT ZONE: Notification, Badge, Profile -->
+                <div class="navbar-right" style="display: flex; align-items: center; gap: 12px;">
+                    <div class="notification-bell" style="display: flex; align-items: center; justify-content: center;">
                         <i class='bx bx-bell'></i>
                         <span class="pulse-dot"></span>
                     </div>
                     
+                    <span class="badge badge-blue" style="vertical-align: middle; display: inline-flex; align-items: center;">SKY EMPLOYEE</span>
+                    
+                    <div class="nav-divider-vertical"></div>
+                    
                     <!-- 👤 User Profile Dropdown -->
-                    <div class="nav-user-dropdown" id="user-dropdown-container">
-                        <div class="nav-avatar-trigger" id="user-dropdown-btn">
+                    <div class="nav-user-dropdown" id="user-dropdown-container" style="display: flex; align-items: center;">
+                        <div class="nav-avatar-trigger" id="user-dropdown-btn" style="display: flex; align-items: center;">
                             <div class="avatar-circle small">
                                 {% if user.first_name %}{{ user.first_name|first|upper }}{% else %}{{ user.username|first|upper }}{% endif %}{% if user.last_name %}{{ user.last_name|first|upper }}{% endif %}
                             </div>

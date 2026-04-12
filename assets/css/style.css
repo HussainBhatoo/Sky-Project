@@ -223,51 +223,67 @@ a:hover {
   flex-direction: column;
 }
 
-/* 🔍 Top Utility Bar: Frosted Glass */
+/* 🔍 Top Utility Bar: 3-Zone Flex Layout */
 .top-navbar {
-  height: var(--header-height);
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  height: 60px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 2.5rem;
+  padding: 0 24px;
   position: sticky;
   top: 0;
   z-index: 900;
 }
 
-.top-navbar::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -1px;
-  height: 4px;
-  background: var(--sky-spectrum);
+/* Navbar Flex Zones */
+.navbar-left, .navbar-middle, .navbar-right {
+  display: flex;
+  align-items: center;
+  flex: 1;
 }
+
+.navbar-middle {
+  justify-content: center;
+}
+
+.navbar-right {
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.nav-divider-vertical {
+  width: 1px;
+  height: 24px;
+  background-color: #e5e7eb;
+  margin: 0 4px;
+}
+
+/* Removed spectrum ::after to respect strict No absolute positioning rule */
 
 .search-bar-container {
   position: relative;
-  width: 400px;
+  width: 100%;
+  max-width: 400px;
+  min-width: 280px;
 }
 
 .search-bar {
   background: var(--sky-surface-strong);
-  padding: 0.7rem 1.25rem;
-  border-radius: 12px;
+  padding: 0 1.25rem;
+  height: 40px;
+  border-radius: 999px;
   display: flex;
   align-items: center;
-  border: 1px solid var(--border);
+  border: 1px solid transparent;
   transition: all 0.2s ease;
 }
 
 .search-bar:focus-within {
-  border-color: var(--sky-focus);
+  border-color: rgba(0, 126, 204, 0.4);
   box-shadow: 0 0 0 3px rgba(0, 126, 204, 0.15);
-  background: white;
+  background: #ffffff;
 }
 
 .search-bar input {
@@ -553,17 +569,27 @@ a:hover {
     font-size: 1.4rem;
     color: var(--sky-header-blue);
     cursor: pointer;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+}
+
+.notification-bell:hover {
+    background: var(--sky-surface-strong);
 }
 
 .pulse-dot {
-    position: absolute;
-    top: 2px;
-    right: 2px;
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
     background: var(--sky-spectrum-2);
     border-radius: 50%;
     border: 2px solid white;
+    margin-left: -5px;
+    margin-top: -15px;
 }
 
 /* ===== FORM & AUTH REFINEMENTS (Student 4 / Lead) ===== */
@@ -913,14 +939,10 @@ textarea.form-control {
 
 /* ===== SIDEBAR COLLAPSE TOGGLE ===== */
 .sidebar-toggle-btn {
-  position: fixed;
-  top: 15px;
-  left: 15px;
-  z-index: 9999;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  border: none;
   font-size: 1.5rem;
-  color: white;
+  color: var(--sky-text);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -928,35 +950,10 @@ textarea.form-control {
   border-radius: 8px;
   padding: 0.4rem;
   transition: all 0.2s ease;
-  backdrop-filter: blur(4px);
 }
 
 .sidebar-toggle-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-}
-
-body.sidebar-collapsed .sidebar-toggle-btn {
-  background: var(--card); 
-  border: 1px solid var(--border);
-  color: var(--sky-header-blue);
-  box-shadow: var(--shadow-sm);
-  backdrop-filter: none;
-}
-
-body.sidebar-collapsed .sidebar-toggle-btn:hover {
   background: var(--sky-surface-strong);
-  color: var(--sky-primary);
-}
-
-.top-navbar {
-  justify-content: flex-start;
-  padding-left: 3rem; 
-}
-
-/* Push the logo down slightly so the fixed button doesn't cover it */
-.sidebar-header {
-  margin-top: 3.5rem;
 }
 
 /* Transitions for collapsing */
@@ -1002,12 +999,12 @@ body.sidebar-collapsed .main-wrapper {
 
 /* Make logo very small */
 body.sidebar-collapsed .sidebar-header {
-  margin-top: 5rem;
+  margin-top: 1rem;
 }
 body.sidebar-collapsed .sky-logo-img.sidebar-logo {
   opacity: 0.3;
   pointer-events: none;
-  transform: scale(0.3) translateY(-100px);
+  transform: scale(0.3) translateY(-30px);
 }
 
 body.sidebar-collapsed .nav-item {
@@ -1040,12 +1037,6 @@ body.sidebar-collapsed .sidebar-footer {
 }
 
 /* ===== TOP NAVBAR USER DROPDOWN ===== */
-.user-nav {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem; /* Gap between bell and avatar */
-}
-
 .nav-user-dropdown {
   position: relative;
 }
