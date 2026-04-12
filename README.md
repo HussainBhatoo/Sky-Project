@@ -7,12 +7,16 @@
 ## 🌌 Project Overview
 The **Sky Engineering Team Registry** is a centralized platform designed to manage and visualize the complex hierarchy of engineering teams at Sky. Built as part of the **5COSC021W - Agile Software Development** module, this application provides a robust system for tracking team members, departmental structures, inter-team dependencies, and internal communications.
 
-## 🚀 Key Features
-- **Team Management:** Track teams, their members, and cross-functional roles.
-- **Organizational Hierarchy:** Visualize departments and leadership structures.
-- **Messaging System:** Internal communication hub for team updates and announcements.
-- **Meeting Scheduler:** Integrated system for managing standups and project meetings.
-- **Audit & Reporting:** Exportable reports (PDF/Excel) for administrative oversight and audit logging.
+## 🚀 High-Fidelity Features
+- **Dashboard:** Unified "Intelligence Surface" with real-time stats.
+- **Teams:** Deep-dive directory with mission statements and tech stacks.
+- **Departments:** Hierarchical view of the 6 engineering business units.
+- **Dependencies:** Interactive relationship maps and upstream/downstream tracking.
+- **Messages:** Internal engineering communication hub.
+- **Schedule:** Organizational release cycles and meeting logistics.
+- **Reports:** Advanced analytics with dynamic PDF and Excel exports.
+- **Audit Log:** Complete traceability of registry mutations.
+- **Admin Hub:** Role-gated system configuration and user management.
 
 ## 🚀 Quick Start (Local Preview)
 > **[SEE THE PREVIEW GUIDE](./PREVIEW_GUIDE.md)**
@@ -20,13 +24,13 @@ The **Sky Engineering Team Registry** is a centralized platform designed to mana
 Follow the link above for exact, step-by-step instructions (cloning, virtual environment, and running the server).
 
 ## 👥 Team Mapping & Responsibilities
-| Student | Name | Role/App | Shared Features |
+| Student | Name | Role/App | High-Fi Module |
 | :--- | :--- | :--- | :--- |
-| **Student 4** | **Maurya Patel** | **Group Lead & Schedule App** | Authentication, Base UI, Global Models |
-| **Student 1** | **Riagul Hossain** | **Teams App** | Team Creation, Member Assignment |
-| **Student 2** | **Lucas Garcia Korotkov** | **Organisation App** | Departments, Hierarchy, Wiki Links |
-| **Student 3** | **Mohammed Suliman Roshid** | **Messages App** | Channels, Message Logs, Notifications |
-| **Student 5** | **Abdul-lateef Hussain** | **Reports App** | PDF Generation, Audit Logging, Excel Exports |
+| **Student 4** | **Maurya Patel** | **Lead / Auth / Base** | **Schedule & Dashboard UI** |
+| **Student 1** | **Riagul Hossain** | **Directory Lead** | **Teams Gallery & Profile** |
+| **Student 2** | **Lucas Garcia Korotkov** | **Architecture Lead** | **Departments & Dependencies** |
+| **Student 3** | **Mohammed Suliman Roshid** | **Collaboration Lead** | **Messages Hub** |
+| **Student 5** | **Abdul-lateef Hussain** | **Governance Lead** | **Reports & Audit Log** |
 
 ## 🛠️ Technology Stack
 - **Backend:** Python 3.12+ | Django 4.2 LTS
@@ -34,12 +38,12 @@ Follow the link above for exact, step-by-step instructions (cloning, virtual env
 - **Database:** SQLite (Development) | PostgreSQL (Production Ready)
 - **Styling:** Sky Blue Design System (Figma Compliant)
 
-## 🎨 Design System
-The application strictly follows the Sky brand guidelines established in CWK1:
-- **Primary Blue:** `#000FF5`
-- **Secondary Blue:** `#00D2FF`
-- **Accent:** `#F5F5F5` (Sky Neutral)
-- **Typography:** Sky Text / Inter
+## 🎨 Design System: Sky Spectrum
+The application strictly follows the Sky "Spectrum" branding:
+- **Primary Gradient:** `linear-gradient(90deg, #e4563e, #e70296, #dc01b1, #be01c4, #9f11e7, #3d5fdf)`
+- **Theme:** Glassmorphism (High-Gloss Panels, Backdrop Blurs)
+- **Typography:** Sky Text / Inter / Roboto
+- **Visual Style:** Premium High-Fidelity Dashboard Layout
 
 ## 📥 Getting Started
 

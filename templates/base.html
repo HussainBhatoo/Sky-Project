@@ -1,4 +1,20 @@
 {% load static %}
+<!-- 
+  SKY ENGINEERING TEAM REGISTRY - BASE ARCHITECTURE
+  
+  LAYOUT STRUCTURE:
+  - .app-container: Global flex wrapper
+  - .sidebar: Left-side navigation with spectral branding
+  - .main-wrapper: Right-side content area
+  - .top-navbar: Floating glassmorphic utility bar
+  - .content-area: Main page-level container with entry animations
+  
+  DESIGN SYSTEM:
+  - Vanilla CSS/JS implementation of the "High-Fidelity" Sky Spectrum theme.
+  - Zero Tailwind runtime dependency.
+  
+  LEAD DEVELOPER: Maurya Patel
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,10 +22,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Sky Engineering Registry{% endblock %}</title>
     
-    <!-- 🧬 Global Design System -->
+    <!-- 🧬 Global Design System (Vanilla High-Fi) -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     
-    <!-- 📦 Boxicons for modern iconography -->
+    <!-- 📦 Core Iconography (Boxicons) -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     
     {% block extra_head %}{% endblock %}
@@ -17,106 +33,160 @@
 <body>
 
     <div class="app-container">
-        <!-- 🧭 Sidebar Navigation (Inherited by all 5 apps) -->
+        <!-- 🧭 Sidebar Navigation: The command center for the registry -->
         <nav class="sidebar">
             <div class="sidebar-header">
-                <a href="{% url 'core:dashboard' %}" style="text-decoration: none;">
+                <a href="{% url 'core:dashboard' %}" class="logo-link">
+                    <!-- 🎨 Sky Spectrum Branding -->
                     <img src="{% static 'images/Sky-spectrum-rgb.png' %}" alt="Sky Logo" class="sky-logo-img sidebar-logo">
                 </a>
             </div>
 
             <ul class="nav-links">
-                <!-- 1. General Dashboard -->
                 <li class="nav-item">
                     <a href="{% url 'core:dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
-                        <i class='bx bxs-dashboard'></i> Dashboard
+                        <i class='bx bx-grid-alt'></i> Dashboard
                     </a>
                 </li>
 
-                <!-- 2. Student 1: Teams (Riagul) -->
+                <!-- App Modules (Students Implementation Areas) -->
                 <li class="nav-item">
                     <a href="{% url 'teams:team_list' %}" class="nav-link {% if 'teams' in request.path %}active{% endif %}">
-                        <i class='bx bxs-group'></i> Engineering Teams
+                        <i class='bx bx-user'></i> Teams
                     </a>
                 </li>
 
-                <!-- 3. Student 2: Organisation (Lucas) -->
                 <li class="nav-item">
-                    <a href="{% url 'organisation:org_chart' %}" class="nav-link {% if 'organisation' in request.path %}active{% endif %}">
-                        <i class='bx bxs-institution' ></i> Organisation
+                    <a href="{% url 'organisation:org_chart' %}" class="nav-link {% if 'organisation' in request.path and 'dependencies' not in request.path %}active{% endif %}">
+                        <i class='bx bx-buildings' ></i> Departments
                     </a>
                 </li>
 
-                <!-- 4. Student 3: Messages (Suliman) -->
+                <li class="nav-item">
+                    <a href="{% url 'organisation:dependencies' %}" class="nav-link {% if 'dependencies' in request.path %}active{% endif %}">
+                        <i class='bx bx-git-repo-forked' ></i> Dependencies
+                    </a>
+                </li>
+
                 <li class="nav-item">
                     <a href="{% url 'messages_app:inbox' %}" class="nav-link {% if 'messages' in request.path %}active{% endif %}">
-                        <i class='bx bxs-message-square-detail' ></i> Messages Hub
+                        <i class='bx bx-envelope' ></i> Messages
                     </a>
                 </li>
 
-                <!-- 5. Student 4: Schedule (Maurya) -->
                 <li class="nav-item">
                     <a href="{% url 'schedule:calendar' %}" class="nav-link {% if 'schedule' in request.path %}active{% endif %}">
-                        <i class='bx bxs-calendar-event' ></i> Master Schedule
+                        <i class='bx bx-calendar' ></i> Schedule
                     </a>
                 </li>
 
-                <li class="nav-divider" style="height: 1px; background: rgba(255,255,255,0.1); margin: 1rem 0;"></li>
-
-                <!-- 6. Student 5: Reports (Hussain) -->
                 <li class="nav-item">
                     <a href="{% url 'reports:reports_home' %}" class="nav-link {% if 'reports' in request.path %}active{% endif %}">
-                        <i class='bx bxs-file-pdf' ></i> Analytics & Reports
+                        <i class='bx bx-file' ></i> Reports
                     </a>
                 </li>
+
+                <li class="nav-item">
+                    <a href="{% url 'core:audit_log' %}" class="nav-link {% if 'audit' in request.path %}active{% endif %}">
+                        <i class='bx bx-clipboard' ></i> Audit Log
+                    </a>
+                </li>
+
+                {% if user.is_superuser %}
+                <li class="nav-divider"></li>
+                <li class="nav-item">
+                    <a href="/admin/" class="nav-link">
+                        <i class='bx bx-cog' ></i> Admin
+                    </a>
+                </li>
+                {% endif %}
             </ul>
 
-            <!-- 👤 User Footer -->
-            <div class="sidebar-footer" style="padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
-                <div style="display: flex; align-items: center; gap: 0.75rem;">
-                    <div style="width: 32px; height: 32px; background: white; color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+            <!-- 👤 High-Fi Staff Footer -->
+            <div class="sidebar-footer">
+                <div class="user-profile-mini">
+                    <div class="avatar-circle">
                         {{ user.username|slice:":1"|upper }}
                     </div>
-                    <div>
-                        <p style="font-size: 0.8rem; font-weight: 600;">@{{ user.username }}</p>
-                        <a href="{% url 'logout' %}" style="font-size: 0.7rem; color: rgba(255,255,255,0.6); text-decoration: none;">Sign Out</a>
-                        <p style="font-size: 0.65rem; color: rgba(255,255,255,0.4); margin-top: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px;">Lead: Maurya Patel</p>
+                    <div class="user-info">
+                        <p class="username">@{{ user.username }}</p>
+                        <a href="{% url 'logout' %}" class="sign-out-link">Sign Out</a>
+                        <p class="lead-credit">Lead: Maurya Patel</p>
                     </div>
                 </div>
             </div>
         </nav>
 
-        <!-- 🖥️ Main Viewport -->
         <div class="main-wrapper">
-            <!-- 🔍 Top Utility Bar -->
+            <!-- 🔍 High-Fi Utility Navbar: Featuring logic-ready search -->
             <header class="top-navbar">
-                <div class="search-bar">
-                    <i class='bx bx-search' style="color: #999;"></i>
-                    <input type="text" placeholder="Search teams, leads or projects...">
+                <div class="search-bar-container" id="global-search">
+                    <div class="search-bar">
+                        <i class='bx bx-search'></i>
+                        <input type="text" placeholder="Search teams, leads or projects..." id="search-input">
+                    </div>
+                    <!-- 💎 Dynamic Results Dropdown (Logic placeholder) -->
+                    <div class="search-results-dropdown" id="search-results">
+                        <!-- Populated via High-Fi JS -->
+                    </div>
                 </div>
 
                 <div class="user-nav">
-                    <div class="badge-blue">SKY EMPLOYEE</div>
-                    <i class='bx bx-bell' style="font-size: 1.25rem; color: var(--header-blue); cursor: pointer;"></i>
+                    <span class="badge badge-blue">SKY EMPLOYEE</span>
+                    <div class="notification-bell">
+                        <i class='bx bx-bell'></i>
+                        <span class="pulse-dot"></span>
+                    </div>
                 </div>
             </header>
 
-            <!-- 📍 Page Content -->
+            <!-- 📍 Dynamic Content Injection Point -->
             <main class="content-area animate-slide-up">
-                {% block content %}
-                <!-- Student app content goes here -->
-                {% endblock %}
+                {% block content %}{% endblock %}
             </main>
         </div>
     </div>
 
-    <!-- 💡 Shared Scripts -->
+    <!-- ⚡ High-Fi Core Logic Subsystem (Vanilla JS) -->
     <script>
-        // Simple logic to maintain the UI feel
+        /**
+         * GLOBAL UI ARCHITECTURE CONTROLLER
+         * Implements High-Fidelity interaction patterns from User Inquiry reference.
+         */
         document.addEventListener('DOMContentLoaded', function() {
-            console.log("Sky Engineering Hub Loaded");
+            const searchInput = document.getElementById('search-input');
+            const resultsDropdown = document.getElementById('search-results');
+            
+            // 🔎 Mock High-Fi Search Interaction logic
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    const query = e.target.value.toLowerCase();
+                    if (query.length > 1) {
+                        resultsDropdown.innerHTML = `
+                            <div class="search-result-header">SEARCHING FOR: "${query}"</div>
+                            <div class="search-result-item">
+                                <i class='bx bxs-search-alt'></i>
+                                <span>No direct matches found. Try specific team names.</span>
+                            </div>
+                        `;
+                        resultsDropdown.classList.add('is-active');
+                    } else {
+                        resultsDropdown.classList.remove('is-active');
+                    }
+                });
+
+                // Clear search on focus out
+                document.addEventListener('click', (e) => {
+                    if (!document.getElementById('global-search').contains(e.target)) {
+                        resultsDropdown.classList.remove('is-active');
+                    }
+                });
+            }
+
+            console.log("Sky Engineering High-Fi Core Ready | Lead: Maurya Patel");
         });
     </script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>
+

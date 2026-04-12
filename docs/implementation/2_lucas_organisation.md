@@ -2,7 +2,7 @@
 **Sky Engineering Team Registry | Individual Implementation Roadmap**
 
 ## 🎯 Goal
-Provide the big-picture view of Sky engineering. You are responsible for showing how teams connect and the hierarchy of the 6 departments.
+Provide the big-picture view of Sky engineering. You are responsible for showing the hierarchical structure of the 6 departments and managing inter-team dependency maps.
 
 ---
 

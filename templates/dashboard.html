@@ -3,92 +3,114 @@
 {% block title %}Dashboard | Sky Registry{% endblock %}
 
 {% block content %}
-<!-- 🏆 Dashboard Hero Section -->
+<!-- 
+  DASHBOARD HIGH-FIDELITY VIEW
+  
+  COMPONENTS:
+  1. Hero Header: Context-aware spectral branding
+  2. Summary Grid: Quick-action tiles with dynamic data
+  3. Audit Surface: High-contrast data table with transition states
+  
+  Lead Developer: Maurya Patel
+-->
+
 <div class="dashboard-header mb-2 animate-slide-up">
-    <h1 class="spectrum-text" style="font-size: 2.5rem;">System Overview</h1>
-    <p style="color: var(--sky-header-blue); opacity: 0.7; font-weight: 500;">Welcome to the Sky Engineering Team Registry Management Portal.</p>
+    <h1 class="spectrum-text" style="font-size: 2.25rem; letter-spacing: -0.02em;">System Overview</h1>
+    <p style="color: var(--sky-header-blue); opacity: 0.6; font-weight: 500; font-size: 1.1rem;">Sky Engineering Team Registry Management Portal</p>
 </div>
 
-<!-- 📊 Dynamic Summary Cards (Using Spectrum Quick Cards) -->
-<div class="grid-dashboard mb-2">
+<!-- 📊 Summary Stats Grid (High-Fi Component Sync) -->
+<div class="grid-dashboard mb-2" style="margin-top: 1.5rem;">
+    <!-- Stat 1: Organisation Scope -->
     <div class="quick-card is-1 animate-slide-up" style="animation-delay: 0.1s;">
         <div class="icon-box">
             <i class='bx bxs-institution'></i>
         </div>
         <div>
-            <div style="font-size: 0.85rem; font-weight: 700; opacity: 0.9; margin-bottom: 0.25rem; letter-spacing: 1px;">TOTAL DEPARTMENTS</div>
-            <div style="font-size: 2.5rem; font-weight: 900;">{{ total_depts }}</div>
+            <div style="font-size: 0.75rem; font-weight: 800; opacity: 0.8; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.1em;">DEPARTMENTS</div>
+            <div style="font-size: 2.75rem; font-weight: 900; line-height: 1;">{{ total_depts }}</div>
         </div>
-        <div style="font-size: 0.8rem; opacity: 0.8; margin-top: auto;">Sky Global Business Units</div>
+        <div style="font-size: 0.8rem; font-weight: 600; opacity: 0.7; margin-top: auto;">Global Business Units</div>
     </div>
     
+    <!-- Stat 2: Workforce Velocity -->
     <div class="quick-card is-2 animate-slide-up" style="animation-delay: 0.2s;">
         <div class="icon-box">
             <i class='bx bxs-group'></i>
         </div>
         <div>
-            <div style="font-size: 0.85rem; font-weight: 700; opacity: 0.9; margin-bottom: 0.25rem; letter-spacing: 1px;">ACTIVE TEAMS</div>
-            <div style="font-size: 2.5rem; font-weight: 900;">{{ total_teams }}</div>
+            <div style="font-size: 0.75rem; font-weight: 800; opacity: 0.8; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.1em;">ACTIVE TEAMS</div>
+            <div style="font-size: 2.75rem; font-weight: 900; line-height: 1;">{{ total_teams }}</div>
         </div>
-        <div style="font-size: 0.8rem; opacity: 0.8; margin-top: auto;">Agile Engineering Squads</div>
+        <div style="font-size: 0.8rem; font-weight: 600; opacity: 0.7; margin-top: auto;">Agile Engineering Squads</div>
     </div>
     
+    <!-- Stat 3: Talent Headcount -->
     <div class="quick-card is-3 animate-slide-up" style="animation-delay: 0.3s;">
         <div class="icon-box">
             <i class='bx bxs-user-detail'></i>
         </div>
         <div>
-            <div style="font-size: 0.85rem; font-weight: 700; opacity: 0.9; margin-bottom: 0.25rem; letter-spacing: 1px;">TOTAL ENGINEERS</div>
-            <div style="font-size: 2.5rem; font-weight: 900;">{{ total_members }}</div>
+            <div style="font-size: 0.75rem; font-weight: 800; opacity: 0.8; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.1em;">TOTAL ENGINEERS</div>
+            <div style="font-size: 2.75rem; font-weight: 900; line-height: 1;">{{ total_members }}</div>
         </div>
-        <div style="font-size: 0.8rem; opacity: 0.8; margin-top: auto;">Sky Technology Headcount</div>
+        <div style="font-size: 0.8rem; font-weight: 600; opacity: 0.7; margin-top: auto;">Sky Technology Network</div>
     </div>
 </div>
 
-<!-- 📜 Recent Activity Section -->
-<div class="row animate-slide-up" style="animation-delay: 0.4s;">
-    <div class="card" style="width: 100%; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
-        <div class="card-header" style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f0f0f0; padding-bottom: 1rem;">
-            <h2 style="font-size: 1.25rem; color: var(--sky-header-blue);">Audit Trail & Recent Updates</h2>
-            <a href="{% url 'core:audit_log' %}" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.8rem;">View Full History</a>
+<!-- 📜 Audit Trail & Intelligence Surface -->
+<div class="row animate-slide-up" style="animation-delay: 0.4s; margin-top: 2rem;">
+    <div class="card" style="width: 100%;">
+        <div class="card-header" style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 1.25rem;">
+            <div>
+                <h2 style="font-size: 1.4rem; color: var(--sky-header-blue);">Recent Activity Trail</h2>
+                <p style="font-size: 0.85rem; color: #888; margin-top: 0.25rem;">Real-time logging of registry mutations and access events</p>
+            </div>
+            <a href="{% url 'core:audit_log' %}" class="btn btn-secondary">
+                <i class='bx bx-history'></i> Full History
+            </a>
         </div>
         
         <table style="width: 100%; border-collapse: collapse;">
             <thead>
-                <tr style="text-align: left; color: #999; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px;">
-                    <th style="padding: 1rem;">Action</th>
-                    <th style="padding: 1rem;">Target Entity</th>
-                    <th style="padding: 1rem;">Actor</th>
-                    <th style="padding: 1rem;">Timestamp</th>
+                <tr style="text-align: left; color: #aaa; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; border-bottom: 1px solid var(--border);">
+                    <th style="padding: 1rem 1.25rem;">Event Type</th>
+                    <th style="padding: 1rem 1.25rem;">Entity Reference</th>
+                    <th style="padding: 1rem 1.25rem;">Authorized Actor</th>
+                    <th style="padding: 1rem 1.25rem;">Timestamp</th>
                 </tr>
             </thead>
             <tbody>
                 {% for log in recent_updates %}
-                <tr style="border-bottom: 1px solid #f9f9f9; transition: background 0.2s;">
-                    <td style="padding: 1rem;">
+                <tr style="border-bottom: 1px solid var(--sky-surface-strong); transition: background 0.2s ease;">
+                    <td style="padding: 1.25rem;">
                         <span class="badge {% if log.action_type == 'CREATE' %}badge-green{% elif log.action_type == 'DELETE' %}badge-red{% else %}badge-blue{% endif %}">
                             {{ log.action_type }}
                         </span>
                     </td>
-                    <td style="padding: 1rem;">
-                        <span style="font-weight: 600; color: #444;">{{ log.entity_type }}</span>
-                        <span style="font-size: 0.8rem; color: #aaa;"> (ID: {{ log.entity_id }})</span>
+                    <td style="padding: 1.25rem;">
+                        <span style="font-weight: 700; color: var(--sky-header-blue); font-size: 0.95rem;">{{ log.entity_type }}</span>
+                        <span style="font-size: 0.75rem; color: #999; margin-left: 0.4rem;">UID-{{ log.entity_id }}</span>
                     </td>
-                    <td style="padding: 1rem; color: #666;">
-                        <div style="display: flex; align-items: center; gap: 0.5rem;">
-                            <div style="width: 24px; height: 24px; background: var(--sky-surface-strong); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: bold; color: var(--sky-primary);">
+                    <td style="padding: 1.25rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <div style="width: 28px; height: 28px; background: var(--sky-tint-10); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 800; color: var(--sky-primary);">
                                 {{ log.actor_user.username|slice:":1"|upper }}
                             </div>
-                            @{{ log.actor_user.username }}
+                            <span style="font-weight: 600; color: #555; font-size: 0.9rem;">@{{ log.actor_user.username }}</span>
                         </div>
                     </td>
-                    <td style="padding: 1rem; font-size: 0.85rem; color: #999;">{{ log.action_changed_at|date:"D, d M H:i" }}</td>
+                    <td style="padding: 1.25rem; font-size: 0.85rem; color: #888; font-weight: 500;">
+                        {{ log.action_changed_at|date:"D, d M" }} <span style="opacity: 0.6;">at {{ log.action_changed_at|date:"H:i" }}</span>
+                    </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="4" style="padding: 3rem; text-align: center; color: #bbb;">
-                        <i class='bx bx-info-circle' style="font-size: 2rem; display: block; margin-bottom: 1rem;"></i>
-                        No activity has been logged in the portal yet.
+                    <td colspan="4" style="padding: 4rem; text-align: center;">
+                        <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem; color: #ccc;">
+                            <i class='bx bx-ghost' style="font-size: 3rem;"></i>
+                            <p style="font-weight: 600; font-size: 1rem;">No recent mutations detected.</p>
+                        </div>
                     </td>
                 </tr>
                 {% endfor %}
@@ -97,3 +119,4 @@
     </div>
 </div>
 {% endblock %}
+

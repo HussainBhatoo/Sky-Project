@@ -11,7 +11,7 @@ Enable collaboration. Your app is the "Slack-lite" of the registry, allowing use
 2. **Tabbed View**: Clean buttons to switch between Inbox, Sent, and Drafts.
 3. **Compose UI**: A search-enabled "To" field (search for User or Team).
 4. **Message Detail**: A clean reading pane for individual messages.
-5. **Real-time feel**: Using simple Django filters to keep the inbox updated.
+5. **Team Communication**: Enable formal inquiries between engineering teams.
 
 ---
 

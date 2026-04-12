@@ -5,4 +5,5 @@ app_name = 'organisation'
 
 urlpatterns = [
     path('', views.placeholder, name='org_chart'),
+    path('dependencies/', views.placeholder, name='dependencies'),
 ]

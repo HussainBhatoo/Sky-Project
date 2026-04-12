@@ -64,11 +64,16 @@ class Department(models.Model):
 class Team(models.Model):
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
     team_name = models.CharField(max_length=100)
-    mission = models.TextField(blank=True) # From Audit
-    lead_email = models.EmailField(blank=True) # From Audit
-    slack_channel = models.CharField(max_length=100, blank=True)
+    mission = models.TextField(blank=True) # High-Fi Requirement
+    lead_email = models.EmailField(blank=True) # High-Fi Requirement
+    team_leader_name = models.CharField(max_length=100, blank=True)
+    work_stream = models.CharField(max_length=100)
+    project_name = models.CharField(max_length=100)
+    project_codebase = models.CharField(max_length=100)
     status = models.CharField(max_length=50, default='Active')
     tech_tags = models.TextField(blank=True, help_text="Comma separated tags")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 ```
 
 ### 2. Base Layout (templates/base.html)
@@ -77,8 +82,15 @@ Use **Glassmorphism** for the sidebar.
 <nav class="sidebar glass-panel">
     <div class="sky-logo">...</div>
     <ul class="nav-items">
-        <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
-        <!-- Add links for all apps -->
+        <li><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
+        <li><a href="{% url 'teams:team_list' %}">Teams</a></li>
+        <li><a href="{% url 'organisation:org_chart' %}">Departments</a></li>
+        <li><a href="{% url 'organisation:dependencies' %}">Dependencies</a></li>
+        <li><a href="{% url 'messages_app:inbox' %}">Messages</a></li>
+        <li><a href="{% url 'schedule:calendar' %}">Schedule</a></li>
+        <li><a href="{% url 'reports:reports_home' %}">Reports</a></li>
+        <li><a href="{% url 'core:audit_log' %}">Audit Log</a></li>
+        <li><a href="/admin/">Admin</a></li>
     </ul>
 </nav>
 <main>

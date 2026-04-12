@@ -1,0 +1,36 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - heading "SKY" [level=1] [ref=e4]
+    - paragraph [ref=e5]: Engineering Team Registry
+  - generic [ref=e6]:
+    - heading "Create Account" [level=2] [ref=e7]
+    - generic [ref=e8]:
+      - generic [ref=e9]:
+        - generic [ref=e10]: Username
+        - textbox "Username" [ref=e11]:
+          - /placeholder: Enter your username
+        - generic [ref=e12]: Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.
+      - generic [ref=e13]:
+        - generic [ref=e14]: Email
+        - textbox "Email" [ref=e15]:
+          - /placeholder: Enter your email
+        - generic [ref=e16]: Enter a valid Sky corporate email address.
+      - generic [ref=e17]:
+        - generic [ref=e18]: Password
+        - textbox "Password" [ref=e19]:
+          - /placeholder: Enter your password
+        - list [ref=e21]:
+          - listitem [ref=e22]: Your password can’t be too similar to your other personal information.
+          - listitem [ref=e23]: Your password must contain at least 8 characters.
+          - listitem [ref=e24]: Your password can’t be a commonly used password.
+          - listitem [ref=e25]: Your password can’t be entirely numeric.
+      - generic [ref=e26]:
+        - generic [ref=e27]: Password confirmation
+        - textbox "Password confirmation" [ref=e28]:
+          - /placeholder: Enter your password confirmation
+        - generic [ref=e29]: Enter the same password as before, for verification.
+      - button "Register Official Account" [ref=e31] [cursor=pointer]
+    - paragraph [ref=e33]:
+      - text: Already have an account?
+      - link "Sign In" [ref=e34] [cursor=pointer]:
+        - /url: /accounts/login/

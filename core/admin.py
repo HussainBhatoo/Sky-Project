@@ -16,6 +16,12 @@ admin.site.site_header = "Sky Engineering Registry Admin"
 admin.site.site_title = "Sky Admin"
 admin.site.index_title = "Sky Engineering Registry Management"
 
+# 🔒 Unify Admin login with High-Fi Portal
+admin.site.login = lambda request, extra_context=None: \
+    admin.site.login(request, extra_context={'next': request.get_full_path()}) \
+    if request.user.is_authenticated and request.user.is_staff \
+    else __import__('django.shortcuts').shortcuts.redirect(f"/accounts/login/?next={request.get_full_path()}")
+
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_display = ['username', 'email', 'first_name', 'last_name', 'is_staff']
