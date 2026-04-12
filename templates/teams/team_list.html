@@ -15,10 +15,26 @@
         <h1 class="spectrum-text" style="font-size: 2rem; letter-spacing: -0.02em;">Teams</h1>
         <p style="color: var(--sky-header-blue); opacity: 0.6; font-weight: 500; font-size: 0.95rem;">{{ total_count }} team{{ total_count|pluralize }} registered across all departments</p>
     </div>
+    <!-- 🔀 Grid / List View Toggle -->
+    <div class="flex-center gap-1" style="background: var(--surface-strong); border-radius: var(--border-radius); padding: 0.25rem; border: 1px solid var(--border);">
+        <a href="?search={{ search_query }}&department={{ dept_filter }}&status={{ status_filter }}&view=grid"
+           class="btn {% if view_mode == 'grid' %}btn-primary{% else %}btn-ghost{% endif %}"
+           style="padding: 0.45rem 0.75rem; font-size: 0.85rem; text-decoration: none;"
+           title="Grid view">
+            <i class='bx bx-grid-alt'></i>
+        </a>
+        <a href="?search={{ search_query }}&department={{ dept_filter }}&status={{ status_filter }}&view=list"
+           class="btn {% if view_mode == 'list' %}btn-primary{% else %}btn-ghost{% endif %}"
+           style="padding: 0.45rem 0.75rem; font-size: 0.85rem; text-decoration: none;"
+           title="List view">
+            <i class='bx bx-list-ul'></i>
+        </a>
+    </div>
 </div>
 
 <!-- 🔍 Search & Filter Bar -->
 <form method="get" action="{% url 'teams:team_list' %}" class="filter-bar mb-2 animate-slide-up" style="animation-delay: 0.1s;">
+    <input type="hidden" name="view" value="{{ view_mode }}">
     <div style="position: relative; flex: 1; max-width: 400px;">
         <i class='bx bx-search' style="position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); color: var(--muted-foreground);"></i>
         <input type="text" name="search" class="filter-input" placeholder="Search by team, lead, or department..." value="{{ search_query }}" id="team-search">
@@ -57,8 +73,61 @@
 </div>
 {% endif %}
 
-<!-- 📇 Teams Grid -->
+<!-- 📇 Teams Grid / List -->
 {% if teams %}
+
+{% if view_mode == 'list' %}
+<!-- ── LIST VIEW ── -->
+<div class="card animate-slide-up" style="animation-delay: 0.2s; padding: 0; overflow: hidden;">
+    <table style="width: 100%; border-collapse: collapse; font-size: 0.875rem;">
+        <thead>
+            <tr style="background: var(--surface-strong); border-bottom: 2px solid var(--border);">
+                <th style="text-align: left; padding: 0.85rem 1.25rem; font-weight: 600; color: var(--sky-header-blue);">Team</th>
+                <th style="text-align: left; padding: 0.85rem 1rem; font-weight: 600; color: var(--sky-header-blue);">Department</th>
+                <th style="text-align: left; padding: 0.85rem 1rem; font-weight: 600; color: var(--sky-header-blue);">Lead</th>
+                <th style="text-align: left; padding: 0.85rem 1rem; font-weight: 600; color: var(--sky-header-blue);">Status</th>
+                <th style="text-align: center; padding: 0.85rem 1rem; font-weight: 600; color: var(--sky-header-blue);">Members</th>
+                <th style="text-align: center; padding: 0.85rem 1rem; font-weight: 600; color: var(--sky-header-blue);">Upstream</th>
+                <th style="text-align: center; padding: 0.85rem 1rem; font-weight: 600; color: var(--sky-header-blue);">Downstream</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for team in teams %}
+            <tr data-href="{% url 'teams:team_detail' team.team_id %}" onclick="window.location=this.dataset.href"
+                style="border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.15s;"
+                onmouseover="this.style.background='var(--surface-strong)'" onmouseout="this.style.background=''">
+                <td style="padding: 0.85rem 1.25rem;">
+                    <a href="{% url 'teams:team_detail' team.team_id %}" style="text-decoration: none; font-weight: 600; color: var(--sky-header-blue);">
+                        {{ team.team_name }}
+                    </a>
+                    {% if team.mission %}
+                    <p style="font-size: 0.75rem; color: var(--muted-foreground); margin: 0.2rem 0 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 260px;">
+                        {{ team.mission|truncatewords:10 }}
+                    </p>
+                    {% endif %}
+                </td>
+                <td style="padding: 0.85rem 1rem;">
+                    <span class="chip chip-department">{{ team.department.department_name }}</span>
+                </td>
+                <td style="padding: 0.85rem 1rem; color: var(--sky-text);">
+                    {{ team.team_leader_name|default:"—" }}
+                </td>
+                <td style="padding: 0.85rem 1rem;">
+                    <span class="chip {% if team.status == 'Active' %}chip-active{% elif team.status == 'Restructuring' %}chip-restructuring{% else %}chip-disbanded{% endif %}">
+                        {{ team.status }}
+                    </span>
+                </td>
+                <td style="padding: 0.85rem 1rem; text-align: center; color: var(--muted-foreground);">{{ team.member_count }}</td>
+                <td style="padding: 0.85rem 1rem; text-align: center; color: var(--muted-foreground);">{{ team.upstream_count }}</td>
+                <td style="padding: 0.85rem 1rem; text-align: center; color: var(--muted-foreground);">{{ team.downstream_count }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% else %}
+<!-- ── GRID VIEW ── -->
 <div class="grid-3 animate-slide-up" style="animation-delay: 0.2s;">
     {% for team in teams %}
     <a href="{% url 'teams:team_detail' team.team_id %}" class="card" style="text-decoration: none; color: inherit; cursor: pointer;">
@@ -78,12 +147,15 @@
         </p>
         {% endif %}
         <div class="flex gap-2" style="margin-top: 0.75rem; font-size: 0.75rem; color: var(--muted-foreground);">
+            <span>{{ team.member_count }} member{{ team.member_count|pluralize }}</span>
             <span>{{ team.upstream_count }} upstream</span>
             <span>{{ team.downstream_count }} downstream</span>
         </div>
     </a>
     {% endfor %}
 </div>
+{% endif %}
+
 {% else %}
 <div class="card animate-slide-up" style="animation-delay: 0.2s;">
     <div class="empty-state">

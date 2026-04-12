@@ -46,6 +46,10 @@ def team_list(request):
 
         departments = Department.objects.all().order_by('department_name')
 
+        view_mode = request.GET.get('view', 'grid')
+        if view_mode not in ('grid', 'list'):
+            view_mode = 'grid'
+
         context = {
             'teams': teams,
             'departments': departments,
@@ -53,6 +57,7 @@ def team_list(request):
             'dept_filter': dept_filter,
             'status_filter': status_filter,
             'total_count': teams.count(),
+            'view_mode': view_mode,
         }
         return render(request, 'teams/team_list.html', context)
     except Exception as error:

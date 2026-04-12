@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages as django_messages
 from django.utils import timezone
 
-from core.models import Message, Team, AuditLog
+from core.models import Message, Team
 
 
 @login_required
@@ -96,21 +96,13 @@ def compose(request):
 
             team = get_object_or_404(Team, team_id=team_id)
 
-            message = Message.objects.create(
+            Message.objects.create(
                 sender_user=request.user,
                 team=team,
                 message_subject=subject,
                 message_body=body,
                 message_status='sent',
                 message_sent_at=timezone.now(),
-            )
-
-            AuditLog.objects.create(
-                actor_user=request.user,
-                action_type='CREATE',
-                entity_type='Message',
-                entity_id=message.message_id,
-                change_summary=f'Sent message: {subject} to {team.team_name}',
             )
 
             django_messages.success(request, 'Message sent successfully.')

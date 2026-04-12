@@ -178,7 +178,7 @@ class Meeting(models.Model):
 class AuditLog(models.Model):
     # Entity 13: AuditLog
     audit_id = models.AutoField(primary_key=True)
-    actor_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='audit_actions')
+    actor_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='audit_actions')
     ACTION_CHOICES = [
         ('CREATE', 'Create'),
         ('UPDATE', 'Update'),

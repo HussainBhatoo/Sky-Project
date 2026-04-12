@@ -1,5 +1,5 @@
-"""
-SCHEDULE MODULE — Student 4: Maurya Patel
+﻿"""
+SCHEDULE MODULE - Student 4: Maurya Patel
 Handles meeting management: calendar display, CRUD operations, and
 cross-team scheduling with inter-app wiring (team_id prefill via GET params).
 """
@@ -10,114 +10,149 @@ from django.utils import timezone
 from datetime import datetime, timedelta
 import calendar as cal_module
 
-from core.models import Meeting, Team, AuditLog
+from core.models import Meeting, Team
 from .forms import MeetingForm
+
+
+def _build_calendar_context(year: int, month: int, meetings) -> dict:
+    """
+    Helper: generates the calendar grid data for a given month.
+
+    :param year: The year integer
+    :param month: The month integer (1-12)
+    :param meetings: QuerySet of Meeting objects to mark on the calendar
+    :return: Dict with calendar_days, first_day_range, month_name
+    """
+    month_name = datetime(year, month, 1).strftime('%B %Y')
+    days_in_month = cal_module.monthrange(year, month)[1]
+    first_weekday = cal_module.monthrange(year, month)[0]
+    # Python calendar: Monday=0. We need Sunday=0 grid.
+    first_day_offset = (first_weekday + 1) % 7
+
+    meeting_dates = set()
+    for m in meetings:
+        if m.start_datetime.month == month and m.start_datetime.year == year:
+            meeting_dates.add(m.start_datetime.day)
+
+    today = timezone.now()
+    calendar_days = [
+        {
+            "number": day_num,
+            "is_today": (day_num == today.day and month == today.month and year == today.year),
+            "has_event": day_num in meeting_dates,
+        }
+        for day_num in range(1, days_in_month + 1)
+    ]
+    return {
+        "calendar_days": calendar_days,
+        "first_day_offset": first_day_offset,
+        "first_day_range": range(first_day_offset),
+        "month_name": month_name,
+    }
 
 
 @login_required
 def schedule_calendar(request):
     """
-    Main schedule view: displays a calendar widget and upcoming meetings list.
-    Supports GET param `?team_id=X` to pre-filter meetings by team.
+    Main schedule view: displays the calendar widget, upcoming meetings list,
+    and the inline meeting-creation form (hidden by default, toggled via JS).
+    Supports GET param ?team_id=X to pre-filter meetings by team.
+    Supports GET param ?new=true to auto-open the create form.
 
     :param request: Standard Django HttpRequest object
     :return: Rendered schedule/calendar.html template
     """
     try:
-        team_filter = request.GET.get('team_id')
+        team_filter = request.GET.get("team_id")
+        prefill_team_id = team_filter
+        show_form = request.GET.get("new") == "true"
 
-        meetings = Meeting.objects.select_related('team', 'created_by_user').order_by('start_datetime')
+        # Always pass a form instance so the template renders the fields
+        form = MeetingForm(initial={"team": prefill_team_id} if prefill_team_id else {})
+
+        meetings = Meeting.objects.select_related("team", "created_by_user").order_by("start_datetime")
         if team_filter:
             meetings = meetings.filter(team__team_id=team_filter)
 
-        # Build calendar data for current month
         today = timezone.now()
-        year = today.year
-        month = today.month
-        month_name = today.strftime('%B %Y')
-        days_in_month = cal_module.monthrange(year, month)[1]
-        first_weekday = cal_module.monthrange(year, month)[0]
-        # Python's calendar uses Monday=0, we need Sunday=0
-        first_day_offset = (first_weekday + 1) % 7
-
-        # Dates that have meetings this month
-        meeting_dates = set()
-        for meeting in meetings:
-            if meeting.start_datetime.month == month and meeting.start_datetime.year == year:
-                meeting_dates.add(meeting.start_datetime.day)
-
-        calendar_days = []
-        for day_num in range(1, days_in_month + 1):
-            calendar_days.append({
-                'number': day_num,
-                'is_today': day_num == today.day,
-                'has_event': day_num in meeting_dates,
-            })
-
-        teams = Team.objects.all().order_by('team_name')
+        calendar_ctx = _build_calendar_context(today.year, today.month, meetings)
+        teams = Team.objects.all().order_by("team_name")
 
         context = {
-            'meetings': meetings,
-            'calendar_days': calendar_days,
-            'first_day_offset': first_day_offset,
-            'first_day_range': range(first_day_offset),
-            'month_name': month_name,
-            'today': today,
-            'teams': teams,
-            'selected_team': team_filter,
+            "meetings": meetings,
+            "form": form,
+            "teams": teams,
+            "selected_team": team_filter,
+            "prefill_team_id": prefill_team_id,
+            "show_form": show_form,
+            "today": today,
         }
-        return render(request, 'schedule/calendar.html', context)
+        context.update(calendar_ctx)
+        return render(request, "schedule/calendar.html", context)
+
     except Exception as error:
-        messages.error(request, f'Error loading schedule: {error}')
-        return render(request, 'schedule/calendar.html', {'meetings': [], 'calendar_days': []})
+        messages.error(request, f"Error loading schedule: {error}")
+        return render(request, "schedule/calendar.html", {
+            "meetings": [],
+            "calendar_days": [],
+            "form": MeetingForm(),
+            "first_day_range": range(0),
+            "month_name": "",
+        })
 
 
 @login_required
 def schedule_create(request):
     """
     Handles creation of new meetings.
-    Supports GET param `?team_id=X` to pre-fill the team dropdown.
+    GET: redirects to calendar with ?new=true to open the form.
+    POST: validates and saves, or re-renders with errors and form open.
+    Supports GET param ?team_id=X to pre-fill the team dropdown.
 
     :param request: Standard Django HttpRequest object
-    :return: Redirect to calendar on success, or form with errors
+    :return: Redirect to calendar on success, or re-render with errors
     """
     try:
-        prefill_team_id = request.GET.get('team_id')
+        prefill_team_id = request.GET.get("team_id")
 
-        if request.method == 'POST':
+        if request.method == "POST":
             form = MeetingForm(request.POST)
             if form.is_valid():
                 meeting = form.save(commit=False)
                 meeting.created_by_user = request.user
                 meeting.save()
 
-                # Audit log
-                AuditLog.objects.create(
-                    actor_user=request.user,
-                    action_type='CREATE',
-                    entity_type='Meeting',
-                    entity_id=meeting.meeting_id,
-                    change_summary=f'Created meeting: {meeting.meeting_title}',
-                )
-
                 messages.success(request, f'Meeting "{meeting.meeting_title}" scheduled successfully.')
-                return redirect('schedule:calendar')
-        else:
-            initial_data = {}
-            if prefill_team_id:
-                initial_data['team'] = prefill_team_id
-            form = MeetingForm(initial=initial_data)
+                return redirect("schedule:calendar")
 
-        teams = Team.objects.all().order_by('team_name')
-        context = {
-            'form': form,
-            'teams': teams,
-            'prefill_team_id': prefill_team_id,
-        }
-        return render(request, 'schedule/calendar.html', context)
+            else:
+                # Re-render calendar with the form open and errors shown
+                meetings = Meeting.objects.select_related("team", "created_by_user").order_by("start_datetime")
+                today = timezone.now()
+                calendar_ctx = _build_calendar_context(today.year, today.month, meetings)
+                teams = Team.objects.all().order_by("team_name")
+                context = {
+                    "meetings": meetings,
+                    "form": form,
+                    "show_form": True,
+                    "teams": teams,
+                    "selected_team": None,
+                    "prefill_team_id": prefill_team_id,
+                    "today": today,
+                }
+                context.update(calendar_ctx)
+                return render(request, "schedule/calendar.html", context)
+
+        else:
+            # GET redirect to calendar with form open
+            redirect_url = "/schedule/?new=true"
+            if prefill_team_id:
+                redirect_url += f"&team_id={prefill_team_id}"
+            return redirect(redirect_url)
+
     except Exception as error:
-        messages.error(request, f'Error creating meeting: {error}')
-        return redirect('schedule:calendar')
+        messages.error(request, f"Error creating meeting: {error}")
+        return redirect("schedule:calendar")
 
 
 @login_required
@@ -132,21 +167,13 @@ def schedule_delete(request, meeting_id):
     try:
         meeting = get_object_or_404(Meeting, meeting_id=meeting_id)
 
-        if request.method == 'POST':
+        if request.method == "POST":
             title = meeting.meeting_title
-
-            AuditLog.objects.create(
-                actor_user=request.user,
-                action_type='DELETE',
-                entity_type='Meeting',
-                entity_id=meeting.meeting_id,
-                change_summary=f'Deleted meeting: {title}',
-            )
-
             meeting.delete()
             messages.success(request, f'Meeting "{title}" has been deleted.')
 
-        return redirect('schedule:calendar')
+        return redirect("schedule:calendar")
+
     except Exception as error:
-        messages.error(request, f'Error deleting meeting: {error}')
-        return redirect('schedule:calendar')
+        messages.error(request, f"Error deleting meeting: {error}")
+        return redirect("schedule:calendar")

@@ -28,7 +28,7 @@
 </div>
 
 <!-- ✏️ New Meeting Form (Hidden by default) -->
-<div id="meeting-form" style="display: none;" class="card animate-slide-up mb-3" style="max-width: 600px;">
+<div id="meeting-form" class="card animate-slide-up mb-3" style="display: {% if show_form %}block{% else %}none{% endif %}; max-width: 640px;">
     <h3 style="color: var(--sky-header-blue); margin-bottom: 1.5rem;">
         <i class='bx bx-calendar-plus' style="margin-right: 0.5rem;"></i> New Meeting
     </h3>
