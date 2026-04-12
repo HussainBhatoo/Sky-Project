@@ -23,6 +23,15 @@ The **Sky Engineering Team Registry** is a centralized platform designed to mana
 
 Follow the link above for exact, step-by-step instructions (cloning, virtual environment, and running the server).
 
+## 🔑 Login Credentials
+The application comes with a pre-populated database containing 46 real Sky engineering teams across 6 departments. You can use the following accounts to test the system:
+
+| Username | Password | Role |
+| :--- | :--- | :--- |
+| `admin` | `Admin1234!` | Superuser / Admin |
+| `testuser` | `Test1234!` | Regular User |
+| `maurya.patel` | `Sky1234!` | Sky Engineer |
+
 ## 👥 Team Mapping & Responsibilities
 | Student | Name | Role/App | High-Fi Module |
 | :--- | :--- | :--- | :--- |

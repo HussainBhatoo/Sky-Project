@@ -9,7 +9,7 @@ class UserSignupForm(UserCreationForm):
     """
     email = forms.EmailField(
         required=True,
-        help_text='Enter a valid Sky corporate email address.'
+        help_text='Must be an official @sky.com or @sky.uk email'
     )
 
     class Meta(UserCreationForm.Meta):
@@ -17,8 +17,12 @@ class UserSignupForm(UserCreationForm):
         fields = UserCreationForm.Meta.fields + ('email',)
 
     def clean_email(self):
-        """Ensure email is unique across the registry."""
+        """Ensure email is unique across the registry and has a valid corporate domain."""
         email = self.cleaned_data.get('email')
+        
+        if not email.endswith('@sky.com') and not email.endswith('@sky.uk'):
+            raise forms.ValidationError("Please use a valid Sky corporate email address (@sky.com or @sky.uk).")
+            
         if User.objects.filter(email=email).exists():
             raise forms.ValidationError("This email is already registered in the Sky Registry.")
         return email

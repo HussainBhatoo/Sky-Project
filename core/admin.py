@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.contrib.admin import AdminSite
+from django.contrib.auth.models import Group
 from .models import (
     User, Department, Team, TeamMember, Dependency, 
     ContactChannel, RepositoryLink, BoardLink, WikiLink, 
@@ -11,82 +13,125 @@ Customizes the administrative interface for the Sky Engineering Registry.
 Provides efficient list views, search functionality, and filtering for all 13 core entities.
 """
 
-# Base Admin Site Branding
-admin.site.site_header = "Sky Engineering Registry Admin"
-admin.site.site_title = "Sky Admin"
-admin.site.index_title = "Sky Engineering Registry Management"
+class SkyAdminSite(AdminSite):
+    site_header = "Sky Engineering Registry Admin"
+    site_title = "Sky Admin"
+    index_title = "Sky Engineering Registry Management"
+    
+    def login(self, request, extra_context=None):
+        if request.user.is_authenticated and request.user.is_staff:
+            return super().login(request, extra_context={'next': request.get_full_path()})
+        return __import__('django.shortcuts').shortcuts.redirect(f"/accounts/login/?next={request.get_full_path()}")
+        
+    def get_app_list(self, request, app_label=None):
+        app_dict = self._build_app_dict(request)
+        
+        # Collect models mapped by object_name
+        models_by_name = {}
+        for app in app_dict.values():
+            for m in app['models']:
+                models_by_name[m['object_name']] = m
+                
+        # Custom structured sections required by the brief
+        sections = [
+            ("Add Team", ['Team']),
+            ("Team Management", ['TeamMember', 'ContactChannel', 'RepositoryLink', 'BoardLink', 'WikiLink', 'StandupInfo']),
+            ("Department", ['Department']),
+            ("Organisation", ['Dependency']),
+            ("Messages", ['Message']),
+            ("User Access (Permissions)", ['User', 'Group']),
+            ("Reports", ['AuditLog']),
+            ("Data Visualization", ['Meeting']),
+        ]
+        
+        app_list = []
+        for section_name, model_names in sections:
+            section_models = []
+            for m_name in model_names:
+                if m_name in models_by_name:
+                    section_models.append(models_by_name[m_name])
+                    
+            if section_models:
+                app_list.append({
+                    'name': section_name,
+                    'app_label': section_name.lower().replace(' ', '_'),
+                    'app_url': '',
+                    'has_module_perms': True,
+                    'models': section_models,
+                })
+        return app_list
 
-# 🔒 Unify Admin login with High-Fi Portal
-admin.site.login = lambda request, extra_context=None: \
-    admin.site.login(request, extra_context={'next': request.get_full_path()}) \
-    if request.user.is_authenticated and request.user.is_staff \
-    else __import__('django.shortcuts').shortcuts.redirect(f"/accounts/login/?next={request.get_full_path()}")
+# Instantiate the custom AdminSite
+sky_admin_site = SkyAdminSite(name='sky_admin')
 
-@admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_display = ['username', 'email', 'first_name', 'last_name', 'is_staff']
     search_fields = ['username', 'email', 'first_name', 'last_name']
 
-@admin.register(Department)
 class DepartmentAdmin(admin.ModelAdmin):
     list_display = ['department_name', 'department_lead_name']
     search_fields = ['department_name', 'department_lead_name']
 
-@admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
     list_display = ['team_name', 'department', 'team_leader_name', 'project_name']
     list_filter = ['department']
     search_fields = ['team_name', 'team_leader_name', 'project_name']
 
-@admin.register(TeamMember)
 class TeamMemberAdmin(admin.ModelAdmin):
     list_display = ['full_name', 'role_title', 'team', 'email']
     list_filter = ['team']
     search_fields = ['full_name', 'email']
 
-@admin.register(Dependency)
 class DependencyAdmin(admin.ModelAdmin):
     list_display = ['from_team', 'to_team', 'dependency_type']
     list_filter = ['dependency_type']
 
-@admin.register(ContactChannel)
 class ContactChannelAdmin(admin.ModelAdmin):
     list_display = ['team', 'channel_type', 'channel_value']
     list_filter = ['channel_type']
 
-@admin.register(RepositoryLink)
 class RepositoryLinkAdmin(admin.ModelAdmin):
     list_display = ['repo_name', 'team', 'repo_url']
     search_fields = ['repo_name']
 
-@admin.register(BoardLink)
 class BoardLinkAdmin(admin.ModelAdmin):
     list_display = ['team', 'board_type', 'board_url']
     list_filter = ['board_type']
 
-@admin.register(WikiLink)
 class WikiLinkAdmin(admin.ModelAdmin):
     list_display = ['wikki_description', 'team', 'wikki_link']
 
-@admin.register(StandupInfo)
 class StandupInfoAdmin(admin.ModelAdmin):
     list_display = ['team', 'standup_time', 'standup_link']
 
-@admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
     list_display = ['message_subject', 'sender_user', 'team', 'message_status', 'message_sent_at']
     list_filter = ['message_status', 'team']
     search_fields = ['message_subject', 'message_body']
 
-@admin.register(Meeting)
 class MeetingAdmin(admin.ModelAdmin):
     list_display = ['meeting_title', 'team', 'start_datetime', 'platform_type']
     list_filter = ['platform_type', 'team']
     search_fields = ['meeting_title', 'agenda_text']
 
-@admin.register(AuditLog)
 class AuditLogAdmin(admin.ModelAdmin):
     list_display = ['action_type', 'entity_type', 'entity_id', 'actor_user', 'action_changed_at']
     list_filter = ['action_type', 'entity_type']
     search_fields = ['change_summary']
     readonly_fields = ['action_changed_at']
+
+# Register models to custom admin site
+sky_admin_site.register(Group)
+sky_admin_site.register(User, UserAdmin)
+sky_admin_site.register(Department, DepartmentAdmin)
+sky_admin_site.register(Team, TeamAdmin)
+sky_admin_site.register(TeamMember, TeamMemberAdmin)
+sky_admin_site.register(Dependency, DependencyAdmin)
+sky_admin_site.register(ContactChannel, ContactChannelAdmin)
+sky_admin_site.register(RepositoryLink, RepositoryLinkAdmin)
+sky_admin_site.register(BoardLink, BoardLinkAdmin)
+sky_admin_site.register(WikiLink, WikiLinkAdmin)
+sky_admin_site.register(StandupInfo, StandupInfoAdmin)
+sky_admin_site.register(Message, MessageAdmin)
+sky_admin_site.register(Meeting, MeetingAdmin)
+sky_admin_site.register(AuditLog, AuditLogAdmin)

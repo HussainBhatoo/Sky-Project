@@ -10,8 +10,7 @@
     <style>
         /* 🎨 Custom Admin Overrides to Match Registry Design */
         #header {
-            background: var(--sky-header-blue);
-            background: var(--sky-spectrum-diagonal);
+            background: linear-gradient(90deg, #e4563e, #e70296, #dc01b1, #be01c4, #9f11e7, #3d5fdf);
             border-bottom: 4px solid white;
             padding: 1rem 2rem;
         }
@@ -22,13 +21,13 @@
             color: white !important;
         }
         .module h2, .module caption, .inline-group h2 {
-            background: var(--sky-header-blue);
+            background: #9f11e7;
             color: white;
             border-radius: 8px 8px 0 0;
             padding: 10px 15px;
         }
         #content h1 {
-            color: var(--sky-header-blue);
+            color: #9f11e7;
             margin-bottom: 20px;
             font-size: 1.8rem;
         }
@@ -36,17 +35,21 @@
             background: var(--sky-surface-strong);
             border-bottom: 1px solid var(--border);
             padding: 10px 2rem;
-            color: var(--sky-header-blue);
+            color: #9f11e7;
         }
         .button, input[type=submit], input[type=button], .submit-row input, a.button {
-            background: var(--sky-primary) !important;
+            background: #9f11e7 !important;
             border-radius: 8px !important;
             padding: 10px 20px !important;
             font-weight: 700 !important;
             border: none !important;
-            box-shadow: 0 4px 10px rgba(0, 15, 245, 0.2) !important;
+            box-shadow: 0 4px 10px rgba(159, 17, 231, 0.2) !important;
         }
-        .button:hover { background: var(--sky-primary-dark) !important; }
+        .button:hover { background: #be01c4 !important; }
+        
+        a:link, a:visited {
+            color: #9f11e7;
+        }
         
         /* User Tools (Top Right) */
         #user-tools {
