@@ -59,17 +59,19 @@
 <!-- 📨 Message Detail View -->
 <div class="grid-2-1 animate-slide-up" style="animation-delay: 0.15s;">
     <!-- Message List (shrunk) -->
-    <div class="card" style="padding: 0; max-height: 70vh; overflow-y: auto;">
+    <div class="card" style="padding: 0; max-height: 70vh; overflow-y: auto; border: 1px solid var(--sky-border-subtle); background: var(--sky-card-bg);">
         {% for msg in all_messages %}
-        <a href="{% url 'messages_app:detail' msg.message_id %}" class="msg-item {% if msg.message_status == 'draft' %}is-unread{% endif %}" style="text-decoration: none; color: inherit;">
-            <div style="flex: 1; min-width: 0;">
+        <a href="{% url 'messages_app:detail' msg.message_id %}" class="msg-item {% if msg.message_status == 'sent' and not selected_message.message_id == msg.message_id %}is-unread{% endif %}" style="text-decoration: none; color: inherit; transition: background 0.2s ease;">
+            <div style="flex: 1; min-width: 0; padding: 0.75rem 1rem; border-bottom: 1px solid var(--sky-border-subtle);">
                 <div class="flex-center gap-1">
-                    {% if msg.message_status == 'draft' %}<span class="unread-dot"></span>{% endif %}
-                    <span style="font-weight: {% if msg.message_id == selected_message.message_id %}800{% else %}500{% endif %}; font-size: 0.9rem; color: var(--sky-header-blue);">{{ msg.message_subject|truncatewords:8 }}</span>
+                    {% if msg.message_status == 'sent' and not selected_message.message_id == msg.message_id %}<span class="unread-dot"></span>{% endif %}
+                    <span style="font-weight: {% if msg.message_id == selected_message.message_id %}800{% else %}500{% endif %}; font-size: 0.85rem; color: var(--sky-header-blue);">{{ msg.message_subject|truncatewords:6 }}</span>
                 </div>
-                <span style="font-size: 0.75rem; color: var(--muted-foreground);">{{ msg.sender_user.username }} → {{ msg.team.team_name }}</span>
+                <div class="flex-between" style="margin-top: 0.25rem;">
+                    <span style="font-size: 0.7rem; color: var(--muted-foreground);">{{ msg.sender_user.username|truncatechars:10 }} → {{ msg.team.team_name|truncatechars:10 }}</span>
+                    <span style="font-size: 0.65rem; color: var(--muted-foreground); white-space: nowrap;">{{ msg.message_sent_at|date:"d M" }}</span>
+                </div>
             </div>
-            <span style="font-size: 0.7rem; color: var(--muted-foreground); white-space: nowrap;">{{ msg.message_sent_at|date:"d M" }}</span>
         </a>
         {% endfor %}
     </div>
@@ -93,20 +95,28 @@
 <div class="card animate-slide-up" style="animation-delay: 0.15s; padding: 0;">
     {% if all_messages %}
     {% for msg in all_messages %}
-    <a href="{% url 'messages_app:detail' msg.message_id %}" class="msg-item {% if msg.message_status == 'draft' %}is-unread{% endif %}" style="text-decoration: none; color: inherit;">
-        <div class="flex-center gap-2" style="flex: 1; min-width: 0;">
-            {% if msg.message_status == 'draft' %}<span class="unread-dot"></span>{% endif %}
+    <a href="{% url 'messages_app:detail' msg.message_id %}" class="msg-item {% if msg.message_status == 'sent' %}is-unread{% endif %}" style="text-decoration: none; color: inherit; transition: all 0.2s ease;">
+        <div class="flex-center gap-2" style="flex: 1; min-width: 0; padding: 1rem 1.5rem; border-bottom: 1px solid var(--sky-border-subtle); border-left: 4px solid transparent;">
+            {% if msg.message_status == 'sent' %}<span class="unread-dot"></span>{% endif %}
             <div style="flex: 1; min-width: 0;">
                 <div class="flex-center gap-1">
-                    <span style="font-weight: 600; font-size: 0.9rem; color: var(--sky-header-blue);">{{ msg.message_subject }}</span>
+                    <span style="font-weight: 600; font-size: 0.95rem; color: var(--sky-header-blue);">{{ msg.message_subject }}</span>
                 </div>
-                <span style="font-size: 0.8rem; color: var(--muted-foreground);">
-                    {{ msg.sender_user.username }} → {{ msg.team.team_name }}
+                <div class="flex-center gap-1 mt-025">
+                    <span style="font-size: 0.8rem; color: var(--muted-foreground);">
+                        {{ msg.sender_user.username }}
+                    </span>
+                    <i class='bx bx-right-arrow-alt' style="font-size: 0.8rem; opacity: 0.5;"></i>
+                    <span style="font-size: 0.8rem; color: var(--sky-header-blue); font-weight: 500;">
+                        {{ msg.team.team_name }}
+                    </span>
+                </div>
+            </div>
+            <div style="text-align: right; flex-shrink: 0;">
+                <span style="font-size: 0.75rem; color: var(--muted-foreground); white-space: nowrap; font-weight: 500;">
+                    <i class='bx bx-time-five' style="vertical-align: middle;"></i> {{ msg.message_sent_at|date:"d M Y, H:i" }}
                 </span>
             </div>
-        </div>
-        <div style="text-align: right; flex-shrink: 0;">
-            <span style="font-size: 0.75rem; color: var(--muted-foreground); white-space: nowrap;">{{ msg.message_sent_at|date:"d M Y, H:i" }}</span>
         </div>
     </a>
     {% endfor %}
