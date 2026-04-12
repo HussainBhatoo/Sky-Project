@@ -5,6 +5,13 @@ from .models import (
     StandupInfo, Message, Meeting, AuditLog
 )
 
+"""
+DJANGO ADMIN CONFIGURATION
+Customizes the administrative interface for the Sky Engineering Registry.
+Provides efficient list views, search functionality, and filtering for all 13 core entities.
+"""
+
+# Base Admin Site Branding
 admin.site.site_header = "Sky Engineering Registry Admin"
 admin.site.site_title = "Sky Admin"
 admin.site.index_title = "Sky Engineering Registry Management"

@@ -87,9 +87,9 @@
 <body>
     <div class="login-card">
         <div class="login-header">
-            <div class="sky-brand">sky</div>
-            <h2 style="font-weight: 600;">Engineering Team Registry</h2>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Group H Implementation (The Avengers)</p>
+            <img src="/assets/images/Sky-spectrum-rgb.png" alt="Sky Spectrum Logo" style="height: 60px; margin-bottom: 1rem;">
+            <p style="color: var(--primary); font-weight: 800; letter-spacing: 2px; text-transform: uppercase; font-size: 0.8rem; margin-bottom: 0.5rem;">Engineering Team Registry</p>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Lead Developer: Maurya Patel</p>
         </div>
 
         <form method="post">
@@ -107,8 +107,11 @@
         </form>
 
         <div class="login-footer">
-            <p>Don't have an account? <a href="#">Request Access</a></p>
+            <p>Don't have an account? <a href="{% url 'accounts:register' %}">Sign Up</a></p>
             <p style="margin-top: 1rem;"><a href="#" style="font-size: 0.85rem; font-weight: 400; opacity: 0.8;">Forgot Password?</a></p>
+            <div style="margin-top: 2rem; font-size: 0.75rem; opacity: 0.6;">
+                © 2026 Sky Engineering Team Registry
+            </div>
         </div>
     </div>
 </body>

@@ -4,53 +4,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Join the Registry | Sky Engineering</title>
-    <!-- Shared Design system -->
+    <title>Create Account | Sky Engineering Portal</title>
+    <!-- Importing our Global Design System -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
     <style>
-        /* Shared Background with Login for Brand Recognition */
         body {
-            background: var(--sky-spectrum-diagonal);
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            padding: 2rem;
         }
         .signup-container {
             width: 100%;
-            max-width: 500px;
-            animation: fadeIn 0.6s ease-out forwards;
+            max-width: 550px;
+            padding: 1rem;
         }
         .logo-box {
-            color: white;
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
         }
-        /* Custom formatting for the Django form assistance */
-        .form-help-text {
+        .sky-brand {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 3rem;
+            letter-spacing: -3px;
+            background: var(--sky-spectrum);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1;
+        }
+        .sub-brand {
+            font-weight: 600;
+            color: var(--sky-header-blue);
+            opacity: 0.8;
+            margin-top: 0.5rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
             font-size: 0.8rem;
-            color: #777;
+        }
+        .form-help-text {
+            font-size: 0.75rem;
+            color: #888;
             margin-top: 0.25rem;
-            display: block;
         }
     </style>
 </head>
 <body>
 
-    <div class="signup-container">
+    <div class="signup-container animate-slide-up">
         <div class="logo-box">
-            <h1 class="sky-logo">SKY</h1>
-            <p>Engineering Team Hub</p>
+            <img src="{% static 'images/Sky-spectrum-rgb.png' %}" alt="Sky Logo" class="sky-logo-img" style="max-width: 240px; margin-bottom: 0.5rem;">
+            <p class="sub-brand">Engineering Team Registry</p>
+            <p style="color: var(--sky-header-blue); opacity: 0.6; font-size: 0.75rem; margin-top: 0.5rem; font-weight: 600;">Lead Developer: Maurya Patel</p>
         </div>
 
-        <div class="glass-card">
-            <h2 class="mb-2 text-center spectrum-text">Create Account</h2>
+        <div class="glass-card" style="background: rgba(255, 255, 255, 0.95); box-shadow: 0 30px 60px rgba(0,0,0,0.08);">
+            <h2 class="mb-2 text-center spectrum-text" style="font-size: 1.75rem;">Create Account</h2>
             
             <form method="post">
                 {% csrf_token %}
                 
-                <!-- We map the Django form fields to our High-Fi CSS classes -->
                 {% for field in form %}
                     <div class="form-group">
                         <label for="{{ field.id_for_label }}">{{ field.label }}</label>
@@ -61,23 +78,24 @@
                                placeholder="Enter your {{ field.label|lower }}"
                                required>
                         {% if field.help_text %}
-                            <span class="form-help-text">{{ field.help_text|safe }}</span>
+                            <div class="form-help-text">{{ field.help_text|safe }}</div>
                         {% endif %}
                         {% for error in field.errors %}
-                            <div class="badge-red" style="margin-top: 5px; font-size: 0.75rem;">{{ error }}</div>
+                            <div style="color: var(--sky-negative); font-size: 0.75rem; margin-top: 5px;">{{ error }}</div>
                         {% endfor %}
                     </div>
                 {% endfor %}
 
                 <div class="mt-1">
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">Register Official Account</button>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; border-radius: 12px; padding: 1rem;">Register Official Account</button>
                 </div>
             </form>
 
             <div class="text-center mt-1">
                 <p style="font-size: 0.9rem; color: #666;">
-                    Already have an account? <a href="{% url 'login' %}" style="color: var(--spectrum-2); font-weight: 600;">Sign In</a>
+                    Already have an account? <a href="{% url 'login' %}" style="color: var(--sky-primary); font-weight: 700; text-decoration: none;">Sign In</a>
                 </p>
+                <p style="font-size: 0.7rem; color: #999; margin-top: 1.5rem; letter-spacing: 0.5px;">© 2026 SKY UK LIMITED</p>
             </div>
         </div>
     </div>

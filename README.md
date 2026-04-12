@@ -1,6 +1,8 @@
 # Sky Engineering Team Registry
 
-![Sky Logo](https://upload.wikimedia.org/wikipedia/en/thumb/3/34/Sky_logo_2020.svg/1200px-Sky_logo_2020.svg.png)
+![Sky Logo](./assets/images/Sky-spectrum-rgb.png)
+
+**Lead Developer:** Maurya Patel
 
 ## 🌌 Project Overview
 The **Sky Engineering Team Registry** is a centralized platform designed to manage and visualize the complex hierarchy of engineering teams at Sky. Built as part of the **5COSC021W - Agile Software Development** module, this application provides a robust system for tracking team members, departmental structures, inter-team dependencies, and internal communications.

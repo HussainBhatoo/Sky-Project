@@ -2,15 +2,18 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 
+"""
+SKY ENGINEERING TEAM REGISTRY - CORE DATA MODELS
+This file defines the 13 foundational entities required by the Sky project brief.
+All models are designed to be extensible while maintaining strict relational integrity.
+"""
+
 class User(AbstractUser):
-    # Entity 1: User (extends Django AbstractUser)
-    # Django's AbstractUser already has:
-    # id (PK), username, password, first_name, last_name, email, is_active, date_joined
-    
-    # Customizing to match exact names if needed, though AbstractUser is usually sufficient.
-    # The brief implies names like user_id, user_email etc.
-    # We will keep AbstractUser's structure but ensure it maps to the requirements.
-    
+    """
+    Entity 1: User
+    Extends Django's AbstractUser to provide a centralized authentication model.
+    Includes SSO username simulation and mandatory corporate email fields.
+    """
     class Meta:
         verbose_name = 'User'
         verbose_name_plural = 'Users'

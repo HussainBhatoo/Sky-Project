@@ -20,7 +20,9 @@
         <!-- 🧭 Sidebar Navigation (Inherited by all 5 apps) -->
         <nav class="sidebar">
             <div class="sidebar-header">
-                <div class="sky-logo">SKY <span style="font-weight: 300; font-size: 0.8rem; opacity: 0.8;">| TEAM Registry</span></div>
+                <a href="{% url 'core:dashboard' %}" style="text-decoration: none;">
+                    <img src="{% static 'images/Sky-spectrum-rgb.png' %}" alt="Sky Logo" class="sky-logo-img sidebar-logo">
+                </a>
             </div>
 
             <ul class="nav-links">
@@ -78,6 +80,7 @@
                     <div>
                         <p style="font-size: 0.8rem; font-weight: 600;">@{{ user.username }}</p>
                         <a href="{% url 'logout' %}" style="font-size: 0.7rem; color: rgba(255,255,255,0.6); text-decoration: none;">Sign Out</a>
+                        <p style="font-size: 0.65rem; color: rgba(255,255,255,0.4); margin-top: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px;">Lead: Maurya Patel</p>
                     </div>
                 </div>
             </div>
@@ -99,7 +102,7 @@
             </header>
 
             <!-- 📍 Page Content -->
-            <main class="content-area animate-fade">
+            <main class="content-area animate-slide-up">
                 {% block content %}
                 <!-- Student app content goes here -->
                 {% endblock %}

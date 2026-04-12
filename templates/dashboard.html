@@ -4,38 +4,53 @@
 
 {% block content %}
 <!-- 🏆 Dashboard Hero Section -->
-<div class="dashboard-header mb-2 animate-fade">
+<div class="dashboard-header mb-2 animate-slide-up">
     <h1 class="spectrum-text" style="font-size: 2.5rem;">System Overview</h1>
-    <p style="color: var(--header-blue); opacity: 0.7; font-weight: 500;">Welcome to the Sky Engineering Team Registry Management Portal.</p>
+    <p style="color: var(--sky-header-blue); opacity: 0.7; font-weight: 500;">Welcome to the Sky Engineering Team Registry Management Portal.</p>
 </div>
 
-<!-- 📊 Dynamic Summary Cards -->
+<!-- 📊 Dynamic Summary Cards (Using Spectrum Quick Cards) -->
 <div class="grid-dashboard mb-2">
-    <div class="glass-card animate-fade" style="animation-delay: 0.1s;">
-        <div style="font-size: 0.8rem; font-weight: 700; color: var(--spectrum-2); margin-bottom: 0.5rem; letter-spacing: 1px;">TOTAL DEPARTMENTS</div>
-        <div style="font-size: 2.5rem; font-weight: 800; color: var(--header-blue);">{{ total_depts }}</div>
-        <div style="margin-top: 1rem; font-size: 0.8rem; color: #888;">Registered in Sky Organisation</div>
+    <div class="quick-card is-1 animate-slide-up" style="animation-delay: 0.1s;">
+        <div class="icon-box">
+            <i class='bx bxs-institution'></i>
+        </div>
+        <div>
+            <div style="font-size: 0.85rem; font-weight: 700; opacity: 0.9; margin-bottom: 0.25rem; letter-spacing: 1px;">TOTAL DEPARTMENTS</div>
+            <div style="font-size: 2.5rem; font-weight: 900;">{{ total_depts }}</div>
+        </div>
+        <div style="font-size: 0.8rem; opacity: 0.8; margin-top: auto;">Sky Global Business Units</div>
     </div>
     
-    <div class="glass-card animate-fade" style="animation-delay: 0.2s;">
-        <div style="font-size: 0.8rem; font-weight: 700; color: var(--spectrum-4); margin-bottom: 0.5rem; letter-spacing: 1px;">ACTIVE TEAMS</div>
-        <div style="font-size: 2.5rem; font-weight: 800; color: var(--header-blue);">{{ total_teams }}</div>
-        <div style="margin-top: 1rem; font-size: 0.8rem; color: #888;">Distributed across global hubs</div>
+    <div class="quick-card is-2 animate-slide-up" style="animation-delay: 0.2s;">
+        <div class="icon-box">
+            <i class='bx bxs-group'></i>
+        </div>
+        <div>
+            <div style="font-size: 0.85rem; font-weight: 700; opacity: 0.9; margin-bottom: 0.25rem; letter-spacing: 1px;">ACTIVE TEAMS</div>
+            <div style="font-size: 2.5rem; font-weight: 900;">{{ total_teams }}</div>
+        </div>
+        <div style="font-size: 0.8rem; opacity: 0.8; margin-top: auto;">Agile Engineering Squads</div>
     </div>
     
-    <div class="glass-card animate-fade" style="animation-delay: 0.3s;">
-        <div style="font-size: 0.8rem; font-weight: 700; color: var(--spectrum-6); margin-bottom: 0.5rem; letter-spacing: 1px;">TOTAL ENGINEERS</div>
-        <div style="font-size: 2.5rem; font-weight: 800; color: var(--header-blue);">{{ total_members }}</div>
-        <div style="margin-top: 1rem; font-size: 0.8rem; color: #888;">Total headcount in registry</div>
+    <div class="quick-card is-3 animate-slide-up" style="animation-delay: 0.3s;">
+        <div class="icon-box">
+            <i class='bx bxs-user-detail'></i>
+        </div>
+        <div>
+            <div style="font-size: 0.85rem; font-weight: 700; opacity: 0.9; margin-bottom: 0.25rem; letter-spacing: 1px;">TOTAL ENGINEERS</div>
+            <div style="font-size: 2.5rem; font-weight: 900;">{{ total_members }}</div>
+        </div>
+        <div style="font-size: 0.8rem; opacity: 0.8; margin-top: auto;">Sky Technology Headcount</div>
     </div>
 </div>
 
 <!-- 📜 Recent Activity Section -->
-<div class="row animate-fade" style="animation-delay: 0.4s;">
+<div class="row animate-slide-up" style="animation-delay: 0.4s;">
     <div class="card" style="width: 100%; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
         <div class="card-header" style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f0f0f0; padding-bottom: 1rem;">
-            <h2 style="font-size: 1.25rem; color: var(--header-blue);">Audit Trail & Recent Updates</h2>
-            <a href="{% url 'audit_log' %}" class="btn" style="padding: 0.5rem 1rem; font-size: 0.8rem; background: var(--surface-strong); color: var(--primary);">View Full History</a>
+            <h2 style="font-size: 1.25rem; color: var(--sky-header-blue);">Audit Trail & Recent Updates</h2>
+            <a href="{% url 'core:audit_log' %}" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.8rem;">View Full History</a>
         </div>
         
         <table style="width: 100%; border-collapse: collapse;">
@@ -61,7 +76,7 @@
                     </td>
                     <td style="padding: 1rem; color: #666;">
                         <div style="display: flex; align-items: center; gap: 0.5rem;">
-                            <div style="width: 24px; height: 24px; background: var(--surface-strong); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: bold; color: var(--primary);">
+                            <div style="width: 24px; height: 24px; background: var(--sky-surface-strong); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: bold; color: var(--sky-primary);">
                                 {{ log.actor_user.username|slice:":1"|upper }}
                             </div>
                             @{{ log.actor_user.username }}

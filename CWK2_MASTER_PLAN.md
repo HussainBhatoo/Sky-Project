@@ -60,6 +60,10 @@ A **Django web application** that replaces the Excel file with a:
 - Full audit trail
 - Django admin panel for management
 
+### 🔐 Authentication Requirements (Coursework Specs)
+- **Mandatory Corporate Email**: As per CWK1 specifications and CWK2 rubric, all user signups must provide a valid corporate email address.
+- **SSO Integration Simulation**: The registry simulates Sky's Single Sign-On (SSO) environment via custom validation in `accounts/forms.py`.
+
 ### Module Context
 - **Module:** 5COSC021W Software Development Group Project
 - **University:** University of Westminster
@@ -627,7 +631,7 @@ INSTALLED_APPS = [
 ]
 
 TEMPLATES DIRS = [BASE_DIR / 'templates']
-STATICFILES_DIRS = [BASE_DIR / 'static']
+STATICFILES_DIRS = [BASE_DIR / 'assets']
 AUTH_USER_MODEL = 'core.User'
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/dashboard/'

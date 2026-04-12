@@ -63,13 +63,22 @@ Open your browser and go to:
 
 ---
 
-## 🛡️ 4. Accessing the Admin Hub
-To manage data directly:
-1. Create a superuser account:
+## 🛡️ 4. Creating & Accessing Accounts
+
+The signup process now requires a **mandatory Sky corporate email address** for coursework compliance.
+
+### Step 6: Create a User Account
+1. Visit: **[http://127.0.0.1:8000/accounts/signup/](http://127.0.0.1:8000/accounts/signup/)**
+2. Enter your details, including a valid email format.
+3. Once registered, you will be redirected to the dashboard.
+
+### Step 7: Create a Superuser (Admin)
+To manage data directly via the Admin Hub:
+1. Run:
    ```bash
    python manage.py createsuperuser
    ```
-2. Follow the prompts to set a username and password.
+2. Follow the prompts.
 3. Access the Admin Panel at: **[http://127.0.0.1:8000/admin/](http://127.0.0.1:8000/admin/)**
 
 ---

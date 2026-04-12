@@ -1,5 +1,9 @@
 #!/usr/bin/env python
-"""Django's command-line utility for administrative tasks."""
+"""
+SKY ENGINEERING TEAM REGISTRY - MANAGEMENT UTILITY
+Primary entry point for administrative tasks, database migrations, and development server.
+Maintained by: Maurya Patel
+"""
 import os
 import sys
 
