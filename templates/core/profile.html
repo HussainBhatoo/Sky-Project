@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}My Profile | Sky Registry{% endblock %}
+
+{% block content %}
+<!--
+  USER PROFILE — HIGH-FIDELITY VIEW
+  Mirrors ProfilePage.tsx from the User Inquiry prototype.
+  Components: Profile summary, settings form.
+-->
+
+<div class="flex-between mb-2 animate-slide-up">
+    <div>
+        <h1 class="spectrum-text" style="font-size: 2rem; letter-spacing: -0.02em;">My Profile</h1>
+        <p style="color: var(--sky-header-blue); opacity: 0.6; font-weight: 500; font-size: 0.95rem;">Manage your individual settings</p>
+    </div>
+</div>
+
+<div class="grid-2-1 animate-slide-up" style="animation-delay: 0.1s;">
+    <!-- Form Side -->
+    <div class="card">
+        <h3 style="color: var(--sky-header-blue); margin-bottom: 1.5rem;">
+            <i class='bx bx-user' style="margin-right: 0.4rem;"></i> Account Settings
+        </h3>
+        
+        <form method="post" action="{% url 'core:profile' %}">
+            {% csrf_token %}
+            <div class="grid-2">
+                <div class="form-group">
+                    <label for="first_name">First Name</label>
+                    <input type="text" name="first_name" id="first_name" class="form-control" value="{{ user.first_name }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="last_name">Last Name</label>
+                    <input type="text" name="last_name" id="last_name" class="form-control" value="{{ user.last_name }}" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" name="email" id="email" class="form-control" value="{{ user.email }}" required>
+                <div style="font-size: 0.75rem; color: var(--muted-foreground); margin-top: 0.4rem; display: flex; align-items: center; gap: 0.3rem;">
+                    <i class='bx bx-info-circle'></i> Must be a valid @sky.uk domain.
+                </div>
+            </div>
+            
+            <div class="mt-2 text-right">
+                <button type="submit" class="btn btn-primary">
+                    <i class='bx bx-save'></i> Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <!-- User Info Side -->
+    <div class="card">
+        <div style="text-align: center; margin-bottom: 1.5rem;">
+            <div class="avatar-circle" style="width: 80px; height: 80px; font-size: 2rem; margin: 0 auto 1rem auto;">
+                {{ user.username|slice:":1"|upper }}
+            </div>
+            <h3 style="color: var(--sky-header-blue); margin-bottom: 0.25rem;">{{ user.get_full_name|default:user.username }}</h3>
+            <span class="chip chip-department">@{{ user.username }}</span>
+        </div>
+        
+        <div style="border-top: 1px solid var(--border); margin-top: 1.5rem; padding-top: 1.5rem;">
+            <div class="flex-between mb-1">
+                <strong style="font-size: 0.85rem; color: var(--muted-foreground);">System Role</strong>
+                <span style="font-size: 0.85rem; font-weight: 600;">{% if user.is_superuser %}Administrator{% else %}Staff{% endif %}</span>
+            </div>
+            <div class="flex-between mb-1">
+                <strong style="font-size: 0.85rem; color: var(--muted-foreground);">Date Joined</strong>
+                <span style="font-size: 0.85rem; font-weight: 600;">{{ user.date_joined|date:"M j, Y" }}</span>
+            </div>
+            <div class="flex-between">
+                <strong style="font-size: 0.85rem; color: var(--muted-foreground);">Last Login</strong>
+                <span style="font-size: 0.85rem; font-weight: 600;">{{ user.last_login|date:"M j, Y" }}</span>
+            </div>
+            
+            <div style="margin-top: 2rem; text-align: center;">
+                <a href="{% url 'logout' %}" class="btn btn-ghost" style="color: var(--sky-negative); width: 100%;">
+                    <i class='bx bx-log-out'></i> Sign Out
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

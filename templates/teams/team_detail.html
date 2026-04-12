@@ -1,0 +1,203 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ team.team_name }} | Sky Registry{% endblock %}
+
+{% block content %}
+<!--
+  TEAM DETAIL — HIGH-FIDELITY VIEW
+  Mirrors TeamDetailsPage.tsx from the User Inquiry prototype.
+  Components: Header, mission card, contacts, links, tech tags, members table, dependencies.
+  Student 1: Riagul Hossain | Lead: Maurya Patel
+-->
+
+<!-- Back button -->
+<a href="{% url 'teams:team_list' %}" class="btn btn-ghost mb-2 animate-slide-up" style="text-decoration: none;">
+    <i class='bx bx-arrow-back'></i> Back to Teams
+</a>
+
+{% if team %}
+<!-- 📛 Team Header -->
+<div class="flex-between mb-2 animate-slide-up" style="animation-delay: 0.05s;">
+    <div>
+        <div class="flex-center gap-2 mb-1">
+            <h1 style="font-size: 1.75rem; color: var(--sky-header-blue);">{{ team.team_name }}</h1>
+            <span class="chip {% if team.status == 'Active' %}chip-active{% elif team.status == 'Restructuring' %}chip-restructuring{% else %}chip-disbanded{% endif %}">
+                {{ team.status }}
+            </span>
+        </div>
+        <div class="flex-center gap-2">
+            <span class="chip chip-department">{{ team.department.department_name }}</span>
+            {% if team.team_leader_name %}
+            <span style="font-size: 0.9rem; color: var(--muted-foreground);">
+                Lead: <strong style="color: var(--sky-primary);">{{ team.team_leader_name }}</strong>
+            </span>
+            {% endif %}
+        </div>
+    </div>
+    <div class="flex gap-1">
+        <a href="{% url 'messages_app:compose' %}?to={{ team.team_name|urlencode }}" class="btn btn-secondary" style="text-decoration: none; font-size: 0.85rem;">
+            <i class='bx bx-envelope'></i> Email Team
+        </a>
+        <a href="{% url 'schedule:create' %}?team_id={{ team.team_id }}" class="btn btn-secondary" style="text-decoration: none; font-size: 0.85rem;">
+            <i class='bx bx-calendar'></i> Schedule Meeting
+        </a>
+        <a href="{% url 'organisation:dependencies' %}?focus={{ team.team_name|urlencode }}" class="btn btn-secondary" style="text-decoration: none; font-size: 0.85rem;">
+            <i class='bx bx-git-repo-forked'></i> Dependencies
+        </a>
+    </div>
+</div>
+
+<!-- 📝 Mission Card -->
+{% if team.mission %}
+<div class="card mb-2 animate-slide-up" style="animation-delay: 0.1s;">
+    <h4 style="color: var(--sky-header-blue); margin-bottom: 0.75rem;">Mission / Responsibilities</h4>
+    <p style="font-size: 0.9rem; color: var(--muted-foreground); line-height: 1.6;">{{ team.mission }}</p>
+</div>
+{% endif %}
+
+<!-- 📞 Contacts & Links -->
+<div class="grid-2 mb-2 animate-slide-up" style="animation-delay: 0.15s;">
+    <div class="card">
+        <h4 style="color: var(--sky-header-blue); margin-bottom: 1rem;">Contacts</h4>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.9rem;">
+            {% if team.lead_email %}
+            <div class="flex-center gap-1">
+                <i class='bx bx-envelope' style="color: var(--muted-foreground);"></i>
+                <span style="color: var(--sky-primary);">{{ team.lead_email }}</span>
+            </div>
+            {% endif %}
+            {% for channel in contacts %}
+            <div class="flex-center gap-1">
+                <i class='bx {% if channel.channel_type == "slack" %}bxl-slack{% elif channel.channel_type == "email" %}bx-envelope{% else %}bx-message-square{% endif %}' style="color: var(--muted-foreground);"></i>
+                <span>{{ channel.get_channel_type_display }}: <span style="color: var(--sky-primary);">{{ channel.channel_value }}</span></span>
+            </div>
+            {% endfor %}
+            {% if not team.lead_email and not contacts %}
+            <p style="color: #ccc; font-size: 0.85rem;">No contact channels registered.</p>
+            {% endif %}
+        </div>
+    </div>
+    <div class="card">
+        <h4 style="color: var(--sky-header-blue); margin-bottom: 1rem;">Links</h4>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.9rem;">
+            {% for repo in repos %}
+            <div class="flex-center gap-1">
+                <i class='bx bx-link-external' style="color: var(--muted-foreground);"></i>
+                <a href="{{ repo.repo_url }}" target="_blank" rel="noreferrer" style="color: var(--sky-primary);">{{ repo.repo_name }}</a>
+            </div>
+            {% endfor %}
+            {% for board in boards %}
+            <div class="flex-center gap-1">
+                <i class='bx bx-link-external' style="color: var(--muted-foreground);"></i>
+                <a href="{{ board.board_url }}" target="_blank" rel="noreferrer" style="color: var(--sky-primary);">{{ board.board_type }} Board</a>
+            </div>
+            {% endfor %}
+            {% if not repos and not boards %}
+            <p style="color: #ccc; font-size: 0.85rem;">No links registered.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- 🏷️ Tech Tags -->
+{% if tech_tags %}
+<div class="card mb-2 animate-slide-up" style="animation-delay: 0.2s;">
+    <h4 style="color: var(--sky-header-blue); margin-bottom: 1rem;">Tech & Skills</h4>
+    <div class="flex flex-wrap gap-1">
+        {% for tag in tech_tags %}
+        <span class="chip chip-tech">{{ tag }}</span>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<!-- 👥 Members Table -->
+<div class="card mb-2 animate-slide-up" style="animation-delay: 0.25s;">
+    <h4 style="color: var(--sky-header-blue); margin-bottom: 1rem;">
+        <i class='bx bx-group' style="margin-right: 0.4rem;"></i> Team Members ({{ members|length }})
+    </h4>
+    {% if members %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for member in members %}
+            <tr>
+                <td style="font-weight: 600;">{{ member.full_name }}</td>
+                <td style="color: var(--muted-foreground);">{{ member.role_title }}</td>
+                <td><a href="mailto:{{ member.email }}">{{ member.email }}</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state" style="padding: 2rem;">
+        <i class='bx bx-user-x'></i>
+        <p class="empty-title">No members assigned</p>
+    </div>
+    {% endif %}
+</div>
+
+<!-- 🔗 Dependencies -->
+<div class="grid-2 mb-2 animate-slide-up" style="animation-delay: 0.3s;">
+    <div class="card">
+        <h4 style="color: var(--sky-header-blue); margin-bottom: 1rem;">Upstream Dependencies</h4>
+        {% if upstream_deps %}
+        <div class="flex flex-wrap gap-1">
+            {% for dep in upstream_deps %}
+            <a href="{% url 'teams:team_detail' dep.from_team.team_id %}" class="chip chip-upstream chip-clickable" style="text-decoration: none;">
+                {{ dep.from_team.team_name }}
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state" style="padding: 1.5rem;">
+            <p class="empty-title" style="font-size: 0.9rem;">No upstream dependencies</p>
+        </div>
+        {% endif %}
+    </div>
+    <div class="card">
+        <h4 style="color: var(--sky-header-blue); margin-bottom: 1rem;">Downstream Dependencies</h4>
+        {% if downstream_deps %}
+        <div class="flex flex-wrap gap-1">
+            {% for dep in downstream_deps %}
+            <a href="{% url 'teams:team_detail' dep.to_team.team_id %}" class="chip chip-downstream chip-clickable" style="text-decoration: none;">
+                {{ dep.to_team.team_name }}
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state" style="padding: 1.5rem;">
+            <p class="empty-title" style="font-size: 0.9rem;">No downstream dependencies</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- 🕓 Audit Footer -->
+<div class="card animate-slide-up" style="animation-delay: 0.35s; background: var(--sky-surface-strong);">
+    <div class="flex-between" style="font-size: 0.8rem;">
+        <span style="color: var(--muted-foreground);">
+            <i class='bx bx-time' style="margin-right: 0.25rem;"></i>
+            Last updated {{ team.updated_at|date:"D, d M Y" }} at {{ team.updated_at|date:"H:i" }}
+        </span>
+        <a href="{% url 'core:audit_log' %}" style="color: var(--sky-primary); font-weight: 600; text-decoration: none;">View audit log</a>
+    </div>
+</div>
+
+{% else %}
+<div class="card">
+    <div class="empty-state">
+        <i class='bx bx-error-circle'></i>
+        <p class="empty-title">Team not found</p>
+        <p class="empty-desc">The team you're looking for doesn't exist.</p>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

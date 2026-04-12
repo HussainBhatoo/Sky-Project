@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block title %}Messages | Sky Registry{% endblock %}
+
+{% block content %}
+<!--
+  MESSAGES — HIGH-FIDELITY VIEW
+  Mirrors MessagesPage.tsx from the User Inquiry prototype.
+  Components: Inbox list with unread indicators, Compose form, detail pane.
+  Student 3: Mohammed Suliman Roshid | Lead: Maurya Patel
+-->
+
+<div class="flex-between mb-2 animate-slide-up">
+    <div>
+        <h1 class="spectrum-text" style="font-size: 2rem; letter-spacing: -0.02em;">Messages</h1>
+        <p style="color: var(--sky-header-blue); opacity: 0.6; font-weight: 500; font-size: 0.95rem;">Communications hub for cross-team messaging</p>
+    </div>
+</div>
+
+<!-- 🗂️ Tabs: Inbox / Compose -->
+<div class="tabs mb-2 animate-slide-up" style="animation-delay: 0.1s;">
+    <a href="{% url 'messages_app:inbox' %}" class="tab-btn {% if active_tab == 'inbox' %}active{% endif %}" style="text-decoration: none;">Inbox</a>
+    <a href="{% url 'messages_app:compose' %}" class="tab-btn {% if active_tab == 'compose' %}active{% endif %}" style="text-decoration: none;">Compose</a>
+</div>
+
+{% if active_tab == 'compose' %}
+<!-- ✏️ Compose Form -->
+<div class="card animate-slide-up" style="animation-delay: 0.15s; max-width: 700px;">
+    <h3 style="color: var(--sky-header-blue); margin-bottom: 1.5rem;">
+        <i class='bx bx-edit' style="margin-right: 0.5rem;"></i> New Message
+    </h3>
+    <form method="post" action="{% url 'messages_app:compose' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="compose-team">To (Team)</label>
+            <select name="team" class="form-control filter-select" id="compose-team" required>
+                <option value="">Select team...</option>
+                {% for team in teams %}
+                <option value="{{ team.team_id }}" {% if prefill_team and prefill_team.team_id == team.team_id %}selected{% endif %}>{{ team.team_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="compose-subject">Subject</label>
+            <input type="text" name="subject" class="form-control" id="compose-subject" placeholder="e.g. Sprint Review Follow-up" required>
+        </div>
+        <div class="form-group">
+            <label for="compose-body">Message</label>
+            <textarea name="body" class="form-control" id="compose-body" rows="6" placeholder="Write your message..."></textarea>
+        </div>
+        <div class="flex gap-1">
+            <button type="submit" class="btn btn-primary"><i class='bx bx-send'></i> Send</button>
+            <a href="{% url 'messages_app:inbox' %}" class="btn btn-secondary" style="text-decoration: none;">Cancel</a>
+        </div>
+    </form>
+</div>
+
+{% elif selected_message %}
+<!-- 📨 Message Detail View -->
+<div class="grid-2-1 animate-slide-up" style="animation-delay: 0.15s;">
+    <!-- Message List (shrunk) -->
+    <div class="card" style="padding: 0; max-height: 70vh; overflow-y: auto;">
+        {% for msg in all_messages %}
+        <a href="{% url 'messages_app:detail' msg.message_id %}" class="msg-item {% if msg.message_status == 'draft' %}is-unread{% endif %}" style="text-decoration: none; color: inherit;">
+            <div style="flex: 1; min-width: 0;">
+                <div class="flex-center gap-1">
+                    {% if msg.message_status == 'draft' %}<span class="unread-dot"></span>{% endif %}
+                    <span style="font-weight: {% if msg.message_id == selected_message.message_id %}800{% else %}500{% endif %}; font-size: 0.9rem; color: var(--sky-header-blue);">{{ msg.message_subject|truncatewords:8 }}</span>
+                </div>
+                <span style="font-size: 0.75rem; color: var(--muted-foreground);">{{ msg.sender_user.username }} → {{ msg.team.team_name }}</span>
+            </div>
+            <span style="font-size: 0.7rem; color: var(--muted-foreground); white-space: nowrap;">{{ msg.message_sent_at|date:"d M" }}</span>
+        </a>
+        {% endfor %}
+    </div>
+
+    <!-- Full Message -->
+    <div class="card">
+        <h3 style="color: var(--sky-header-blue); margin-bottom: 0.75rem; font-size: 1.1rem;">{{ selected_message.message_subject }}</h3>
+        <div class="flex-center gap-2 mb-2" style="font-size: 0.8rem; color: var(--muted-foreground);">
+            <span><strong>From:</strong> {{ selected_message.sender_user.username }}</span>
+            <span><strong>To:</strong> {{ selected_message.team.team_name }}</span>
+            <span>{{ selected_message.message_sent_at|date:"d M Y, H:i" }}</span>
+        </div>
+        <div style="border-top: 1px solid var(--border); padding-top: 1rem; font-size: 0.9rem; line-height: 1.7; color: var(--sky-text);">
+            {{ selected_message.message_body|linebreaks }}
+        </div>
+    </div>
+</div>
+
+{% else %}
+<!-- 📥 Inbox List -->
+<div class="card animate-slide-up" style="animation-delay: 0.15s; padding: 0;">
+    {% if all_messages %}
+    {% for msg in all_messages %}
+    <a href="{% url 'messages_app:detail' msg.message_id %}" class="msg-item {% if msg.message_status == 'draft' %}is-unread{% endif %}" style="text-decoration: none; color: inherit;">
+        <div class="flex-center gap-2" style="flex: 1; min-width: 0;">
+            {% if msg.message_status == 'draft' %}<span class="unread-dot"></span>{% endif %}
+            <div style="flex: 1; min-width: 0;">
+                <div class="flex-center gap-1">
+                    <span style="font-weight: 600; font-size: 0.9rem; color: var(--sky-header-blue);">{{ msg.message_subject }}</span>
+                </div>
+                <span style="font-size: 0.8rem; color: var(--muted-foreground);">
+                    {{ msg.sender_user.username }} → {{ msg.team.team_name }}
+                </span>
+            </div>
+        </div>
+        <div style="text-align: right; flex-shrink: 0;">
+            <span style="font-size: 0.75rem; color: var(--muted-foreground); white-space: nowrap;">{{ msg.message_sent_at|date:"d M Y, H:i" }}</span>
+        </div>
+    </a>
+    {% endfor %}
+    {% else %}
+    <div class="empty-state">
+        <i class='bx bx-envelope-open'></i>
+        <p class="empty-title">Inbox is empty</p>
+        <p class="empty-desc">No messages yet. Compose your first message to a team.</p>
+    </div>
+    {% endif %}
+</div>
+{% endif %}
+
+{% endblock %}

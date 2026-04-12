@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block title %}Reports & Analytics | Sky Registry{% endblock %}
+
+{% block content %}
+<!--
+  REPORTS DASHBOARD — HIGH-FIDELITY VIEW
+  Mirrors ReportsPage.tsx from the User Inquiry prototype.
+  Components: Stat cards, tables, export buttons.
+  Student 5: Hussain Bhatoo | Lead: Maurya Patel
+-->
+
+<div class="flex-between mb-2 animate-slide-up">
+    <div>
+        <h1 class="spectrum-text" style="font-size: 2rem; letter-spacing: -0.02em;">Reports & Analytics</h1>
+        <p style="color: var(--sky-header-blue); opacity: 0.6; font-weight: 500; font-size: 0.95rem;">System-wide statistics and data exports</p>
+    </div>
+    <div class="flex gap-1">
+        <a href="{% url 'reports:export_csv' %}" class="btn btn-secondary" style="text-decoration: none;">
+            <i class='bx bx-export'></i> Export CSV
+        </a>
+        <button class="btn btn-primary" onclick="window.print()">
+            <i class='bx bx-printer'></i> Print Report
+        </button>
+    </div>
+</div>
+
+<!-- 📊 Top Stat Cards -->
+<div class="grid-4 mb-3 animate-slide-up" style="animation-delay: 0.1s;">
+    <div class="stat-card">
+        <div class="stat-value">{{ total_departments }}</div>
+        <div class="stat-label">Departments</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ total_teams }}</div>
+        <div class="stat-label">Teams</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ total_members }}</div>
+        <div class="stat-label">System Users</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ total_dependencies }}</div>
+        <div class="stat-label">Dependencies</div>
+    </div>
+</div>
+
+<div class="grid-2 animate-slide-up" style="animation-delay: 0.2s;">
+    <!-- Department Breakdown -->
+    <div class="card">
+        <h4 style="color: var(--sky-header-blue); margin-bottom: 1rem;">
+            <i class='bx bx-buildings' style="margin-right: 0.4rem;"></i> Department Breakdown
+        </h4>
+        <div style="overflow-x: auto;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Department</th>
+                        <th>Teams</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for dept in department_stats %}
+                    <tr>
+                        <td style="font-weight: 600;">{{ dept.department_name }}</td>
+                        <td>
+                            <span class="chip chip-department">{{ dept.team_count }}</span>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="2" class="text-center" style="padding: 2rem; color: var(--muted-foreground);">No departments found</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Largest Teams -->
+    <div class="card">
+        <h4 style="color: var(--sky-header-blue); margin-bottom: 1rem;">
+            <i class='bx bx-group' style="margin-right: 0.4rem;"></i> Largest Teams
+        </h4>
+        <div style="overflow-x: auto;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Team</th>
+                        <th>Department</th>
+                        <th>Members</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for team in team_stats %}
+                    <tr>
+                        <td style="font-weight: 600;">
+                            <a href="{% url 'teams:team_detail' team.team_id %}" style="text-decoration: none;">{{ team.team_name }}</a>
+                        </td>
+                        <td style="font-size: 0.8rem; color: var(--muted-foreground);">
+                            {{ team.department.department_name|default:"—" }}
+                        </td>
+                        <td>
+                            <span class="chip chip-tech">{{ team.member_count }}</span>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center" style="padding: 2rem; color: var(--muted-foreground);">No teams found</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- 🖨️ Print Styles -->
+<style>
+    @media print {
+        body { background: white; }
+        .sidebar, .top-navbar, .btn { display: none !important; }
+        .main-wrapper { margin-left: 0; padding: 0; }
+        .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+        .spectrum-text { color: var(--sky-primary) !important; -webkit-text-fill-color: var(--sky-primary); }
+    }
+</style>
+
+{% endblock %}

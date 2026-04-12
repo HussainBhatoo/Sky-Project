@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block title %}Departments & Organisation | Sky Registry{% endblock %}
+
+{% block content %}
+<!--
+  ORGANISATION — HIGH-FIDELITY VIEW
+  Mirrors DepartmentsPage.tsx from the User Inquiry prototype.
+  Components: Department list with nested team cards + Org chart tree.
+  Student 2: Lucas Garcia Korotkov | Lead: Maurya Patel
+-->
+
+<div class="flex-between mb-2 animate-slide-up">
+    <div>
+        <h1 class="spectrum-text" style="font-size: 2rem; letter-spacing: -0.02em;">Departments & Organisation</h1>
+        <p style="color: var(--sky-header-blue); opacity: 0.6; font-weight: 500; font-size: 0.95rem;">
+            {{ total_departments }} departments · {{ total_teams }} teams
+        </p>
+    </div>
+</div>
+
+<!-- 🗂️ Tabs: Departments / Org Chart -->
+<div class="tabs mb-3 animate-slide-up" style="animation-delay: 0.1s;">
+    <button class="tab-btn active" onclick="switchTab('list', this)" id="tab-list">Departments</button>
+    <button class="tab-btn" onclick="switchTab('org', this)" id="tab-org">Org Chart</button>
+</div>
+
+<!-- 📋 TAB 1: Departments List -->
+<div id="panel-list" class="animate-slide-up" style="animation-delay: 0.15s;">
+    {% for item in dept_data %}
+    <div class="card mb-2">
+        <div class="flex-between mb-2">
+            <div>
+                <h3 style="color: var(--sky-header-blue);">{{ item.department.department_name }}</h3>
+                <p style="font-size: 0.8rem; color: var(--muted-foreground);">
+                    Head: {{ item.department.department_lead_name }}
+                </p>
+            </div>
+            <span class="chip chip-department">
+                <i class='bx bx-group' style="font-size: 0.8rem;"></i> {{ item.teams|length }} teams
+            </span>
+        </div>
+        <div class="grid-3">
+            {% for team in item.teams %}
+            <a href="{% url 'teams:team_detail' team.team_id %}" style="text-decoration: none; color: inherit; border: 1px solid var(--border); border-radius: 12px; padding: 0.85rem 1rem; transition: all 0.2s ease; display: block;" onmouseover="this.style.background='var(--sky-tint-5)'" onmouseout="this.style.background='transparent'">
+                <div class="flex-between mb-1">
+                    <span style="font-size: 0.9rem; font-weight: 600;">{{ team.team_name }}</span>
+                    <span class="chip {% if team.status == 'Active' %}chip-active{% elif team.status == 'Restructuring' %}chip-restructuring{% else %}chip-disbanded{% endif %}" style="font-size: 0.65rem;">
+                        {{ team.status }}
+                    </span>
+                </div>
+                <span style="font-size: 0.75rem; color: var(--muted-foreground);">Lead: {{ team.team_leader_name|default:"—" }}</span>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% empty %}
+    <div class="card">
+        <div class="empty-state">
+            <i class='bx bx-buildings'></i>
+            <p class="empty-title">No departments found</p>
+            <p class="empty-desc">Run the data population script to seed departments.</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- 🏗️ TAB 2: Org Chart -->
+<div id="panel-org" style="display: none;" class="animate-slide-up">
+    {% for item in dept_data %}
+    <div class="card mb-2">
+        <div class="flex-center gap-3" style="flex-wrap: wrap;">
+            <!-- Department Node -->
+            <div class="org-node org-node-dept" style="min-width: 140px;">
+                <strong>{{ item.department.department_name }}</strong>
+                <span class="org-node-sub">{{ item.department.department_lead_name }}</span>
+            </div>
+
+            <!-- Arrow -->
+            <i class='bx bx-chevron-right' style="font-size: 1.5rem; color: var(--muted-foreground);"></i>
+
+            <!-- Team Nodes -->
+            <div class="flex flex-wrap gap-1">
+                {% for team in item.teams %}
+                <a href="{% url 'teams:team_detail' team.team_id %}" class="org-node org-node-team" style="text-decoration: none; color: inherit;">
+                    <span>{{ team.team_name }}</span>
+                    <span class="org-node-sub">{{ team.team_leader_name|default:"—" }}</span>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    /**
+     * Organisation Module — Tab Switcher
+     * Toggles between Departments list view and Org Chart view.
+     */
+    function switchTab(tabId, button) {
+        document.getElementById('panel-list').style.display = tabId === 'list' ? 'block' : 'none';
+        document.getElementById('panel-org').style.display = tabId === 'org' ? 'block' : 'none';
+        document.querySelectorAll('.tab-btn').forEach(function(btn) { btn.classList.remove('active'); });
+        button.classList.add('active');
+    }
+</script>
+{% endblock %}

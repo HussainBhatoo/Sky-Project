@@ -38,3 +38,18 @@ def audit_log(request):
     """
     logs = AuditLog.objects.all().order_by('-action_changed_at')
     return render(request, 'audit_log.html', {'logs': logs})
+
+@login_required
+def profile_view(request):
+    """
+    Displays the user profile and handles account settings updates.
+    """
+    if request.method == 'POST':
+        user = request.user
+        user.first_name = request.POST.get('first_name', user.first_name)
+        user.last_name = request.POST.get('last_name', user.last_name)
+        user.email = request.POST.get('email', user.email)
+        user.save()
+        return render(request, 'core/profile.html', {'user': user, 'success': True})
+    
+    return render(request, 'core/profile.html', {'user': request.user})

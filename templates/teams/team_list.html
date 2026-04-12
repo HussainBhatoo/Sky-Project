@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}Teams | Sky Registry{% endblock %}
+
+{% block content %}
+<!--
+  TEAMS LIST — HIGH-FIDELITY VIEW
+  Mirrors TeamsListPage.tsx from the User Inquiry prototype.
+  Components: Search bar, department/status filters, team card grid.
+  Student 1: Riagul Hossain | Lead: Maurya Patel
+-->
+
+<div class="flex-between mb-2 animate-slide-up">
+    <div>
+        <h1 class="spectrum-text" style="font-size: 2rem; letter-spacing: -0.02em;">Teams</h1>
+        <p style="color: var(--sky-header-blue); opacity: 0.6; font-weight: 500; font-size: 0.95rem;">{{ total_count }} team{{ total_count|pluralize }} registered across all departments</p>
+    </div>
+</div>
+
+<!-- 🔍 Search & Filter Bar -->
+<form method="get" action="{% url 'teams:team_list' %}" class="filter-bar mb-2 animate-slide-up" style="animation-delay: 0.1s;">
+    <div style="position: relative; flex: 1; max-width: 400px;">
+        <i class='bx bx-search' style="position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); color: var(--muted-foreground);"></i>
+        <input type="text" name="search" class="filter-input" placeholder="Search by team, lead, or department..." value="{{ search_query }}" id="team-search">
+    </div>
+    <select name="department" class="filter-select" id="dept-filter">
+        <option value="">All Departments</option>
+        {% for dept in departments %}
+        <option value="{{ dept.department_name }}" {% if dept_filter == dept.department_name %}selected{% endif %}>{{ dept.department_name }}</option>
+        {% endfor %}
+    </select>
+    <select name="status" class="filter-select" id="status-filter">
+        <option value="">All Statuses</option>
+        <option value="Active" {% if status_filter == 'Active' %}selected{% endif %}>Active</option>
+        <option value="Restructuring" {% if status_filter == 'Restructuring' %}selected{% endif %}>Restructuring</option>
+        <option value="Disbanded" {% if status_filter == 'Disbanded' %}selected{% endif %}>Disbanded</option>
+    </select>
+    <button type="submit" class="btn btn-secondary" style="padding: 0.65rem 1rem;">
+        <i class='bx bx-filter-alt'></i> Apply
+    </button>
+</form>
+
+<!-- Active filter chips -->
+{% if dept_filter or status_filter %}
+<div class="flex-center gap-1 mb-2 animate-slide-up" style="animation-delay: 0.15s;">
+    <span style="font-size: 0.8rem; color: var(--muted-foreground);">Filters:</span>
+    {% if dept_filter %}
+    <a href="?search={{ search_query }}&status={{ status_filter }}" class="chip chip-department" style="text-decoration: none;">
+        {{ dept_filter }} <i class='bx bx-x' style="font-size: 0.85rem;"></i>
+    </a>
+    {% endif %}
+    {% if status_filter %}
+    <a href="?search={{ search_query }}&department={{ dept_filter }}" class="chip {% if status_filter == 'Active' %}chip-active{% elif status_filter == 'Restructuring' %}chip-restructuring{% else %}chip-disbanded{% endif %}" style="text-decoration: none;">
+        {{ status_filter }} <i class='bx bx-x' style="font-size: 0.85rem;"></i>
+    </a>
+    {% endif %}
+</div>
+{% endif %}
+
+<!-- 📇 Teams Grid -->
+{% if teams %}
+<div class="grid-3 animate-slide-up" style="animation-delay: 0.2s;">
+    {% for team in teams %}
+    <a href="{% url 'teams:team_detail' team.team_id %}" class="card" style="text-decoration: none; color: inherit; cursor: pointer;">
+        <div class="flex-between mb-1">
+            <h4 style="font-size: 1rem; color: var(--sky-header-blue); padding-right: 0.5rem;">{{ team.team_name }}</h4>
+            <span class="chip {% if team.status == 'Active' %}chip-active{% elif team.status == 'Restructuring' %}chip-restructuring{% else %}chip-disbanded{% endif %}">
+                {{ team.status }}
+            </span>
+        </div>
+        <p style="font-size: 0.8rem; color: var(--muted-foreground); margin-bottom: 0.5rem;">
+            Lead: {{ team.team_leader_name|default:"Not assigned" }}
+        </p>
+        <span class="chip chip-department" style="margin-bottom: 0.5rem;">{{ team.department.department_name }}</span>
+        {% if team.mission %}
+        <p style="font-size: 0.8rem; color: #888; margin-top: 0.5rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+            {{ team.mission|truncatewords:18 }}
+        </p>
+        {% endif %}
+        <div class="flex gap-2" style="margin-top: 0.75rem; font-size: 0.75rem; color: var(--muted-foreground);">
+            <span>{{ team.upstream_count }} upstream</span>
+            <span>{{ team.downstream_count }} downstream</span>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+{% else %}
+<div class="card animate-slide-up" style="animation-delay: 0.2s;">
+    <div class="empty-state">
+        <i class='bx bx-inbox'></i>
+        <p class="empty-title">No teams found</p>
+        <p class="empty-desc">Try adjusting your search or filters.</p>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

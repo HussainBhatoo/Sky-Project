@@ -1,23 +1,110 @@
 """
-Teams Application - Module Student 1: Riagul Hossain
-This module handles all team-related functionality including list views, 
-team details, and member assignment.
+Teams Application — Module Student 1: Riagul Hossain
+Handles team listing with search/filter, and individual team detail pages.
+Provides inter-app wiring to Schedule and Messages modules.
 Lead Developer: Maurya Patel
 """
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q, Count
 
-"""
-TEAMS MANAGEMENT MODULE
-Handles the registration and lifecycle of engineering teams.
-Central point for team metadata, leaders, and project assignments within the Sky Registry.
-"""
+from core.models import Team, Department, TeamMember, Dependency, ContactChannel, RepositoryLink, BoardLink
 
-def placeholder(request):
+
+@login_required
+def team_list(request):
     """
-    Temporary placeholder for the Teams Management module.
-    Designed to be extended with custom team registration and sorting logic.
-    
+    Displays a filterable, searchable grid of all registered teams.
+    Supports GET params: ?search=, ?department=, ?status=
+
     :param request: Standard Django HttpRequest object
-    :return: Rendered placeholder template with application context
+    :return: Rendered teams/team_list.html template
     """
-    return render(request, 'placeholder.html', {'app_name': 'Teams Management'})
+    try:
+        search_query = request.GET.get('search', '').strip()
+        dept_filter = request.GET.get('department', '')
+        status_filter = request.GET.get('status', '')
+
+        teams = Team.objects.select_related('department').annotate(
+            member_count=Count('members'),
+            upstream_count=Count('dependencies_to', filter=Q(dependencies_to__dependency_type='upstream')),
+            downstream_count=Count('dependencies_from', filter=Q(dependencies_from__dependency_type='downstream')),
+        ).order_by('team_name')
+
+        if search_query:
+            teams = teams.filter(
+                Q(team_name__icontains=search_query) |
+                Q(team_leader_name__icontains=search_query) |
+                Q(department__department_name__icontains=search_query)
+            )
+
+        if dept_filter:
+            teams = teams.filter(department__department_name=dept_filter)
+
+        if status_filter:
+            teams = teams.filter(status=status_filter)
+
+        departments = Department.objects.all().order_by('department_name')
+
+        context = {
+            'teams': teams,
+            'departments': departments,
+            'search_query': search_query,
+            'dept_filter': dept_filter,
+            'status_filter': status_filter,
+            'total_count': teams.count(),
+        }
+        return render(request, 'teams/team_list.html', context)
+    except Exception as error:
+        return render(request, 'teams/team_list.html', {
+            'teams': [],
+            'departments': [],
+            'error': str(error),
+        })
+
+
+@login_required
+def team_detail(request, team_id):
+    """
+    Shows a comprehensive detail page for a single team, including members,
+    dependencies, contacts, links, and tech stack.
+    Provides action buttons wired to Schedule and Messages modules.
+
+    :param request: Standard Django HttpRequest object
+    :param team_id: Primary key of the team
+    :return: Rendered teams/team_detail.html template
+    """
+    try:
+        team = get_object_or_404(
+            Team.objects.select_related('department'),
+            team_id=team_id,
+        )
+
+        members = TeamMember.objects.filter(team=team).order_by('full_name')
+        contacts = ContactChannel.objects.filter(team=team)
+        repos = RepositoryLink.objects.filter(team=team)
+        boards = BoardLink.objects.filter(team=team)
+
+        upstream_deps = Dependency.objects.filter(
+            to_team=team, dependency_type='upstream'
+        ).select_related('from_team')
+
+        downstream_deps = Dependency.objects.filter(
+            from_team=team, dependency_type='downstream'
+        ).select_related('to_team')
+
+        tech_tags = [tag.strip() for tag in team.tech_tags.split(',') if tag.strip()] if team.tech_tags else []
+
+        context = {
+            'team': team,
+            'members': members,
+            'contacts': contacts,
+            'repos': repos,
+            'boards': boards,
+            'upstream_deps': upstream_deps,
+            'downstream_deps': downstream_deps,
+            'tech_tags': tech_tags,
+        }
+        return render(request, 'teams/team_detail.html', context)
+    except Exception as error:
+        return render(request, 'teams/team_detail.html', {'error': str(error)})

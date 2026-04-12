@@ -1,0 +1,209 @@
+{% extends 'base.html' %}
+
+{% block title %}Dependencies | Sky Registry{% endblock %}
+
+{% block content %}
+<!--
+  DEPENDENCIES — HIGH-FIDELITY VIEW
+  Mirrors DependenciesPage.tsx from the User Inquiry prototype.
+  Components: Focus team selector, SVG graph, list view.
+  Student 2: Lucas Garcia Korotkov | Lead: Maurya Patel
+-->
+
+<div class="flex-between mb-2 animate-slide-up">
+    <div>
+        <h1 class="spectrum-text" style="font-size: 2rem; letter-spacing: -0.02em;">Dependencies</h1>
+        <p style="color: var(--sky-header-blue); opacity: 0.6; font-weight: 500; font-size: 0.95rem;">Visualize inter-team dependency relationships</p>
+    </div>
+</div>
+
+<!-- 🗂️ Tabs -->
+<div class="tabs mb-2 animate-slide-up" style="animation-delay: 0.1s;">
+    <button class="tab-btn active" onclick="switchDepTab('graph', this)" id="dep-tab-graph">Graph View</button>
+    <button class="tab-btn" onclick="switchDepTab('list', this)" id="dep-tab-list">List View</button>
+</div>
+
+<!-- 🎯 Focus Team Selector -->
+<form method="get" action="{% url 'organisation:dependencies' %}" class="filter-bar mb-3 animate-slide-up" style="animation-delay: 0.15s;">
+    <div class="form-group" style="margin-bottom: 0;">
+        <label style="font-size: 0.8rem; font-weight: 700; color: var(--sky-header-blue);">Focus Team</label>
+        <select name="focus" class="filter-select" style="min-width: 250px;" onchange="this.form.submit()">
+            {% for team in teams %}
+            <option value="{{ team.team_name }}" {% if focus_team_name == team.team_name %}selected{% endif %}>{{ team.team_name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+</form>
+
+<!-- 📊 TAB 1: Graph View (SVG) -->
+<div id="dep-panel-graph" class="animate-slide-up" style="animation-delay: 0.2s;">
+    {% if focus_team %}
+    <div class="card" style="overflow-x: auto;">
+        <!-- Legend -->
+        <div class="flex-center gap-3 mb-2" style="font-size: 0.75rem; color: var(--muted-foreground);">
+            <span class="flex-center gap-1"><span style="width: 12px; height: 12px; border-radius: 4px; background: var(--sky-primary); display: inline-block;"></span> Focus Team</span>
+            <span class="flex-center gap-1"><span style="width: 12px; height: 12px; border-radius: 4px; background: rgba(159, 17, 231, 0.15); display: inline-block;"></span> Upstream</span>
+            <span class="flex-center gap-1"><span style="width: 12px; height: 12px; border-radius: 4px; background: rgba(228, 86, 62, 0.15); display: inline-block;"></span> Downstream</span>
+            <span class="flex-center gap-1"><span style="width: 32px; border-top: 2px solid #ccc; display: inline-block;"></span> Dependency direction</span>
+        </div>
+
+        <!-- SVG Dependency Graph rendered by JS -->
+        <div id="dep-graph-svg" style="min-height: 300px;"></div>
+    </div>
+    {% else %}
+    <div class="card">
+        <div class="empty-state">
+            <i class='bx bx-git-repo-forked'></i>
+            <p class="empty-title">No teams available</p>
+            <p class="empty-desc">Seed the database to view dependency graphs.</p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- 📋 TAB 2: List View -->
+<div id="dep-panel-list" style="display: none;" class="animate-slide-up">
+    {% if focus_team %}
+    <div class="grid-2">
+        <!-- Upstream -->
+        <div class="card">
+            <h4 style="color: var(--sky-header-blue); margin-bottom: 1rem;">Upstream Dependencies ({{ upstream_deps|length }})</h4>
+            {% if upstream_deps %}
+            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                {% for dep in upstream_deps %}
+                <a href="{% url 'teams:team_detail' dep.from_team.team_id %}" style="text-decoration: none; color: inherit; display: flex; align-items: center; justify-content: space-between; padding: 0.75rem; border: 1px solid var(--border); border-radius: 10px; transition: background 0.2s;" onmouseover="this.style.background='var(--sky-tint-5)'" onmouseout="this.style.background='transparent'">
+                    <div>
+                        <div style="font-size: 0.9rem; font-weight: 600;">{{ dep.from_team.team_name }}</div>
+                        <div style="font-size: 0.75rem; color: var(--muted-foreground);">{{ dep.from_team.department.department_name }} · {{ dep.from_team.team_leader_name|default:"—" }}</div>
+                    </div>
+                    <span class="chip chip-upstream">Upstream</span>
+                </a>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state" style="padding: 2rem;">
+                <p class="empty-title">No upstream dependencies</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Downstream -->
+        <div class="card">
+            <h4 style="color: var(--sky-header-blue); margin-bottom: 1rem;">Downstream Dependencies ({{ downstream_deps|length }})</h4>
+            {% if downstream_deps %}
+            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                {% for dep in downstream_deps %}
+                <a href="{% url 'teams:team_detail' dep.to_team.team_id %}" style="text-decoration: none; color: inherit; display: flex; align-items: center; justify-content: space-between; padding: 0.75rem; border: 1px solid var(--border); border-radius: 10px; transition: background 0.2s;" onmouseover="this.style.background='var(--sky-tint-5)'" onmouseout="this.style.background='transparent'">
+                    <div>
+                        <div style="font-size: 0.9rem; font-weight: 600;">{{ dep.to_team.team_name }}</div>
+                        <div style="font-size: 0.75rem; color: var(--muted-foreground);">{{ dep.to_team.department.department_name }} · {{ dep.to_team.team_leader_name|default:"—" }}</div>
+                    </div>
+                    <span class="chip chip-downstream">Downstream</span>
+                </a>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state" style="padding: 2rem;">
+                <p class="empty-title">No downstream dependencies</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    /**
+     * Dependencies Module — Tab Switcher & SVG Graph Renderer
+     */
+    function switchDepTab(tabId, button) {
+        document.getElementById('dep-panel-graph').style.display = tabId === 'graph' ? 'block' : 'none';
+        document.getElementById('dep-panel-list').style.display = tabId === 'list' ? 'block' : 'none';
+        document.querySelectorAll('.tab-btn').forEach(function(btn) { btn.classList.remove('active'); });
+        button.classList.add('active');
+    }
+
+    /**
+     * Client-side SVG dependency graph renderer.
+     * Uses dependency data injected from Django context.
+     */
+    document.addEventListener('DOMContentLoaded', function() {
+        var graphContainer = document.getElementById('dep-graph-svg');
+        if (!graphContainer) return;
+
+        var focusTeam = '{{ focus_team_name|escapejs }}';
+        if (!focusTeam) return;
+
+        // Build upstream/downstream lists from template data
+        var upstreamNames = [{% for dep in upstream_deps %}'{{ dep.from_team.team_name|escapejs }}',{% endfor %}];
+        var downstreamNames = [{% for dep in downstream_deps %}'{{ dep.to_team.team_name|escapejs }}',{% endfor %}];
+
+        if (upstreamNames.length === 0 && downstreamNames.length === 0) {
+            graphContainer.innerHTML = '<div class="empty-state"><i class="bx bx-git-repo-forked"></i><p class="empty-title">No dependencies to display</p><p class="empty-desc">This team has no upstream or downstream dependencies.</p></div>';
+            return;
+        }
+
+        var svgWidth = 900;
+        var colX = [120, 450, 780];
+        var nodePositions = {};
+        var spacing, startY;
+
+        // Layout upstream column
+        spacing = Math.min(55, 400 / Math.max(upstreamNames.length, 1));
+        startY = Math.max(30, 200 - (upstreamNames.length * spacing) / 2);
+        upstreamNames.forEach(function(name, i) { nodePositions[name] = { x: colX[0], y: startY + i * spacing }; });
+
+        // Center node
+        nodePositions[focusTeam] = { x: colX[1], y: 200 };
+
+        // Layout downstream column
+        spacing = Math.min(55, 400 / Math.max(downstreamNames.length, 1));
+        startY = Math.max(30, 200 - (downstreamNames.length * spacing) / 2);
+        downstreamNames.forEach(function(name, i) { nodePositions[name] = { x: colX[2], y: startY + i * spacing }; });
+
+        var allNames = [focusTeam].concat(upstreamNames).concat(downstreamNames);
+        var maxY = Math.max.apply(null, allNames.map(function(n) { return nodePositions[n] ? nodePositions[n].y : 0; })) + 60;
+        var svgHeight = Math.max(maxY, 300);
+
+        var svg = '<svg width="' + svgWidth + '" height="' + svgHeight + '" style="min-width:900px;">';
+        svg += '<defs><marker id="arrow" viewBox="0 0 10 7" refX="10" refY="3.5" markerWidth="8" markerHeight="6" orient="auto-start-reverse"><polygon points="0 0, 10 3.5, 0 7" fill="#999"/></marker></defs>';
+
+        // Draw edges (upstream → focus)
+        upstreamNames.forEach(function(name) {
+            var from = nodePositions[name];
+            var to = nodePositions[focusTeam];
+            svg += '<line x1="' + (from.x + 145) + '" y1="' + (from.y + 15) + '" x2="' + (to.x - 5) + '" y2="' + (to.y + 15) + '" stroke="#ccc" stroke-width="1.5" marker-end="url(#arrow)"/>';
+        });
+
+        // Draw edges (focus → downstream)
+        downstreamNames.forEach(function(name) {
+            var from = nodePositions[focusTeam];
+            var to = nodePositions[name];
+            svg += '<line x1="' + (from.x + 145) + '" y1="' + (from.y + 15) + '" x2="' + (to.x - 5) + '" y2="' + (to.y + 15) + '" stroke="#ccc" stroke-width="1.5" marker-end="url(#arrow)"/>';
+        });
+
+        // Draw nodes
+        allNames.forEach(function(name) {
+            var pos = nodePositions[name];
+            if (!pos) return;
+            var isCenter = name === focusTeam;
+            var isUp = upstreamNames.indexOf(name) >= 0;
+            var fill = isCenter ? '#030213' : isUp ? '#ede9fe' : '#fff7ed';
+            var textColor = isCenter ? 'white' : '#333';
+            var stroke = isCenter ? '#030213' : isUp ? '#c4b5fd' : '#fed7aa';
+            var displayName = name.length > 22 ? name.substring(0, 20) + '...' : name;
+
+            svg += '<g style="cursor:pointer;">';
+            svg += '<rect x="' + (pos.x - 5) + '" y="' + pos.y + '" width="150" height="30" rx="6" fill="' + fill + '" stroke="' + stroke + '" stroke-width="1.5"/>';
+            svg += '<text x="' + (pos.x + 70) + '" y="' + (pos.y + 19) + '" text-anchor="middle" fill="' + textColor + '" font-size="11">' + displayName + '</text>';
+            svg += '</g>';
+        });
+
+        svg += '</svg>';
+        graphContainer.innerHTML = svg;
+    });
+</script>
+{% endblock %}

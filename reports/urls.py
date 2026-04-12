@@ -4,5 +4,6 @@ from . import views
 app_name = 'reports'
 
 urlpatterns = [
-    path('', views.placeholder, name='reports_home'),
+    path('', views.reports_home, name='reports_home'),
+    path('export/csv/', views.export_csv, name='export_csv'),
 ]

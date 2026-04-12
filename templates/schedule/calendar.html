@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+
+{% block title %}Schedule | Sky Registry{% endblock %}
+
+{% block content %}
+<!--
+  SCHEDULE MODULE — HIGH-FIDELITY VIEW
+  Mirrors SchedulePage.tsx from the User Inquiry prototype.
+  Components: Calendar widget, meeting list, create form.
+  Student 4: Maurya Patel
+-->
+
+<div class="flex-between mb-2 animate-slide-up">
+    <div>
+        <h1 class="spectrum-text" style="font-size: 2rem; letter-spacing: -0.02em;">Schedule</h1>
+        <p style="color: var(--sky-header-blue); opacity: 0.6; font-weight: 500; font-size: 0.95rem;">Manage meetings and cross-team sessions</p>
+    </div>
+    <div class="flex gap-1">
+        {% if selected_team %}
+            <a href="{% url 'schedule:calendar' %}" class="btn btn-secondary">
+                <i class='bx bx-x'></i> Clear Filter
+            </a>
+        {% endif %}
+        <button class="btn btn-primary" onclick="document.getElementById('meeting-form').style.display = document.getElementById('meeting-form').style.display === 'none' ? 'block' : 'none'">
+            <i class='bx bx-plus'></i> Schedule Meeting
+        </button>
+    </div>
+</div>
+
+<!-- ✏️ New Meeting Form (Hidden by default) -->
+<div id="meeting-form" style="display: none;" class="card animate-slide-up mb-3" style="max-width: 600px;">
+    <h3 style="color: var(--sky-header-blue); margin-bottom: 1.5rem;">
+        <i class='bx bx-calendar-plus' style="margin-right: 0.5rem;"></i> New Meeting
+    </h3>
+    <form method="post" action="{% url 'schedule:create' %}{% if prefill_team_id %}?team_id={{ prefill_team_id }}{% endif %}">
+        {% csrf_token %}
+
+        {% for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+            <span style="color: var(--sky-negative); font-size: 0.8rem;">{{ field.errors.0 }}</span>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        <div class="flex gap-1 mt-2">
+            <button type="submit" class="btn btn-primary">
+                <i class='bx bx-check'></i> Schedule
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="document.getElementById('meeting-form').style.display = 'none'">
+                Cancel
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- 📊 Main Layout: Meetings List (2/3) + Calendar Widget (1/3) -->
+<div class="grid-2-1 animate-slide-up" style="animation-delay: 0.15s;">
+
+    <!-- 📋 Upcoming Meetings -->
+    <div>
+        <h3 style="color: var(--sky-header-blue); margin-bottom: 1rem;">
+            <i class='bx bx-list-ul' style="margin-right: 0.5rem;"></i> Upcoming Meetings
+        </h3>
+
+        {% if meetings %}
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+            {% for meeting in meetings %}
+            <div class="card" style="padding: 1.25rem;">
+                <div class="flex-between">
+                    <div>
+                        <h4 style="font-size: 1rem; color: var(--sky-header-blue);">{{ meeting.meeting_title }}</h4>
+                        <p style="font-size: 0.8rem; color: var(--muted-foreground); margin-top: 0.25rem;">
+                            <span class="chip chip-department">{{ meeting.team.team_name }}</span>
+                        </p>
+                        {% if meeting.agenda_text %}
+                        <p style="font-size: 0.85rem; color: #888; margin-top: 0.5rem;">{{ meeting.agenda_text|truncatewords:20 }}</p>
+                        {% endif %}
+                    </div>
+                    <div style="text-align: right; flex-shrink: 0;">
+                        <div style="font-size: 0.8rem; color: var(--muted-foreground); display: flex; align-items: center; gap: 0.4rem; justify-content: flex-end;">
+                            <i class='bx bx-calendar' style="font-size: 0.9rem;"></i>
+                            {{ meeting.start_datetime|date:"D, d M Y" }}
+                        </div>
+                        <div style="font-size: 0.8rem; color: var(--muted-foreground); display: flex; align-items: center; gap: 0.4rem; justify-content: flex-end; margin-top: 0.25rem;">
+                            <i class='bx bx-time' style="font-size: 0.9rem;"></i>
+                            {{ meeting.start_datetime|date:"H:i" }} — {{ meeting.end_datetime|date:"H:i" }}
+                        </div>
+                        <div style="margin-top: 0.5rem;">
+                            <span class="chip chip-tech">{{ meeting.get_platform_type_display }}</span>
+                        </div>
+                        <form method="post" action="{% url 'schedule:delete' meeting.meeting_id %}" style="margin-top: 0.5rem;" onsubmit="return confirm('Delete this meeting?');">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-ghost" style="color: var(--sky-negative); font-size: 0.75rem; padding: 0.25rem 0.5rem;">
+                                <i class='bx bx-trash'></i> Delete
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="card">
+            <div class="empty-state">
+                <i class='bx bx-calendar-x'></i>
+                <p class="empty-title">No meetings scheduled</p>
+                <p class="empty-desc">Click "Schedule Meeting" to create your first session.</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- 📅 Calendar Widget -->
+    <div>
+        <h3 style="color: var(--sky-header-blue); margin-bottom: 1rem;">
+            <i class='bx bx-calendar' style="margin-right: 0.5rem;"></i> Calendar
+        </h3>
+        <div class="card">
+            <div style="text-align: center; font-size: 0.95rem; font-weight: 700; color: var(--sky-header-blue); margin-bottom: 1rem;">
+                {{ month_name }}
+            </div>
+            <div class="calendar-grid">
+                <div class="cal-header">Su</div>
+                <div class="cal-header">Mo</div>
+                <div class="cal-header">Tu</div>
+                <div class="cal-header">We</div>
+                <div class="cal-header">Th</div>
+                <div class="cal-header">Fr</div>
+                <div class="cal-header">Sa</div>
+
+                <!-- Empty cells before first day -->
+                {% for i in first_day_range %}
+                <div class="cal-day is-empty">&nbsp;</div>
+                {% endfor %}
+
+                <!-- Calendar days -->
+                {% for day in calendar_days %}
+                <div class="cal-day {% if day.is_today %}is-today{% endif %} {% if day.has_event %}has-event{% endif %}">
+                    {{ day.number }}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Quick Filter by Team -->
+        <div class="card mt-2" style="padding: 1rem;">
+            <h4 style="font-size: 0.85rem; color: var(--sky-header-blue); margin-bottom: 0.75rem;">Filter by Team</h4>
+            <form method="get" action="{% url 'schedule:calendar' %}">
+                <select name="team_id" class="filter-select" style="width: 100%;" onchange="this.form.submit()">
+                    <option value="">All Teams</option>
+                    {% for team in teams %}
+                    <option value="{{ team.team_id }}" {% if selected_team == team.team_id|stringformat:"d" %}selected{% endif %}>
+                        {{ team.team_name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    /**
+     * Schedule Module UI Controller
+     * Auto-opens form when ?new=true is in URL (from inter-app wiring).
+     */
+    document.addEventListener('DOMContentLoaded', function() {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('new') === 'true') {
+            const formEl = document.getElementById('meeting-form');
+            if (formEl) formEl.style.display = 'block';
+        }
+    });
+</script>
+{% endblock %}
