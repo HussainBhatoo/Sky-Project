@@ -31,6 +31,9 @@
     {% block extra_head %}{% endblock %}
 </head>
 <body>
+    <button id="sidebar-toggle" class="sidebar-toggle-btn" aria-label="Toggle Sidebar">
+                    <i class='bx bx-menu'></i>
+                </button>
 
     <div class="app-container">
         <!-- 🧭 Sidebar Navigation: The command center for the registry -->
@@ -45,50 +48,50 @@
             <ul class="nav-links">
                 <li class="nav-item">
                     <a href="{% url 'core:dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
-                        <i class='bx bx-grid-alt'></i> Dashboard
+                        <i class='bx bx-grid-alt'></i> <span class="nav-label">Dashboard</span>
                     </a>
                 </li>
 
                 <!-- App Modules (Students Implementation Areas) -->
                 <li class="nav-item">
                     <a href="{% url 'teams:team_list' %}" class="nav-link {% if 'teams' in request.path %}active{% endif %}">
-                        <i class='bx bx-user'></i> Teams
+                        <i class='bx bx-user'></i> <span class="nav-label">Teams</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
                     <a href="{% url 'organisation:org_chart' %}" class="nav-link {% if 'organisation' in request.path and 'dependencies' not in request.path %}active{% endif %}">
-                        <i class='bx bx-buildings' ></i> Departments
+                        <i class='bx bx-buildings' ></i> <span class="nav-label">Departments</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
                     <a href="{% url 'organisation:dependencies' %}" class="nav-link {% if 'dependencies' in request.path %}active{% endif %}">
-                        <i class='bx bx-git-repo-forked' ></i> Dependencies
+                        <i class='bx bx-git-repo-forked' ></i> <span class="nav-label">Dependencies</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
                     <a href="{% url 'messages_app:inbox' %}" class="nav-link {% if 'messages' in request.path %}active{% endif %}">
-                        <i class='bx bx-envelope' ></i> Messages
+                        <i class='bx bx-envelope' ></i> <span class="nav-label">Messages</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
                     <a href="{% url 'schedule:calendar' %}" class="nav-link {% if 'schedule' in request.path %}active{% endif %}">
-                        <i class='bx bx-calendar' ></i> Schedule
+                        <i class='bx bx-calendar' ></i> <span class="nav-label">Schedule</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
                     <a href="{% url 'reports:reports_home' %}" class="nav-link {% if 'reports' in request.path %}active{% endif %}">
-                        <i class='bx bx-file' ></i> Reports
+                        <i class='bx bx-file' ></i> <span class="nav-label">Reports</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
                     <a href="{% url 'core:audit_log' %}" class="nav-link {% if 'audit' in request.path %}active{% endif %}">
-                        <i class='bx bx-clipboard' ></i> Audit Log
+                        <i class='bx bx-clipboard' ></i> <span class="nav-label">Audit Log</span>
                     </a>
                 </li>
 
@@ -96,33 +99,18 @@
                 <li class="nav-divider"></li>
                 <li class="nav-item">
                     <a href="/admin/" class="nav-link">
-                        <i class='bx bx-cog' ></i> Admin
+                        <i class='bx bx-cog' ></i> <span class="nav-label">Admin</span>
                     </a>
                 </li>
                 {% endif %}
             </ul>
 
-            <!-- 👤 High-Fi Staff Footer -->
-            <div class="sidebar-footer">
-                <div class="user-profile-mini">
-                    <div class="avatar-circle">
-                        {{ user.username|slice:":1"|upper }}
-                    </div>
-                    <div class="user-info">
-                        <p class="username">@{{ user.username }}</p>
-                        <a href="{% url 'logout' %}" class="sign-out-link">Sign Out</a>
-                        <p class="lead-credit">Lead: Maurya Patel</p>
-                    </div>
-                </div>
-            </div>
-        </nav>
+            </nav>
 
         <div class="main-wrapper">
             <!-- 🔍 High-Fi Utility Navbar: Featuring logic-ready search -->
             <header class="top-navbar">
-                <button id="sidebar-toggle" class="sidebar-toggle-btn" aria-label="Toggle Sidebar">
-                    <i class='bx bx-menu'></i>
-                </button>
+                
                 <div class="search-bar-container" id="global-search">
                     <div class="search-bar">
                         <i class='bx bx-search'></i>
@@ -139,6 +127,30 @@
                     <div class="notification-bell">
                         <i class='bx bx-bell'></i>
                         <span class="pulse-dot"></span>
+                    </div>
+                    
+                    <!-- 👤 User Profile Dropdown -->
+                    <div class="nav-user-dropdown" id="user-dropdown-container">
+                        <div class="nav-avatar-trigger" id="user-dropdown-btn">
+                            <div class="avatar-circle small">
+                                {% if user.first_name %}{{ user.first_name|first|upper }}{% else %}{{ user.username|first|upper }}{% endif %}{% if user.last_name %}{{ user.last_name|first|upper }}{% endif %}
+                            </div>
+                            <span class="user-fullname">{{ user.get_full_name|default:user.username }}</span>
+                            <i class='bx bx-chevron-down'></i>
+                        </div>
+                        
+                        <div class="nav-dropdown-menu" id="user-dropdown-menu">
+                            <a href="{% url 'core:profile' %}" class="dropdown-item">
+                                <i class='bx bx-user'></i> Profile
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <form method="POST" action="{% url 'logout' %}" class="dropdown-form">
+                                {% csrf_token %}
+                                <button type="submit" class="dropdown-item text-danger">
+                                    <i class='bx bx-log-out'></i> Sign Out
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </header>
@@ -189,8 +201,31 @@
             // 🍔 Sidebar Toggle Logic
             const sidebarToggle = document.getElementById('sidebar-toggle');
             if (sidebarToggle) {
+                // Initialize from localStorage
+                if (localStorage.getItem('sidebar-collapsed') === 'true') {
+                    document.body.classList.add('sidebar-collapsed');
+                }
+                
                 sidebarToggle.addEventListener('click', () => {
                     document.body.classList.toggle('sidebar-collapsed');
+                    localStorage.setItem('sidebar-collapsed', document.body.classList.contains('sidebar-collapsed'));
+                });
+            }
+
+            // User Dropdown Logic
+            const dropdownBtn = document.getElementById('user-dropdown-btn');
+            const dropdownMenu = document.getElementById('user-dropdown-menu');
+            const dropdownContainer = document.getElementById('user-dropdown-container');
+            
+            if (dropdownBtn && dropdownMenu) {
+                dropdownBtn.addEventListener('click', (e) => {
+                    dropdownMenu.classList.toggle('active');
+                });
+                
+                document.addEventListener('click', (e) => {
+                    if (dropdownContainer && !dropdownContainer.contains(e.target)) {
+                        dropdownMenu.classList.remove('active');
+                    }
                 });
             }
 
