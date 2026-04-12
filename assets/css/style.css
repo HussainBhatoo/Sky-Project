@@ -910,3 +910,129 @@ textarea.form-control {
     .filter-bar { flex-direction: column; align-items: stretch; }
     .filter-bar .filter-input { max-width: 100%; }
 }
+
+/* ===== SIDEBAR COLLAPSE TOGGLE ===== */
+.sidebar-toggle-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.75rem;
+  color: var(--sky-header-blue);
+  cursor: pointer;
+  margin-right: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  padding: 0.25rem;
+  transition: all 0.2s ease;
+}
+
+.sidebar-toggle-btn:hover {
+  background: var(--sky-tint-10);
+  color: var(--sky-primary);
+}
+
+.top-navbar {
+  justify-content: flex-start;
+}
+
+.search-bar-container {
+  flex: 1;
+}
+
+/* Transitions for collapsing */
+.sidebar {
+  transition: width 0.3s cubic-bezier(0.2, 0, 0, 1);
+  overflow-x: hidden;
+}
+
+.main-wrapper {
+  transition: margin-left 0.3s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.nav-link {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.sky-logo-img.sidebar-logo {
+  transition: all 0.3s ease;
+}
+
+.sidebar-footer .user-profile-mini {
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+/* Collapsed State */
+body.sidebar-collapsed .sidebar {
+  width: 80px;
+}
+
+body.sidebar-collapsed .main-wrapper {
+  margin-left: 80px;
+}
+
+body.sidebar-collapsed .sky-logo-img.sidebar-logo {
+  opacity: 0;
+  pointer-events: none;
+  height: 20px;
+  margin-bottom: 2rem;
+}
+body.sidebar-collapsed .sidebar-header {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+body.sidebar-collapsed .sidebar-header::after {
+    content: "\ebdb"; /* boxicons bx-cloud logo approx or letter S */
+    font-family: boxicons !important;
+    font-size: 2rem;
+    color: white;
+    position: absolute;
+    top: 2rem;
+}
+
+body.sidebar-collapsed .nav-item {
+  width: 100%;
+}
+
+body.sidebar-collapsed .nav-link {
+  padding: 0.75rem;
+  justify-content: center;
+}
+
+body.sidebar-collapsed .nav-link i {
+  font-size: 1.5rem;
+  margin-right: 0;
+}
+
+/* Hide text via indented block approach since no span wrapper */
+body.sidebar-collapsed .nav-link {
+  color: transparent !important;
+}
+
+body.sidebar-collapsed .nav-link.active {
+    background: rgba(255, 255, 255, 0.2);
+}
+body.sidebar-collapsed .nav-link.active i {
+    color: white;
+}
+
+body.sidebar-collapsed .sidebar-footer .user-info {
+  display: none;
+}
+body.sidebar-collapsed .sidebar-footer {
+  justify-content: center;
+  padding: 1rem 0;
+}
+body.sidebar-collapsed .nav-link i {
+  color: rgba(255,255,255,0.7) !important;
+}
+body.sidebar-collapsed .nav-link:hover i {
+  color: white !important;
+}
+body.sidebar-collapsed .nav-link.active i {
+  color: white !important;
+}

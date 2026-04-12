@@ -120,6 +120,9 @@
         <div class="main-wrapper">
             <!-- 🔍 High-Fi Utility Navbar: Featuring logic-ready search -->
             <header class="top-navbar">
+                <button id="sidebar-toggle" class="sidebar-toggle-btn" aria-label="Toggle Sidebar">
+                    <i class='bx bx-menu'></i>
+                </button>
                 <div class="search-bar-container" id="global-search">
                     <div class="search-bar">
                         <i class='bx bx-search'></i>
@@ -180,6 +183,14 @@
                     if (!document.getElementById('global-search').contains(e.target)) {
                         resultsDropdown.classList.remove('is-active');
                     }
+                });
+            }
+
+            // 🍔 Sidebar Toggle Logic
+            const sidebarToggle = document.getElementById('sidebar-toggle');
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', () => {
+                    document.body.classList.toggle('sidebar-collapsed');
                 });
             }
 
