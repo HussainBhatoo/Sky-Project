@@ -8,17 +8,17 @@ This is the comprehensive roadmap for **Maurya Patel** (Group Lead & Student 4).
 **Objective**: Build a robust meeting management system with calendar visualization.
 
 ### A. Meeting CRUD System
-- [ ] **Implementation**:
-    - [ ] `forms.py`: Create `MeetingForm` with validation to prevent double-booking.
-    - [ ] `views.py`: Implement `MeetingListView`, `MeetingCreateView`, and `MeetingDeleteView`.
-    - [ ] **Smart Prefill**: Logic to auto-select `team_id` when linking from a team page.
-- [ ] **Templates**:
-    - [ ] `meeting_list.html`: List view with Sky branding.
-    - [ ] `meeting_form.html`: Request meet form with glassmorphism.
+- [x] **Implementation**:
+    - [x] `forms.py`: Create `MeetingForm` with validation to prevent double-booking.
+    - [x] `views.py`: Implement `MeetingListView`, `MeetingCreateView`, and `MeetingDeleteView`.
+    - [x] **Smart Prefill**: Logic to auto-select `team_id` when linking from a team page.
+- [x] **Templates**:
+    - [x] `meeting_list.html`: List view with Sky branding.
+    - [x] `meeting_form.html`: Request meet form with glassmorphism.
 
 ### B. Calendar Dashboard
-- [ ] **Logic**: Generate month days in `views.py` and mark dates with `Meeting` objects.
-- [ ] **UI**: Responsive grid calendar in `calendar.html`.
+- [x] **Logic**: Generate month days in `views.py` and mark dates with `Meeting` objects.
+- [x] **UI**: Responsive grid calendar in `calendar.html`.
 
 ---
 
@@ -26,19 +26,19 @@ This is the comprehensive roadmap for **Maurya Patel** (Group Lead & Student 4).
 **Objective**: Finalize core features and ensure parity across all 5 apps.
 
 ### A. Authentication & User (Accounts)
-- [ ] **Password Security**: Setup password reset flow.
-- [ ] **Profiles**: implement user profile edit views.
-- [ ] **Roles**: Ensure only appropriate users can modify specific items.
+- [x] **Password Security**: Setup password reset flow.
+- [x] **Profiles**: implement user profile edit views.
+- [x] **Roles**: Ensure only appropriate users can modify specific items.
 
 ### B. Dashboard & Audit
-- [ ] **Real Metrics**: Replace static numbers with `Team.objects.count()`, etc.
-- [ ] **Audit Signals**: Setup `post_save` signals in `core/` to auto-log every change.
-- [ ] **Audit Feed**: Visual activity log on the dashboard.
+- [x] **Real Metrics**: Replace static numbers with `Team.objects.count()`, etc.
+- [x] **Audit Signals**: Setup `post_save` signals in `core/` to auto-log every change.
+- [x] **Audit Feed**: Visual activity log on the dashboard.
 
 ### C. Search & Wiring
-- [ ] **Global Search**: Search across Teams, Members, and Departments.
-- [ ] **Inter-App Linking**: Ensure Teams link to Schedule, and Schedule links to Messages.
-- [ ] **CSS Audit**: Verify all teammates are using the standard design tokens.
+- [x] **Global Search**: Search across Teams, Members, and Departments.
+- [x] **Inter-App Linking**: Ensure Teams link to Schedule, and Schedule links to Messages.
+- [x] **CSS Audit**: Verify all teammates are using the standard design tokens.
 
 ---
 

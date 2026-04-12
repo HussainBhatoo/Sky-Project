@@ -1,47 +1,54 @@
-# 🏛️ 0. GROUP COMMON & FOUNDATION
+# ✅ 0. GROUP COMMON & FOUNDATION [COMPLETED]
 **The Avengers — Group H | Sky Engineering Team Registry**
 
-
-This document details the shared infrastructure that every teammate depends on. 
-
-> [!IMPORTANT]
-> Before starting your work, read the **[GROUP COLLABORATION WORKFLOW](./GROUP_WORKFLOW.md)** to understand our branching and PR process.
+This document details the shared infrastructure that everyone teammate depends on. All core architectural tasks are now finalized.
 
 ---
 
-## 🛠️ WHAT we are building (Group Scope)
-1. **Authentication**: Login, Registration, Logout, and Profile updates.
-2. **Shared Models**: All 13 database entities in `core/models.py`.
-3. **Design System**: The "Sky Spectrum" CSS variables and glassmorphism.
-4. **Base Layout**: `base.html` which contains the sidebar and top navigation.
-5. **Admin Hub**: A customized Django Admin panel for management.
+## 💎 WHAT we built (Group Scope)
+1. **Authentication**: Login, Registration, Logout, and Profile updates. [STABLE]
+2. **Shared Models**: All 13 database entities in `core/models.py`. [FINALIZED]
+3. **Design System**: The "Sky Spectrum" CSS variables and glassmorphism. [IMPLEMENTED]
+4. **Base Layout**: `base.html` with centralized `sky-layout.css`. [HARDENED]
+5. **Admin Hub**: A customized Django Admin panel with visual parity. [COMPLETE]
 
 ---
 
-## 📂 WHERE we are building it (File Roadmap)
+## 📂 WHERE it is (File Roadmap)
 
-| File Path | Purpose | Contributors |
-|-----------|---------|--------------|
-| `core/models.py` | The database schema (13 entities) | All (Lead: Maurya) |
-| `accounts/views.py` | Auth logic | Maurya / Abdul-lateef |
-| `templates/base.html` | The master layout for all apps | Maurya |
-| `static/css/style.css` | Design System (Colors, Gradients) | All |
-| `core/admin.py` | Custom Admin Interface | All |
-
----
-
-## 💾 DATA SEEDING (Importing Sky Registry)
-Before anyone starts building, you **must** import the official Sky data from the Excel file into your SQLite database.
-
-1.  **Move the Data**:
-    ```powershell
-    python scripts/populate_data.py
-    ```
-2.  **Verify**: Log into the admin panel (`localhost:8000/admin`) to see the teams populated.
+| File Path | Purpose | Status |
+|-----------|---------|--------|
+| `core/models.py` | The database schema (13 entities) | ✅ Finalized |
+| `accounts/urls.py` | Auth routing Hub | ✅ Finalized |
+| `templates/base.html` | The master layout for all apps | ✅ Finalized |
+| `assets/css/sky-layout.css` | Central Layout & Admin Parity | ✅ Finalized |
+| `assets/css/style.css` | Component Styles & Animations | ✅ Finalized |
+| `core/admin.py` | Custom Admin Site Configuration | ✅ Finalized |
 
 ---
 
-## 🚀 HOW to implement (Step-by-Step)
+## 🧪 DOCUMENTATION SYNC
+All student implementation plans are now synced to the central `sky-layout.css` architecture. Teammates must ensure they reference the centralized variables for structural parity.
+
+### Core CSS Architecture
+The project now uses a dual-CSS strategy:
+- `sky-layout.css`: Structural constraints, sidebar, and "Nuclear" admin overrides.
+- `style.css`: Feature-specific component styling and animations.
+
+---
+
+## ⚡ DATA VERIFICATION
+The Registry is pre-populated with:
+- 6 Departments
+- 46 Engineering Teams
+- Real Sky Spectrum branding
+
+### Access Credits
+- admin / Admin1234!
+- testuser / Test1234!
+
+---
+*Updated: April 12, 2026 | Final Integration Complete*
 
 ### 1. The Database (core/models.py)
 Every student will import these models. Ensure you include the expanded fields from our High-Fi audit:

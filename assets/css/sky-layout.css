@@ -1,0 +1,533 @@
+/* 
+ * Sky Engineering Team Registry - Global Design System (Layout)
+ * 
+ * ARCHITECTURE:
+ * This stylesheet implements the official Sky Engineering layout architecture.
+ * It uses Vanilla CSS for maximum performance and compatibility.
+ * 
+ * CORE PRINCIPLES:
+ * 1. Spectrum Branding: Consistent use of the Sky Spectrum gradient.
+ * 2. Universal Navigation: Ensures sidebar/navbar parity across normal apps and Django Admin.
+ */
+
+:root {
+  --font-size: 16px;
+
+  /* ===== SKY UI BASE COLOURS ===== */
+  --sky-primary: #000ff5;
+  --sky-primary-dark: #000cc4;
+  --sky-focus: #007ecc;
+  --sky-surface: #fafafd;
+  --sky-surface-strong: #f3f5ff;
+  --sky-tint-5: rgba(0, 15, 245, 0.05);
+  --sky-tint-10: rgba(0, 15, 245, 0.1);
+  --sky-tint-14: rgba(0, 15, 245, 0.14);
+  --sky-header-blue: #0c1b87;
+  --sky-text: #333333;
+
+  --sky-positive: #007e13;
+  --sky-negative: #dd1717;
+  --sky-attention: #f15a22;
+
+  /* ===== SKY SPECTRUM (Foundational) ===== */
+  --sky-spectrum-1: #e4563e;
+  --sky-spectrum-2: #e70296;
+  --sky-spectrum-3: #dc01b1;
+  --sky-spectrum-4: #be01c4;
+  --sky-spectrum-5: #9f11e7;
+  --sky-spectrum-6: #3d5fdf;
+
+  --sky-spectrum: linear-gradient(
+    90deg,
+    var(--sky-spectrum-1) 0%,
+    var(--sky-spectrum-2) 20%,
+    var(--sky-spectrum-3) 40%,
+    var(--sky-spectrum-4) 60%,
+    var(--sky-spectrum-5) 80%,
+    var(--sky-spectrum-6) 100%
+  );
+
+  --sky-spectrum-diagonal: linear-gradient(
+    135deg,
+    var(--sky-spectrum-1) 0%,
+    var(--sky-spectrum-2) 20%,
+    var(--sky-spectrum-3) 40%,
+    var(--sky-spectrum-4) 60%,
+    var(--sky-spectrum-5) 80%,
+    var(--sky-spectrum-6) 100%
+  );
+
+  /* ===== TOKEN MAPPING (High-Fi) ===== */
+  --primary: var(--sky-primary);
+  --primary-foreground: #ffffff;
+  --background: var(--sky-surface);
+  --foreground: var(--sky-text);
+  
+  --card: rgba(255, 255, 255, 0.92);
+  --card-foreground: var(--sky-text);
+  
+  --popover: #ffffff;
+  --popover-foreground: var(--sky-text);
+
+  --muted: var(--sky-surface-strong);
+  --muted-foreground: rgba(51, 51, 51, 0.72);
+
+  --accent: var(--sky-tint-10);
+  --accent-foreground: var(--sky-text);
+
+  --destructive: var(--sky-negative);
+  --destructive-foreground: #ffffff;
+
+  --border: rgba(0, 15, 245, 0.12);
+  --input-background: rgba(255, 255, 255, 0.96);
+  --ring: rgba(0, 126, 204, 0.35);
+
+  --radius: 0.75rem;
+  --sidebar-width: 260px;
+  --header-height: 70px;
+  
+  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 10px 15px -3px rgba(0, 15, 245, 0.1), 0 4px 6px -2px rgba(0, 15, 245, 0.05);
+  --shadow-lg: 0 20px 25px -5px rgba(12, 27, 135, 0.15), 0 10px 10px -5px rgba(12, 27, 135, 0.1);
+}
+
+/* ===== BASE STYLES ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--sky-text);
+  min-height: 100vh;
+  line-height: 1.5;
+  /* 🎨 Premium Background Wash */
+  background:
+    radial-gradient(1200px 600px at 20% -10%, rgba(0, 15, 245, 0.18) 0%, rgba(0, 15, 245, 0) 55%),
+    radial-gradient(900px 520px at 90% 0%, rgba(0, 126, 204, 0.14) 0%, rgba(0, 126, 204, 0) 60%),
+    radial-gradient(900px 520px at 40% 110%, rgba(220, 1, 177, 0.1) 0%, rgba(220, 1, 177, 0) 55%),
+    linear-gradient(180deg, #fafafd 0%, #f3f5ff 60%, #fafafd 100%);
+  background-attachment: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+html body h1, html body h2, html body h3, html body h4 {
+  color: var(--sky-header-blue);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+html body a {
+  color: var(--sky-primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+html body a:hover {
+  color: var(--sky-primary-dark);
+}
+
+/* ===== LAYOUT ARCHITECTURE ===== */
+html body .app-container {
+  display: flex !important;
+  min-height: 100vh;
+}
+
+/* 🧭 Sidebar: Deep Blue with Spectrum Accent */
+html body .sidebar {
+  width: var(--sidebar-width);
+  background: linear-gradient(180deg, var(--sky-header-blue) 0%, var(--sky-primary-dark) 55%, var(--sky-primary) 100%);
+  color: white;
+  position: fixed;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+html body .sidebar::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 8px;
+  background: var(--sky-spectrum);
+}
+
+html body .sidebar-header {
+  margin-bottom: 2.5rem;
+  padding-top: 1rem;
+}
+
+html body .sky-logo-img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+html body .sidebar-logo {
+  opacity: 0.9;
+}
+
+html body .sky-logo-img:hover {
+  transform: scale(1.08);
+}
+
+html body .nav-links {
+  list-style: none !important;
+  flex-grow: 1;
+}
+
+html body .sidebar ul, 
+html body .sidebar li, 
+html body .nav-item {
+  margin-bottom: 0.5rem;
+  list-style: none !important;
+  list-style-type: none !important;
+  display: block !important;
+}
+
+html body .sidebar a,
+html body .nav-links a,
+html body .nav-link:hover,
+html body .sidebar a:hover {
+  text-decoration: none !important;
+}
+
+html body .nav-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1.25rem;
+  color: rgba(255, 255, 255, 0.7);
+  border-radius: 12px;
+  transition: all 0.25s ease;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+  font-size: 16px !important;
+  height: 48px;
+  font-weight: 500;
+  text-decoration: none !important;
+}
+
+html body .nav-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  transform: translateX(6px);
+}
+
+html body .nav-link.active {
+  background: #ffffff;
+  color: var(--sky-primary-dark);
+  font-weight: 700;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+html body .main-wrapper {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  display: flex;
+  flex-direction: column;
+}
+
+/* 🔍 Top Utility Bar: 3-Zone Flex Layout */
+html body .top-navbar {
+  height: 60px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 900;
+}
+
+/* Navbar Flex Zones */
+html body .navbar-left, html body .navbar-middle, html body .navbar-right {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+html body .navbar-middle {
+  justify-content: center;
+}
+
+html body .navbar-right {
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+html body .nav-divider-vertical {
+  width: 1px;
+  height: 24px;
+  background-color: #e5e7eb;
+  margin: 0 4px;
+}
+
+html body .search-bar-container {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  min-width: 280px;
+}
+
+html body .search-bar {
+  background: var(--sky-surface-strong);
+  padding: 0 1.25rem;
+  height: 40px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+html body .search-bar:focus-within {
+  border-color: rgba(0, 126, 204, 0.4);
+  box-shadow: 0 0 0 3px rgba(0, 126, 204, 0.15);
+  background: #ffffff;
+}
+
+html body .search-bar input {
+  background: transparent;
+  border: none;
+  outline: none;
+  flex: 1;
+  margin-left: 0.75rem;
+  font-size: 0.95rem;
+  color: var(--sky-text);
+}
+
+html body .content-area {
+  padding: 2.5rem;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* 🛠️ DJANGO ADMIN PARITY OVERRIDES */
+
+/* Content Wrapper */
+html body #content-main {
+  width: 100%;
+}
+
+html body #content-main .module {
+  background: var(--card) !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: var(--shadow-sm) !important;
+  border-radius: var(--radius) !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+  overflow: hidden !important;
+  margin-bottom: 2rem !important;
+}
+
+html body #content-main .module:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+/* Module Headers (Caption) */
+html body #content-main .module caption {
+  background: linear-gradient(90deg, var(--sky-header-blue), var(--sky-primary-dark)) !important;
+  padding: 16px 24px !important;
+  text-align: left !important;
+}
+
+html body #content-main .module caption a.section,
+html body #content-main .module caption {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 1.05rem !important;
+  letter-spacing: 0.02em !important;
+  text-transform: uppercase !important;
+}
+
+/* Table Rows */
+html body #content-main .module table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+}
+
+html body #content-main .module tr {
+  border-bottom: 1px solid rgba(0, 15, 245, 0.06) !important;
+  transition: background 0.15s ease !important;
+}
+
+html body #content-main .module tr:hover {
+  background: rgba(0, 126, 204, 0.03) !important;
+}
+
+html body #content-main .module th {
+  padding: 16px 24px !important;
+}
+
+html body #content-main .module th a {
+  color: var(--sky-text) !important;
+  font-weight: 600 !important;
+  font-size: 0.95rem !important;
+}
+
+html body #content-main .module th a:hover {
+  color: var(--sky-primary) !important;
+}
+
+/* Action Links (Add / Change) */
+html body #content-main .module td {
+  padding: 16px 24px !important;
+  text-align: right !important;
+}
+
+html body .addlink, 
+html body .changelink {
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 8px 16px !important;
+  border-radius: 99px !important;
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease !important;
+}
+
+html body .addlink {
+  background: rgba(0, 126, 19, 0.1) !important;
+  color: var(--sky-positive) !important;
+}
+
+html body .addlink:hover {
+  background: var(--sky-positive) !important;
+  color: white !important;
+}
+
+html body .changelink {
+  background: var(--sky-tint-10) !important;
+  color: var(--sky-primary) !important;
+}
+
+html body .changelink:hover {
+  background: var(--sky-primary) !important;
+  color: white !important;
+}
+
+/* Hide default Django admin icons for Add/Change */
+html body .addlink::before,
+html body .changelink::before {
+  display: none !important;
+}
+
+/* =========================================================================
+   🚀 SKY SPECTRUM ADMIN INDEX "QUICK-CARD" TRANSFORMATION
+   "make admin options same as dashboard card"
+   Transforms standard Django model <tr> rows into Sky Spectrum tiles
+   ========================================================================= */
+
+/* Only target the main admin index (dashboard class) */
+html body.dashboard #content-main {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2rem !important;
+}
+
+/* Clear module backgrounds so the rows can be individual cards */
+html body.dashboard #content-main .module {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+/* Re-style App Headers cleanly */
+html body.dashboard #content-main .module caption {
+  background: transparent !important;
+  padding: 0 0 1rem 0 !important;
+}
+
+html body.dashboard #content-main .module caption a.section,
+html body.dashboard #content-main .module caption {
+  color: var(--sky-header-blue) !important;
+  font-size: 1.4rem !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.02em !important;
+  text-transform: none !important;
+}
+
+/* Grid out the table rows into cards */
+html body.dashboard #content-main .module tbody {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)) !important;
+  gap: 1.5rem !important;
+}
+
+/* Morph each model <tr> into a quick-card */
+html body.dashboard #content-main .module tr {
+  display: flex !important;
+  flex-direction: column !important;
+  border-radius: 18px !important;
+  padding: 1.75rem !important;
+  color: #fff !important;
+  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+  box-shadow: 0 14px 30px rgba(12, 27, 135, 0.18) !important;
+  background: var(--sky-spectrum-diagonal) !important;
+  background-size: 180% 180% !important;
+  background-position: left top !important;
+  transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1) !important;
+  margin-bottom: 0 !important; /* clear table border margins */
+}
+
+/* Apply the fixed hover effect (spectral flow & scale) */
+html body.dashboard #content-main .module tr:hover {
+  background-position: left bottom !important;
+  transform: scale(1.02) !important;
+}
+
+/* Format the model name link (e.g. Users, Teams) */
+html body.dashboard #content-main .module th {
+  padding: 0 !important;
+  border: none !important;
+  margin-bottom: 1.5rem !important;
+}
+
+html body.dashboard #content-main .module th a {
+  color: #ffffff !important;
+  font-size: 1.8rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.02em !important;
+  text-transform: uppercase !important;
+  display: block !important;
+}
+
+/* Restyle action links to float at the bottom as translucent pills */
+html body.dashboard #content-main .module td {
+  padding: 0 !important;
+  border: none !important;
+  display: inline-block !important;
+  margin-right: 0.75rem !important;
+}
+
+html body.dashboard .addlink, 
+html body.dashboard .changelink {
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: white !important;
+  backdrop-filter: blur(4px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  box-shadow: none !important;
+}
+
+html body.dashboard .addlink:hover, 
+html body.dashboard .changelink:hover {
+  background: white !important;
+  color: var(--sky-primary) !important;
+}

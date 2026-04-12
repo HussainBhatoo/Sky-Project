@@ -527,14 +527,17 @@ sky-team-registry/              ← Root (cloned from GitHub)
 │   ├── base.html               ← CRITICAL: sidebar, navbar, CSS vars
 │   ├── dashboard.html
 │   ├── audit_log.html
+│   ├── admin/
+│   │   └── base.html           ← Custom override for Django Admin matching Sky Spectrum
 │   └── partials/
 │       ├── sidebar.html
 │       ├── navbar.html
 │       └── notifications.html
 │
-└── static/                     ← CSS, JS, images
+└── assets/                     ← CSS, JS, images (overriding old static folder)
     ├── css/
-    │   └── style.css           ← Sky blue design system from CWK1
+    │   ├── style.css           ← Sky blue design system from CWK1
+    │   └── sky-layout.css      ← Centralized structural layout & Django admin parity classes
     ├── js/
     │   └── main.js
     └── images/

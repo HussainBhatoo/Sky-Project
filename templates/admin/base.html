@@ -1,0 +1,210 @@
+{% load i18n static %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE|default:'en-us' }}" dir="{{ LANGUAGE_BIDI|yesno:'rtl,ltr,auto' }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% block admin_title %}{{ title }} | Sky Admin{% endblock %}{% endblock %}</title>
+    
+    <!-- 📦 Django Admin Base CSS (Loaded First) -->
+    <link rel="stylesheet" href="{% block stylesheet %}{% static 'admin/css/base.css' %}{% endblock %}">
+    {% block extrastyle %}{% endblock %}
+
+    <!-- 🧬 Global Design System (Vanilla High-Fi) - LOADED LAST TO ENSURE PARITY -->
+    <link rel="stylesheet" href="{% static 'css/sky-layout.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
+    <!-- 📦 Core Iconography (Boxicons) -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    
+    <!-- 🖋️ Typography (Inter) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* 🚀 SKY SPECTRUM ADMIN HIJACK - TOTAL PARITY */
+        
+        /* Kill Default Admin Chrome */
+        #header, #nav-sidebar, .nav-sidebar, #branding, .breadcrumbs { display: none !important; }
+        
+        /* Breadcrumbs - Registry Card Style */
+        div.breadcrumbs-custom {
+            background: rgba(255, 255, 255, 0.85) !important;
+            backdrop-filter: blur(8px) !important;
+            padding: 18px 30px !important;
+            border-radius: 16px !important;
+            margin-bottom: 30px !important;
+            box-shadow: 0 4px 15px rgba(0, 15, 245, 0.04) !important;
+            border: 1px solid rgba(0, 15, 245, 0.08) !important;
+            font-size: 0.95rem !important;
+            color: #777 !important;
+        }
+
+        div.breadcrumbs-custom a { 
+            color: #9f11e7 !important; 
+            font-weight: 700 !important; 
+            text-decoration: none !important;
+        }
+
+        /* Admin Elements Hardening */
+        .module h2 {
+            background: linear-gradient(90deg, #e4563e, #e70296) !important;
+            color: white !important;
+            padding: 16px 24px !important;
+            font-weight: 800 !important;
+            font-size: 0.95rem !important;
+            text-transform: uppercase !important;
+        }
+
+        input[type=submit], .button {
+            background: linear-gradient(90deg, #9f11e7, #e70296) !important;
+            border-radius: 12px !important;
+            padding: 10px 24px !important;
+            font-weight: 700 !important;
+            color: white !important;
+            border: none !important;
+            transition: all 0.3s ease !important;
+        }
+    </style>
+</head>
+<body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}">
+
+    <div class="app-container">
+        <!-- 🧭 Sidebar Navigation: Exactly as base.html -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <a href="{% url 'core:dashboard' %}" class="logo-link">
+                    <img src="{% static 'images/Sky-spectrum-rgb.png' %}" alt="Sky Logo" class="sky-logo-img sidebar-logo">
+                </a>
+            </div>
+
+            <ul class="nav-links">
+                <li class="nav-item">
+                    <a href="{% url 'core:dashboard' %}" class="nav-link">
+                        <i class='bx bx-grid-alt'></i> <span class="nav-label">Dashboard</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item"><a href="{% url 'teams:team_list' %}" class="nav-link"><i class='bx bx-user'></i> <span class="nav-label">Teams</span></a></li>
+                <li class="nav-item"><a href="{% url 'organisation:org_chart' %}" class="nav-link"><i class='bx bx-buildings'></i> <span class="nav-label">Departments</span></a></li>
+                <li class="nav-item"><a href="{% url 'organisation:dependencies' %}" class="nav-link"><i class='bx bx-git-repo-forked'></i> <span class="nav-label">Dependencies</span></a></li>
+                <li class="nav-item"><a href="{% url 'messages_app:inbox' %}" class="nav-link"><i class='bx bx-envelope'></i> <span class="nav-label">Messages</span></a></li>
+                <li class="nav-item"><a href="{% url 'schedule:calendar' %}" class="nav-link"><i class='bx bx-calendar'></i> <span class="nav-label">Schedule</span></a></li>
+                <li class="nav-item"><a href="{% url 'reports:reports_home' %}" class="nav-link"><i class='bx bx-file'></i> <span class="nav-label">Reports</span></a></li>
+                <li class="nav-item"><a href="{% url 'core:audit_log' %}" class="nav-link"><i class='bx bx-clipboard'></i> <span class="nav-label">Audit Log</span></a></li>
+                
+                <li class="nav-divider"></li>
+                <li class="nav-item">
+                    <a href="/admin/" class="nav-link active">
+                        <i class='bx bx-cog'></i> <span class="nav-label">Admin</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="main-wrapper">
+            <!-- 🔍 Utility Navbar -->
+            <header class="top-navbar">
+                <div class="navbar-left">
+                    <button id="sidebar-toggle" class="sidebar-toggle-btn">
+                        <i class='bx bx-menu'></i>
+                    </button>
+                </div>
+                <div class="navbar-middle">
+                    <div class="search-bar-container">
+                        <div class="search-bar">
+                            <i class='bx bx-search'></i>
+                            <input type="text" placeholder="Search teams, leads or projects..." id="search-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="navbar-right">
+                    <div class="notification-bell">
+                        <i class='bx bx-bell'></i><span class="pulse-dot"></span>
+                    </div>
+                    <span class="badge badge-blue">SKY EMPLOYEE</span>
+                    <div class="nav-divider-vertical"></div>
+                    
+                    <div class="nav-user-dropdown" id="user-dropdown-container">
+                        <div class="nav-avatar-trigger" id="user-dropdown-btn">
+                            <div class="avatar-circle small">
+                                {% if user.first_name %}{{ user.first_name|first|upper }}{% else %}{{ user.username|first|upper }}{% endif %}
+                            </div>
+                            <span class="user-fullname">{{ user.get_full_name|default:user.username }}</span>
+                            <i class='bx bx-chevron-down'></i>
+                        </div>
+                        <div class="nav-dropdown-menu" id="user-dropdown-menu">
+                            <a href="{% url 'core:profile' %}" class="dropdown-item"><i class='bx bx-user'></i> Profile</a>
+                            <div class="dropdown-divider"></div>
+                            <form method="POST" action="{% url 'logout' %}" class="dropdown-form">
+                                {% csrf_token %}
+                                <button type="submit" class="dropdown-item text-danger">
+                                    <i class='bx bx-log-out'></i> Sign Out
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Admin Area -->
+            <main class="content-area animate-slide-up" style="padding: 40px !important;">
+                {% if not is_popup %}
+                    {% block breadcrumbs %}
+                    <div class="breadcrumbs-custom">
+                        <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+                        {% if title %} &rsaquo; {{ title }}{% endif %}
+                    </div>
+                    {% endblock %}
+                {% endif %}
+
+                <div id="content" class="{% block coltype %}colM{% endblock %}">
+                    {% block pretitle %}{% endblock %}
+                    {% block content_title %}{% if title %}<h1 style="color: var(--sky-header-blue); font-weight: 800; margin-bottom: 0.8rem;">{{ title }}</h1>{% endif %}{% endblock %}
+                    
+                    {% block messages %}
+                      {% if messages %}
+                        <ul class="messagelist">
+                          {% for message in messages %}
+                            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|capfirst }}</li>
+                          {% endfor %}
+                        </ul>
+                      {% endif %}
+                    {% endblock messages %}
+
+                    {% block content %}
+                        {{ content }}
+                    {% endblock %}
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- ⚡ JavaScript Persistence -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarToggle = document.getElementById('sidebar-toggle');
+            if (sidebarToggle) {
+                if (localStorage.getItem('sidebar-collapsed') === 'true') {
+                    document.body.classList.add('sidebar-collapsed');
+                }
+                sidebarToggle.addEventListener('click', () => {
+                    document.body.classList.toggle('sidebar-collapsed');
+                    localStorage.setItem('sidebar-collapsed', document.body.classList.contains('sidebar-collapsed'));
+                });
+            }
+
+            const dropdownBtn = document.getElementById('user-dropdown-btn');
+            const dropdownMenu = document.getElementById('user-dropdown-menu');
+            const dropdownContainer = document.getElementById('user-dropdown-container');
+            if (dropdownBtn && dropdownMenu) {
+                dropdownBtn.addEventListener('click', () => dropdownMenu.classList.toggle('active'));
+                document.addEventListener('click', (e) => {
+                    if (dropdownContainer && !dropdownContainer.contains(e.target)) {
+                        dropdownMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

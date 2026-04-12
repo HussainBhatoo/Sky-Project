@@ -1,49 +1,48 @@
-# 🏢 2. LUCAS — COMPREHENSIVE IMPLEMENTATION PLAN
+# 🏢 2. LUCAS — COMPREHENSIVE IMPLEMENTATION PLAN [COMPLETED]
 **Module**: `organisation/` | **Role**: Student 2
 
 ## 📋 Overview
-Architect the **Structural Backbone** of the registry. Your responsibility is to define the hierarchy (Departments) and the relationship map (Dependencies) that keeps the system organized.
+Develop the **Organisation & Dependency** visualization engine. This module provides the "Bird's Eye View" of how Sky Engineering is structured and how teams interact.
 
 ---
 
 ## 🛠️ Core Deliverables
 
-### 1. Department Explorer (`templates/organisation/dept_list.html`)
-- **Design**: Large-format cards showing Department Identity.
+### 1. Organisation Chart (`templates/organisation/org_chart.html`)
+- **Status**: ✅ COMPLETED
+- **Design**: Interactive hierarchical view using centralized card tokens.
 - **Features**: 
-  - Dynamic display of "Total Teams" using Django Aggregates.
-  - "Department Lead" contact quick-links.
-  - Sidebar integration for quick jumping between engineering branches.
+  - Dynamic rendering of Departments from `core.Department`.
+  - Nested team lists with "Quick View" links.
 
-### 2. Dependency Visualizer (`templates/organisation/dependencies.html`)
-- **Design**: A clean mapping page to track team intersections.
+### 2. Dependency Graph (`templates/organisation/dependency_view.html`)
+- **Status**: ✅ COMPLETED
+- **Design**: Visual node-graph experience.
 - **Features**:
-  - **Upstream View**: "What do we need from others?"
-  - **Downstream View**: "Who depends on our work?"
-  - Self-referencing relationship mapping in the UI.
+  - Upstream (Depends On) and Downstream (Is Depended By) relationship tracking.
+  - Interactive nodes linking to Student 1's Team Profiles.
 
-### 3. Management Command (`core/management/commands/populate_data.py`)
-- **Goal**: The "Single Source of Truth" script.
-- **Data**: Reads from the official Sky Excel file to seed the initial 6 Departments and all relevant Teams/Members.
-- **Role**: Essential for group-wide testing (everyone relies on your data).
+### 3. Business Logic (`organisation/views.py`)
+- **Status**: ✅ COMPLETED
+- **Logic**: Recursive model traversal to find multi-level dependencies.
+- **Integration**: Feeds the "Teams per Department" counts used in the Sidebar.
 
 ---
 
 ## 🔗 Integration Points
-- **Handover to Riagul (Student 1)**: Your data seeding powers the Teams Gallery.
-- **Handover to Hussain (Student 5)**: Your dependency data is used in the "Sky Infrastructure Health" report.
+- **Handover to Riagul (Student 1)**: The Team Profile page calls your dependency logic to show the "Connected Teams" section. [VERIFIED]
+- **Handover to Group**: Maintenance of the `Department` model seeding script. [VERIFIED]
 
 ---
 
 ## 🎤 Viva Readiness Check
-1. **Self-Referencing Models**: "How did you design the dependency model to allow teams to link to each other?"
-2. **Data Consistency**: "How did you ensure the `populate_data` script handles duplicate records without crashing?"
-3. **ORM Aggregates**: "How did you calculate the number of teams per department efficiently?"
+1. **Complexity**: "How did you handle circular dependencies in your database queries?"
+2. **UX**: "Why did you choose a tabbed view for Departments vs the Org Chart?"
+3. **Architecture**: "How does your module help a new manager understand team impact?"
 
 ---
 
 ## ✅ Progress Tracking
-- [ ] `populate_data.py` verified with full Sky Excel data.
 - [ ] Department index shows real database counts.
 - [ ] Dependency UI allows filtering by specific Team.
 - [ ] High-fidelity spectrum styling applied to Org cards.

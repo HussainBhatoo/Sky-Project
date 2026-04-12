@@ -81,7 +81,7 @@ Use **Glassmorphism** for the calendar background.
 ---
 
 ## ✅ MAURYA'S CHECKLIST
-- [ ] Users can cancel their own meetings.
-- [ ] The calendar correctly identifies "Today's" date.
-- [ ] Form includes a 'Purpose' field (Mission/Sync/Emergency).
-- [ ] Successfully integrated logic with Riagul (Teams) and Suliman (Messages).
+- [x] Users can cancel their own meetings.
+- [x] The calendar correctly identifies "Today's" date.
+- [x] Form includes a 'Purpose' field (Mission/Sync/Emergency).
+- [x] Successfully integrated logic with Riagul (Teams) and Suliman (Messages).
