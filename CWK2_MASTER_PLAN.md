@@ -151,7 +151,7 @@ https://trello.com/invite/b/696e18dddc44e139524ec21f/ATTI20f3cc8f34b260cf8cf6781
 
 | Section | Marks | What Gets You Full Marks |
 |---------|-------|--------------------------|
-| Database + Admin + Login Implementation | 15 | All models implemented correctly, Django admin fully customised with all 8 menu items, login/register/forgot password all working |
+| Database + Admin + Login Implementation | 15 | All models implemented correctly, Django admin fully customised with all 8 menu items, login/register/forgot password (simplified admin contact) all working |
 | UI/UX Consistency | 10 | Screenshots of all 5 apps looking visually identical, discussion of principles applied, how consistency was enforced (base.html) |
 | Security Risks | 5 | Min 2 risks identified (CSRF, SQL injection, session hijacking etc) with specific Django mitigations explained |
 | Legal Constraints | 5 | GDPR, DPA 2018, other laws cited in Harvard format with good discussion |
@@ -177,7 +177,7 @@ The viva is marked separately inside Code Functionality and Version Control:
 | Home/Landing Page | Links to User Login, Admin Login, Sign Up, Forgot Password |
 | User Login | Email + Password form, session management, redirect to dashboard |
 | User Registration | Local only (NO Google/OAuth), fields: First Name, Last Name, Username, Email, Password, Confirm Password |
-| Forgot Password | Reset password flow |
+| Forgot Password | Simplified Static Admin Contact Page |
 | Logout | Clear session, redirect to login |
 | User Profile | View + edit: First Name, Last Name, Username, Email, Change Password |
 | Dashboard | Stat cards (total teams, departments, upstream/downstream counts), recent updates list, grid/list mode toggle, notifications, profile link |
@@ -428,7 +428,7 @@ Every screen designed in CWK1 high-fidelity wireframes (Figma) must be built in 
 | Reports | Student 5 (Hussain) | PDF + Excel export buttons, report cards |
 | Audit Log | GROUP | Table of all system actions, searchable |
 | Admin Hub | GROUP | Django admin with 8 menu items customised |
-| User Profile | GROUP | Edit name/email/username, change password |
+| User Profile | GROUP | Edit name/email/username, integrated Password Change |
 
 ### CWK1 Design System (Must Match in CWK2)
 CSS Variables to use EXACTLY as designed:
@@ -497,7 +497,7 @@ sky-team-registry/              ← Root (cloned from GitHub)
         login.html
         register.html
         profile.html
-        forgot_password.html
+        registration/forgot_password.html
 
  teams/                      ← Student 1 (Lucas)
     views.py
@@ -648,9 +648,9 @@ INSTALLED_APPS = [
 TEMPLATES DIRS = [BASE_DIR / 'templates']
 STATICFILES_DIRS = [BASE_DIR / 'assets']
 AUTH_USER_MODEL = 'core.User'
-LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = '/dashboard/'
-LOGOUT_REDIRECT_URL = '/accounts/login/'
+LOGIN_URL = 'accounts:login'
+LOGIN_REDIRECT_URL = 'core:dashboard'
+LOGOUT_REDIRECT_URL = 'accounts:login'
 ```
 
 #### Step 1.3 — All Models in core/models.py
@@ -707,7 +707,8 @@ Files: `accounts/views.py`, `accounts/forms.py`, `accounts/urls.py`
 - Login view with form validation
 - Register view with Django UserCreationForm extended
 - Logout view
-- Forgot password (Django built-in password reset)
+- Forgot password (Simplified Admin Contact Page)
+- Authenticated Password Change (Integrated in Profile)
 - Profile edit view
 - All views use `@login_required` decorator where needed
 - CSRF tokens on all forms (Django adds automatically with `{% csrf_token %}`)
@@ -975,7 +976,7 @@ MUST answer ALL 5 QUESTIONS:
 #### Section 1: Database + Admin + Login (15 marks)
 - Final implemented models vs CWK1 ERD — what changed and why
 - Screenshots of all Django admin pages working
-- Screenshots of login/register/forgot password working
+- Screenshots of login/register/forgot password (Admin Contact) working
 - Explain which models each student used and how they connect
 
 #### Section 2: UI/UX Consistency (10 marks)
@@ -1103,7 +1104,7 @@ Brief says dashboard should have "notifications" — implement a simple notifica
 (e.g. unread messages count).
 
 ### Trap 13: Profile Must Support Password Change
-"update profile, change password if required" — both update and change password must work.
+"update profile, change password if required" — both update and integrated change password must work.
 
 ---
 

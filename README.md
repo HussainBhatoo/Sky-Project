@@ -20,7 +20,7 @@ The Sky Engineering Team Registry has undergone a comprehensive functional and s
 #### Authentication Audit Results (April 2026)
 - **Login/Signup**: Fully validated with corporate domain checks (`@sky.com` / `@sky.uk`).
 - **Security**: Robust CSRF protection, PBKDF2 password hashing, and input sanitization (SQLi/XSS tested).
-- **Recovery**: Secure Password Reset flow implemented with console-based logic for auditing.
+- **Recovery**: Simplified "Contact Administrator" flow for password recovery; authenticated Password Change integrated into user profile settings.
 - **Admin**: Dedicated administrative portal reachable from the entry point.
 - **Status**: **PASS (32/32 checks)**
 

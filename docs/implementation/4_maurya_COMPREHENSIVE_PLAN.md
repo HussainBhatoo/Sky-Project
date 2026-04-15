@@ -26,7 +26,7 @@ This is the comprehensive roadmap for **Maurya Patel** (Group Lead & Student 4).
 **Objective**: Finalize core features and ensure parity across all 5 apps.
 
 ### A. Authentication & User (Accounts)
-- [x] **Password Security**: Setup password reset flow.
+- [x] **Password Security**: Setup simplified namespaced recovery flow (Contact Admin).
 - [x] **Profiles**: implement user profile edit views.
 - [x] **Roles**: Ensure only appropriate users can modify specific items.
 

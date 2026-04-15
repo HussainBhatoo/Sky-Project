@@ -6,7 +6,7 @@ This document details the shared infrastructure that everyone teammate depends o
 ---
 
 ## WHAT we built (Group Scope)
-1. **Authentication**: Login, Registration, Logout, and Full Secure Password Reset flow. [FINALIZED & AUDITED]
+1. **Authentication**: Login, Registration, Logout, and Simplified Namespaced Password Recovery (Contact Admin). [FINALIZED & AUDITED]
 2. **Shared Models**: All 15 database entities in `core/models.py`. [FINALIZED]
 3. **Design System**: The "Sky Spectrum" CSS variables and glassmorphism. [IMPLEMENTED]
 4. **Base Layout**: `base.html` with centralized `sky-layout.css`. [HARDENED]
