@@ -6,11 +6,11 @@ This document details the shared infrastructure that everyone teammate depends o
 ---
 
 ## WHAT we built (Group Scope)
-1. **Authentication**: Login, Registration, Logout, and Profile updates. [STABLE]
+1. **Authentication**: Login, Registration, Logout, and Full Secure Password Reset flow. [FINALIZED & AUDITED]
 2. **Shared Models**: All 15 database entities in `core/models.py`. [FINALIZED]
 3. **Design System**: The "Sky Spectrum" CSS variables and glassmorphism. [IMPLEMENTED]
 4. **Base Layout**: `base.html` with centralized `sky-layout.css`. [HARDENED]
-5. **Admin Hub**: A customized Django Admin panel with visual parity. [COMPLETE]
+5. **Admin Hub**: A dedicated Django Admin panel with visual parity. [COMPLETE]
 6. **Professionalization Layer**: Global "Design Spells" and debounced AJAX Dynamic Search. [NEW]
 7. **Compliance Entities**: Implementation of `Vote` and `TimeTrack` models for 100% rubric coverage. [NEW]
 

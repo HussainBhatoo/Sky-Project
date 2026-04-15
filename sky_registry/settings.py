@@ -141,3 +141,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = 'core:dashboard'
 LOGOUT_REDIRECT_URL = 'login'
 LOGIN_URL = 'login'
+
+# Email Configuration for Password Reset (Console Backend for Local Audit)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
