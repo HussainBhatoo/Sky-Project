@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic import CreateView, TemplateView
 from .forms import UserSignupForm
 
 class SkyLoginView(LoginView):
@@ -25,7 +25,7 @@ class SkySignupView(CreateView):
     """
     form_class = UserSignupForm
     template_name = 'registration/signup.html'
-    success_url = reverse_lazy('login')
+    success_url = reverse_lazy('accounts:login')
 
     def form_valid(self, form):
         """
@@ -35,10 +35,17 @@ class SkySignupView(CreateView):
         response = super().form_valid(form)
         return response
 
+class SkyForgotPasswordView(TemplateView):
+    """
+    Simplified Forgot Password view that displays a static contact message.
+    Used to satisfy coursework requirements without full SMTP complexity.
+    """
+    template_name = 'registration/forgot_password.html'
+
 def logout_view(request):
     """
     Custom logout handler that terminates the current Django session 
     and clears authentication tokens before redirecting to the login screen.
     """
     logout(request)
-    return redirect('login')
+    return redirect('accounts:login')

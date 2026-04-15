@@ -137,10 +137,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Auth Redirects
+# Authentication Redirect Settings
+# Centralized routing for session lifecycle management
+LOGIN_URL = 'accounts:login'
 LOGIN_REDIRECT_URL = 'core:dashboard'
-LOGOUT_REDIRECT_URL = 'login'
-LOGIN_URL = 'login'
-
-# Email Configuration for Password Reset (Console Backend for Local Audit)
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+LOGOUT_REDIRECT_URL = 'accounts:login'

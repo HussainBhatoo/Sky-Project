@@ -43,7 +43,10 @@
                 </div>
             </div>
             
-            <div class="mt-2 text-right">
+            <div class="mt-2 text-right" style="display: flex; gap: 0.8rem; justify-content: flex-end;">
+                <a href="{% url 'accounts:password_change' %}" class="btn btn-ghost" style="border: 1px solid var(--border); color: var(--sky-header-blue);">
+                    <i class='bx bx-lock-alt'></i> Change Password
+                </a>
                 <button type="submit" class="btn btn-primary">
                     <i class='bx bx-save'></i> Save Changes
                 </button>
@@ -76,9 +79,12 @@
             </div>
             
             <div style="margin-top: 2rem; text-align: center;">
-                <a href="{% url 'logout' %}" class="btn btn-ghost" style="color: var(--sky-negative); width: 100%;">
-                    <i class='bx bx-log-out'></i> Sign Out
-                </a>
+                <form method="POST" action="{% url 'accounts:logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-ghost" style="color: var(--sky-negative); width: 100%; border: none; background: none; font-weight: 600; cursor: pointer;">
+                        <i class='bx bx-log-out'></i> Sign Out
+                    </button>
+                </form>
             </div>
         </div>
     </div>
