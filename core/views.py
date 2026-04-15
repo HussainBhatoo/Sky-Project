@@ -22,12 +22,14 @@ def dashboard(request):
     :param request: Standard Django HttpRequest object
     :return: Rendered dashboard.html template with statistics context
     """
+    view_mode = request.GET.get('view', 'grid')
     context = {
         'total_teams': Team.objects.count(),
         'total_depts': Department.objects.count(),
         'total_members': TeamMember.objects.count(),
         'total_meetings': Meeting.objects.count(),
         'recent_updates': AuditLog.objects.all().order_by('-action_changed_at')[:10],
+        'view_mode': view_mode,
     }
     return render(request, 'dashboard.html', context)
 

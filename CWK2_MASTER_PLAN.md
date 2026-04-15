@@ -180,7 +180,7 @@ The viva is marked separately inside Code Functionality and Version Control:
 | Forgot Password | Simplified Static Admin Contact Page |
 | Logout | Clear session, redirect to login |
 | User Profile | View + edit: First Name, Last Name, Username, Email, Change Password |
-| Dashboard | Stat cards (total teams, departments, upstream/downstream counts), recent updates list, grid/list mode toggle, notifications, profile link |
+| Dashboard | Stat cards (total teams, departments, workforce), recent updates list, grid/list layout toggle |
 | Global Search | Real-time debounced AJAX search with high-fidelity results dropdown |
 | Design Spells | Professional micro-interactions (tilt, shine, pulse) applied globally |
 | Team Voting | Distinct `Vote` table (Rubric 1.14) for team endorsements (toggle) |

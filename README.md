@@ -65,12 +65,12 @@ graph TD
 ```
 
 ## High-Fidelity Features & "Design Spells"
-*   **Intelligence Surface (Dashboard):** Real-time monitoring of team health and organizational volume.
+*   **Intelligence Surface (Dashboard):** Real-time monitoring of team health and organizational volume with integrated Grid/List layout toggle.
 *   **Global Semantic Search:** Debounced AJAX-powered engine for instant discovery of teams and leads.
 *   **Team Endorsements (Voting):** Social signal system for team recognition and peer support.
 *   **Logistics Visualization:** Monthly and Weekly toggles for engineering release and meeting coordination.
 *   **Architectural Visualization:** Interactive dependency mapping and hierarchical org charts linking to detailed department profiles.
-*   **Design Spells (Micro-interactions):** Production-grade UI details including interactive card tilts, glassmorphism shine effects, and status-pulsing indicators.
+*   **Design Spells (Micro-interactions):** Production-grade UI details including interactive card tilts and glassmorphism shine effects.
 *   **Traceability (Audit Log):** Every mutation is recorded via Django signals for complete governance.
 
 ## Access Control

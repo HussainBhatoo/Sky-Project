@@ -144,3 +144,4 @@ Inject the **Sky Spectrum** gradient.
 - [x] Audit Log creates an entry when a Team is added.
 - [x] **Global Professionalization Layer** (Emoji scrub, Design Spells, Dynamic Search) implemented.
 - [x] **Relational Compliance**: Vote and TimeTrack entities fully operational.
+- [x] **Dashboard Refinement**: Toggle-based Grid/List layouts and notification cleanup (Production finalization).

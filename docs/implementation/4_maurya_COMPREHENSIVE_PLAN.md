@@ -34,6 +34,7 @@ This is the comprehensive roadmap for **Maurya Patel** (Group Lead & Student 4).
 - [x] **Real Metrics**: Replace static numbers with `Team.objects.count()`, etc.
 - [x] **Audit Signals**: Setup `post_save` signals in `core/` to auto-log every change.
 - [x] **Audit Feed**: Visual activity log on the dashboard.
+- [x] **Layout Toggle**: Implement stateless Grid/List view toggle for the dashboard.
 
 ### C. Search & Wiring
 - [x] **Global Search**: Search across Teams, Members, and Departments.
