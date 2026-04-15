@@ -27,6 +27,12 @@
     </div>
 </div>
 
+<!-- View Navigation: Monthly / Weekly -->
+<div class="tabs mb-2 animate-slide-up" style="animation-delay: 0.1s;">
+    <a href="{% url 'schedule:calendar' %}" class="tab-btn {% if not active_view or active_view == 'monthly' %}active{% endif %}" style="text-decoration: none;">Monthly View</a>
+    <a href="{% url 'schedule:weekly' %}" class="tab-btn {% if active_view == 'weekly' %}active{% endif %}" style="text-decoration: none;">Weekly View</a>
+</div>
+
 <!-- New Meeting Form (Hidden by default) -->
 <div id="meeting-form" class="card animate-slide-up spell-tilt mb-3" style="display: {% if show_form %}block{% else %}none{% endif %}; max-width: 640px;">
     <h3 style="color: var(--sky-header-blue); margin-bottom: 1.5rem;">
@@ -61,9 +67,15 @@
 
     <!-- Upcoming Meetings -->
     <div>
-        <h3 style="color: var(--sky-header-blue); margin-bottom: 1rem;">
-            <i class='bx bx-list-ul' style="margin-right: 0.5rem;"></i> Upcoming Meetings
+        <h3 style="color: var(--sky-header-blue); margin-bottom: 0.5rem;">
+            <i class='bx bx-list-ul' style="margin-right: 0.5rem;"></i> 
+            {% if active_view == 'weekly' %}Weekly Schedule{% else %}Upcoming Meetings{% endif %}
         </h3>
+        {% if active_view == 'weekly' %}
+        <p style="font-size: 0.85rem; color: var(--muted-foreground); margin-bottom: 1.5rem;">
+            Showing sessions from <strong>{{ start_of_week|date:"d M" }}</strong> to <strong>{{ end_of_week|date:"d M Y" }}</strong>
+        </p>
+        {% endif %}
 
         {% if meetings %}
         <div style="display: flex; flex-direction: column; gap: 0.75rem;">
@@ -106,8 +118,13 @@
         <div class="card">
             <div class="empty-state">
                 <i class='bx bx-calendar-x'></i>
-                <p class="empty-title">No meetings scheduled</p>
-                <p class="empty-desc">Click "Schedule Meeting" to create your first session.</p>
+                <p class="empty-title">
+                    {% if active_view == 'weekly' %}No meetings this week{% else %}No meetings scheduled{% endif %}
+                </p>
+                <p class="empty-desc">
+                    {% if active_view == 'weekly' %}There are no sessions planned for this seven-day period.
+                    {% else %}Click "Schedule Meeting" to create your first session.{% endif %}
+                </p>
             </div>
         </div>
         {% endif %}

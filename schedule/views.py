@@ -1,4 +1,4 @@
-﻿"""
+"""
 SCHEDULE MODULE - Student 4: Maurya Patel
 Handles meeting management: calendar display, CRUD operations, and
 cross-team scheduling with inter-app wiring (team_id prefill via GET params).
@@ -89,16 +89,45 @@ def schedule_calendar(request):
         }
         context.update(calendar_ctx)
         return render(request, "schedule/calendar.html", context)
+    except Exception as error:
+        return render(request, "schedule/calendar.html", {"error": str(error)})
+
+
+@login_required
+def schedule_weekly(request):
+    """
+    Weekly view: displays meetings in a simple list for the current week.
+    """
+    try:
+        today = timezone.now().date()
+        # Find start of week (Monday)
+        start_of_week = today - timedelta(days=today.weekday())
+        end_of_week = start_of_week + timedelta(days=6)
+
+        meetings = Meeting.objects.filter(
+            start_datetime__date__range=[start_of_week, end_of_week]
+        ).select_related("team", "created_by_user").order_by("start_datetime")
+
+        teams = Team.objects.all().order_by("team_name")
+        
+        # Calendar context for sidebar (current month)
+        now = timezone.now()
+        calendar_ctx = _build_calendar_context(now.year, now.month, meetings)
+
+        context = {
+            "meetings": meetings,
+            "teams": teams,
+            "active_view": "weekly",
+            "start_of_week": start_of_week,
+            "end_of_week": end_of_week,
+            "today": now,
+        }
+        context.update(calendar_ctx)
+        return render(request, "schedule/calendar.html", context)
 
     except Exception as error:
-        messages.error(request, f"Error loading schedule: {error}")
-        return render(request, "schedule/calendar.html", {
-            "meetings": [],
-            "calendar_days": [],
-            "form": MeetingForm(),
-            "first_day_range": range(0),
-            "month_name": "",
-        })
+        messages.error(request, f"Error loading weekly schedule: {error}")
+        return redirect("schedule:calendar")
 
 
 @login_required

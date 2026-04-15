@@ -31,7 +31,9 @@
     <div class="card mb-2 spell-tilt spell-shine">
         <div class="flex-between mb-2">
             <div>
-                <h3 style="color: var(--sky-header-blue);">{{ item.department.department_name }}</h3>
+                <a href="{% url 'organisation:department_detail' item.department.department_id %}" style="text-decoration: none;">
+                    <h3 style="color: var(--sky-header-blue);">{{ item.department.department_name }}</h3>
+                </a>
                 <p style="font-size: 0.8rem; color: var(--muted-foreground);">
                     Head: {{ item.department.department_lead_name }}
                 </p>
@@ -71,10 +73,10 @@
     <div class="card mb-2 spell-tilt">
         <div class="flex-center gap-3" style="flex-wrap: wrap;">
             <!-- Department Node -->
-            <div class="org-node org-node-dept" style="min-width: 140px;">
+            <a href="{% url 'organisation:department_detail' item.department.department_id %}" class="org-node org-node-dept" style="min-width: 140px; text-decoration: none;">
                 <strong>{{ item.department.department_name }}</strong>
                 <span class="org-node-sub">{{ item.department.department_lead_name }}</span>
-            </div>
+            </a>
 
             <!-- Arrow -->
             <i class='bx bx-chevron-right' style="font-size: 1.5rem; color: var(--muted-foreground);"></i>

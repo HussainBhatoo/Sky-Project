@@ -4,7 +4,7 @@ from django.contrib.auth.models import Group
 from .models import (
     User, Department, Team, TeamMember, Dependency, 
     ContactChannel, RepositoryLink, BoardLink, WikiLink, 
-    StandupInfo, Message, Meeting, AuditLog
+    StandupInfo, Message, Meeting, AuditLog, Vote, TimeTrack
 )
 
 """
@@ -40,7 +40,7 @@ class SkyAdminSite(AdminSite):
             ("Organisation", ['Dependency']),
             ("Messages", ['Message']),
             ("User Access (Permissions)", ['User', 'Group']),
-            ("Reports", ['AuditLog']),
+            ("Reports & Compliance", ['AuditLog', 'Vote', 'TimeTrack']),
             ("Data Visualization", ['Meeting']),
         ]
         
@@ -114,11 +114,20 @@ class MeetingAdmin(admin.ModelAdmin):
     list_filter = ['platform_type', 'team']
     search_fields = ['meeting_title', 'agenda_text']
 
+class VoteAdmin(admin.ModelAdmin):
+    list_display = ['voter', 'team', 'vote_type', 'voted_at']
+    list_filter = ['vote_type', 'team']
+    search_fields = ['voter__username', 'team__team_name']
+
+class TimeTrackAdmin(admin.ModelAdmin):
+    list_display = ['team', 'milestone_name', 'status', 'scheduled_date', 'actual_date']
+    list_filter = ['status', 'team']
+    search_fields = ['milestone_name', 'team__team_name']
+
 class AuditLogAdmin(admin.ModelAdmin):
-    list_display = ['action_type', 'entity_type', 'entity_id', 'actor_user', 'action_changed_at']
+    list_display = ['actor_user', 'entity_type', 'action_type', 'action_changed_at']
     list_filter = ['action_type', 'entity_type']
-    search_fields = ['change_summary']
-    readonly_fields = ['action_changed_at']
+    search_fields = ['change_summary', 'actor_user__username']
 
 # Register models to custom admin site
 sky_admin_site.register(Group)
@@ -135,3 +144,5 @@ sky_admin_site.register(StandupInfo, StandupInfoAdmin)
 sky_admin_site.register(Message, MessageAdmin)
 sky_admin_site.register(Meeting, MeetingAdmin)
 sky_admin_site.register(AuditLog, AuditLogAdmin)
+sky_admin_site.register(Vote, VoteAdmin)
+sky_admin_site.register(TimeTrack, TimeTrackAdmin)

@@ -26,7 +26,9 @@
             </span>
         </div>
         <div class="flex-center gap-2">
-            <span class="chip chip-department">{{ team.department.department_name }}</span>
+            <a href="{% url 'organisation:department_detail' team.department.department_id %}" style="text-decoration: none;">
+                <span class="chip chip-department chip-clickable">{{ team.department.department_name }}</span>
+            </a>
             {% if team.team_leader_name %}
             <span style="font-size: 0.9rem; color: var(--muted-foreground);">
                 Lead: <strong style="color: var(--sky-primary);">{{ team.team_leader_name }}</strong>
@@ -43,6 +45,11 @@
         </a>
         <a href="{% url 'organisation:dependencies' %}?focus={{ team.team_name|urlencode }}" class="btn btn-secondary" style="text-decoration: none; font-size: 0.85rem;">
             <i class='bx bx-git-repo-forked'></i> Dependencies
+        </a>
+        <a href="{% url 'teams:vote_team' team.team_id %}" class="btn {% if has_voted %}btn-primary{% else %}btn-secondary{% endif %}" style="text-decoration: none; font-size: 0.85rem;">
+            <i class='bx {% if has_voted %}bxs-heart{% else %}bx-heart{% endif %}'></i> 
+            {% if has_voted %}Endorsed{% else %}Endorse Team{% endif %} 
+            <span class="badge ml-1" style="background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 10px;">{{ vote_count }}</span>
         </a>
     </div>
 </div>

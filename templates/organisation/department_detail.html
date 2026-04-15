@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ department.department_name }} | Sky Registry{% endblock %}
+
+{% block content %}
+<!--
+  DEPARTMENT DETAIL — HIGH-FIDELITY VIEW
+  Student 2: Lucas Garcia Korotkov | Lead: Maurya Patel
+-->
+
+<a href="{% url 'organisation:org_chart' %}" class="btn btn-ghost mb-2 animate-slide-up" style="text-decoration: none;">
+    <i class='bx bx-arrow-back'></i> Back to Organisation
+</a>
+
+<div class="flex-between mb-2 animate-slide-up" style="animation-delay: 0.05s;">
+    <div>
+        <h1 style="font-size: 1.75rem; color: var(--sky-header-blue);">{{ department.department_name }}</h1>
+        <p style="color: var(--muted-foreground); font-size: 0.95rem;">
+            Head of Department: <strong style="color: var(--sky-primary);">{{ department.department_lead_name }}</strong>
+        </p>
+    </div>
+    <div class="flex gap-1">
+        <span class="chip chip-department" style="font-size: 0.9rem; padding: 0.5rem 1rem;">
+            <i class='bx bx-group'></i> {{ total_teams }} Teams
+        </span>
+    </div>
+</div>
+
+<div class="card mb-2 animate-slide-up spell-tilt" style="animation-delay: 0.1s;">
+    <h3 style="color: var(--sky-header-blue); margin-bottom: 1.5rem;">
+        <i class='bx bx-sitemap' style="margin-right: 0.5rem;"></i> Teams in this Department
+    </h3>
+    
+    <div class="grid-3">
+        {% for team in teams %}
+        <a href="{% url 'teams:team_detail' team.team_id %}" class="card spell-tilt hover-lift" style="text-decoration: none; color: inherit; padding: 1.25rem;">
+            <div class="flex-between mb-1">
+                <span style="font-size: 1.1rem; font-weight: 700;">{{ team.team_name }}</span>
+                <span class="chip {% if team.status == 'Active' %}chip-active{% elif team.status == 'Restructuring' %}chip-restructuring{% else %}chip-disbanded{% endif %}" style="font-size: 0.7rem;">
+                    {{ team.status }}
+                </span>
+            </div>
+            <div style="font-size: 0.85rem; color: var(--muted-foreground); margin-bottom: 1rem;">
+                Lead: {{ team.team_leader_name|default:"—" }}
+            </div>
+            <div class="flex-between" style="font-size: 0.8rem;">
+                <span style="color: var(--sky-primary);">
+                    <i class='bx bx-user'></i> {{ team.member_count }} members
+                </span>
+                <span style="color: var(--muted-foreground);">
+                    View Details <i class='bx bx-chevron-right'></i>
+                </span>
+            </div>
+        </a>
+        {% empty %}
+        <div class="empty-state" style="grid-column: span 3;">
+            <i class='bx bx-buildings'></i>
+            <p class="empty-title">No teams registered</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

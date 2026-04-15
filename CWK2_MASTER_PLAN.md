@@ -183,6 +183,8 @@ The viva is marked separately inside Code Functionality and Version Control:
 | Dashboard | Stat cards (total teams, departments, upstream/downstream counts), recent updates list, grid/list mode toggle, notifications, profile link |
 | Global Search | Real-time debounced AJAX search with high-fidelity results dropdown |
 | Design Spells | Professional micro-interactions (tilt, shine, pulse) applied globally |
+| Team Voting | Distinct `Vote` table (Rubric 1.14) for team endorsements (toggle) |
+| Audit Log | Searchable activity feed with signal-based tracking |
 
 #### B. Django Admin Panel (Customised)
 The brief says: "There is a Django Admin so that will be the Administrator"
@@ -208,7 +210,7 @@ All admin management happens through Django's built-in /admin/ — we just custo
 
 Auto-log ALL create/update/delete operations in the system.
 Display page: searchable table of who did what and when.
-Implementation: Django signals or middleware.
+Implementation: Django signals tracking User, Action Type, Entity, and Changes.
 
 #### E. Professionalization Layer (High-Fi)
 - **Design Spells**: Global CSS utility library for premium micro-interactions.
@@ -227,14 +229,15 @@ Implementation: Django signals or middleware.
 | Team Detail Page | Team mission/responsibilities, manager, contact channels (Slack/Teams/email), team members table, code repositories list, upstream + downstream dependencies |
 | Email Team Button | Compose message to team from team detail page |
 | Schedule Meeting Button | Quick link to schedule meeting for this team |
+| Team Voting | "Endorse Team" button on detail page with status toggle |
 | Skills/Tags | Display team's tech stack / skills as badge chips |
 
 #### Student 2 — Lucas — Organisation App (`organisation/`)
 | Feature | Details |
 |---------|---------|
 | Departments List | All departments with team counts |
-| Department Detail | Leader, teams list, specialisation/description |
-| Org Chart Tab | Visual hierarchy using connected nodes for departments → teams |
+| Department Detail | Leader, teams list, specialisation/description, linked from all chips |
+| Org Chart Tab | Visual hierarchy with interactive nodes linking to department pages |
 | Dependencies Page | Graph View: interactive/visual dependency map (upstream + downstream), List View: table split into upstream/downstream panels, Focus team selector, Direction filter, Depth filter |
 
 #### Student 3 — Suliman — Messages App (`messages_app/`)
@@ -242,16 +245,16 @@ Implementation: Django signals or middleware.
 |---------|---------|
 | Inbox | List of received messages with timestamps, clickable to read |
 | Compose / New Message | To (recipient/team selector), Subject, Message body, Send button |
-| Sent | List of sent messages |
-| Drafts | Saved draft messages |
+| Sent | List of sent messages accessible via 'Sent' tab |
+| Drafts | Saved draft messages with "Save as Draft" functionality |
 
 #### Student 4 — MAURYA — Schedule App (`schedule/`)
 | Feature | Details |
 |---------|---------|
 | Upcoming Meetings List | All upcoming meetings for user's teams, sorted by date |
-| Schedule Meeting Form | Meeting title, Team dropdown (FK), Date + Time picker, End time, Platform dropdown (Teams/Zoom/Google Meet/In Person), Meeting link field, Agenda textarea |
-| Monthly Calendar View | Calendar showing meetings plotted by month |
-| Weekly View | Calendar showing meetings plotted by week |
+| Schedule Meeting Form | Meeting title, Team dropdown (FK), Date + Time picker, End time |
+| Monthly Calendar View | Interactive visual calendar showing meetings plotted by month |
+| Weekly View | Focused list view navigation for current week logistics |
 | Meeting Detail | View individual meeting info, agenda, link |
 | Edit/Delete Meeting | Edit existing meeting details |
 

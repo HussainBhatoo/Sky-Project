@@ -17,9 +17,11 @@
     </div>
 </div>
 
-<!-- Tabs: Inbox / Compose -->
+<!-- Tabs: Inbox / Sent / Drafts / Compose -->
 <div class="tabs mb-2 animate-slide-up" style="animation-delay: 0.1s;">
     <a href="{% url 'messages_app:inbox' %}" class="tab-btn {% if active_tab == 'inbox' %}active{% endif %}" style="text-decoration: none;">Inbox</a>
+    <a href="{% url 'messages_app:sent_messages' %}" class="tab-btn {% if active_tab == 'sent' %}active{% endif %}" style="text-decoration: none;">Sent</a>
+    <a href="{% url 'messages_app:draft_messages' %}" class="tab-btn {% if active_tab == 'drafts' %}active{% endif %}" style="text-decoration: none;">Drafts</a>
     <a href="{% url 'messages_app:compose' %}" class="tab-btn {% if active_tab == 'compose' %}active{% endif %}" style="text-decoration: none;">Compose</a>
 </div>
 
@@ -48,9 +50,10 @@
             <label for="compose-body">Message</label>
             <textarea name="body" class="form-control" id="compose-body" rows="6" placeholder="Write your message..."></textarea>
         </div>
-        <div class="flex gap-1">
-            <button type="submit" class="btn btn-primary"><i class='bx bx-send'></i> Send</button>
-            <a href="{% url 'messages_app:inbox' %}" class="btn btn-secondary" style="text-decoration: none;">Cancel</a>
+        <div class="flex gap-1" style="margin-top: 1.5rem;">
+            <button type="submit" name="action" value="sent" class="btn btn-primary"><i class='bx bx-send'></i> Send Message</button>
+            <button type="submit" name="action" value="draft" class="btn btn-secondary"><i class='bx bx-save'></i> Save as Draft</button>
+            <a href="{% url 'messages_app:inbox' %}" class="btn btn-ghost" style="text-decoration: none; margin-left: auto;">Cancel</a>
         </div>
     </form>
 </div>
@@ -114,7 +117,8 @@
             </div>
             <div style="text-align: right; flex-shrink: 0;">
                 <span style="font-size: 0.75rem; color: var(--muted-foreground); white-space: nowrap; font-weight: 500;">
-                    <i class='bx bx-time-five' style="vertical-align: middle;"></i> {{ msg.message_sent_at|date:"d M Y, H:i" }}
+                    <i class='bx bx-time-five' style="vertical-align: middle;"></i> 
+                    {% if msg.message_sent_at %}{{ msg.message_sent_at|date:"d M Y, H:i" }}{% else %}Draft{% endif %}
                 </span>
             </div>
         </div>
@@ -123,8 +127,16 @@
     {% else %}
     <div class="empty-state">
         <i class='bx bx-envelope-open'></i>
-        <p class="empty-title">Inbox is empty</p>
-        <p class="empty-desc">No messages yet. Compose your first message to a team.</p>
+        <p class="empty-title">
+            {% if active_tab == 'sent' %}No sent messages
+            {% elif active_tab == 'drafts' %}No drafts
+            {% else %}Inbox is empty{% endif %}
+        </p>
+        <p class="empty-desc">
+            {% if active_tab == 'sent' %}You haven't sent any messages yet.
+            {% elif active_tab == 'drafts' %}You don't have any saved drafts.
+            {% else %}No messages yet. Compose your first message to a team.{% endif %}
+        </p>
     </div>
     {% endif %}
 </div>

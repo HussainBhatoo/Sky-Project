@@ -8,7 +8,8 @@ Provide the big-picture view of Sky engineering. You are responsible for showing
 
 ## WHAT to build
 1. **Department Index**: A list showing all 6 departments with their leads and team counts.
-2. **Interactive Org Chart**: A visual structure showing Department → Team links.
+2. **Department Detail**: Individual pages showing department mission and a list of all assigned teams.
+3. **Interactive Org Chart**: A visual structure with nodes linking to department pages.
 3. **Dependency Visualizer**:
    - **Graph View**: A map showing which teams depend on each other.
    - **List View**: A split table with "Upstream" (What we need) and "Downstream" (Who needs us).

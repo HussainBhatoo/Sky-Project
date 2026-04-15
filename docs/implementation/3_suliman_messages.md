@@ -8,7 +8,8 @@ Enable collaboration. Your app is the "Slack-lite" of the registry, allowing use
 
 ## WHAT to build
 1. **Inbox**: A list of messages received, with clear "Read/Unread" indicators.
-2. **Tabbed View**: Clean buttons to switch between Inbox, Sent, and Drafts.
+2. **Sent & Drafts Tabs**: Dedicated tabs to track outbound correspondence and in-progress saves.
+3. **Tabbed View**: Clean buttons to switch between Inbox, Sent, and Drafts.
 3. **Compose UI**: A search-enabled "To" field (search for User or Team).
 4. **Message Detail**: A clean reading pane for individual messages.
 5. **Team Communication**: Enable formal inquiries between engineering teams.

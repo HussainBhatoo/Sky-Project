@@ -11,7 +11,8 @@ Summarize and Export. Your app is used by Sky Executives to see the health of th
 2. **Growth Chart**: A simple CSS-based bar chart showing team counts.
 3. **PDF Generator**: A button that generates a formal "Sky Registry Summary" PDF using the `reportlab` library.
 4. **Excel Export**: A button that downloads the full Team database using the `openpyxl` library.
-5. **Audit Intelligence**: Connect reports to the Audit Log for traceability analysis.
+5. **Registry Admin**: A custom Django Admin registered in the `SkyAdminSite` with full Audit Log visibility.
+6. **Audit Intelligence**: Connect reports to the Audit Log for traceability and compliance logs (Rubric 1.1).
 
 ---
 

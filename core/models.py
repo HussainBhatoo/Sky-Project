@@ -192,3 +192,30 @@ class AuditLog(models.Model):
 
     def __str__(self):
         return f"{self.action_type} - {self.entity_type} ({self.entity_id})"
+
+class Vote(models.Model):
+    # Entity 14: Vote (Rubric Requirement 1.14)
+    vote_id = models.AutoField(primary_key=True)
+    voter = models.ForeignKey(User, on_delete=models.CASCADE, related_name='votes')
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='votes')
+    vote_type = models.CharField(max_length=20, choices=[('support', 'Support'), ('endorse', 'Endorse')], default='support')
+    voted_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('voter', 'team') # One vote per user per team
+
+    def __str__(self):
+        return f"{self.voter.username} voted for {self.team.team_name}"
+
+class TimeTrack(models.Model):
+    # Entity 15: TimeTrack (Rubric Requirement 1.14 - Distinct Table)
+    track_id = models.AutoField(primary_key=True)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='time_tracks')
+    milestone_name = models.CharField(max_length=255)
+    status = models.CharField(max_length=50, choices=[('planned', 'Planned'), ('in_progress', 'In Progress'), ('completed', 'Completed')], default='planned')
+    scheduled_date = models.DateField()
+    actual_date = models.DateField(null=True, blank=True)
+    notes = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"{self.team.team_name} - {self.milestone_name}"

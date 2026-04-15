@@ -9,7 +9,8 @@ Manage time across the engineering organization. Your app handles the logistics 
 1. **Meeting Request Form**: A form where users pick a Team, Date, and Time.
 2. **Smart Prefill**: Automatically select the `Team` in the form if the user comes from Riagul's Team Detail page.
 3. **Mini-Calendar Widget**: A visual grid showing the current month and which days have "booked" engineering slots.
-4. **Schedule Hub**: A comprehensive list of team release cycles and meeting logistics.
+4. **Weekly View Navigation**: A dedicated list view for current week logistics, accessible via tab toggle.
+5. **Schedule Hub**: A comprehensive list of team release cycles and meeting logistics.
 5. **Team Lead Role**: As the Lead, you must ensure all students use the **Sky Spectrum** design tokens correctly in their CSS.
 
 ---

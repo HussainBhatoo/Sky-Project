@@ -12,7 +12,8 @@ Build the central directory of the application. You are responsible for showing 
 3. **Mission & Vision**: Displaying the newly added `mission` field.
 4. **Tech Chips**: Displaying `tech_tags` as colorful batches.
 5. **Contact Actions**: "Email Team" and "Schedule Meeting" redirect buttons.
-6. **Lifecycle Management**: A "Disband" button for teams and status tracking (`Active`/`Inactive`).
+6. **Team Voting**: "Endorse Team" button on detail page with status toggle (Rubric 1.14).
+7. **Lifecycle Management**: A "Disband" button for teams and status tracking (`Active`/`Inactive`).
 
 ---
 

@@ -8,7 +8,9 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Count
 
-from core.models import Team, Department, TeamMember, Dependency, ContactChannel, RepositoryLink, BoardLink
+from core.models import Team, Department, TeamMember, Dependency, ContactChannel, RepositoryLink, BoardLink, Vote
+from django.shortcuts import redirect
+from django.contrib import messages
 
 
 @login_required
@@ -100,6 +102,9 @@ def team_detail(request, team_id):
 
         tech_tags = [tag.strip() for tag in team.tech_tags.split(',') if tag.strip()] if team.tech_tags else []
 
+        vote_count = Vote.objects.filter(team=team).count()
+        has_voted = Vote.objects.filter(team=team, voter=request.user).exists()
+
         context = {
             'team': team,
             'members': members,
@@ -109,7 +114,32 @@ def team_detail(request, team_id):
             'upstream_deps': upstream_deps,
             'downstream_deps': downstream_deps,
             'tech_tags': tech_tags,
+            'vote_count': vote_count,
+            'has_voted': has_voted,
         }
         return render(request, 'teams/team_detail.html', context)
     except Exception as error:
         return render(request, 'teams/team_detail.html', {'error': str(error)})
+
+
+@login_required
+def vote_team(request, team_id):
+    """
+    Toggles a 'Vote/Endorse' for a team.
+    Rubric Requirement: Each student must be able to vote for a team (distinct table).
+    """
+    try:
+        team = get_object_or_404(Team, team_id=team_id)
+        vote, created = Vote.objects.get_or_create(voter=request.user, team=team)
+        
+        if not created:
+            # If already voted, remove it (toggle behavior)
+            vote.delete()
+            messages.info(request, f"Removed endorsement for {team.team_name}.")
+        else:
+            messages.success(request, f"Voted for {team.team_name}!")
+            
+        return redirect('teams:team_detail', team_id=team_id)
+    except Exception as error:
+        messages.error(request, f"Error processing vote: {str(error)}")
+        return redirect('teams:team_list')

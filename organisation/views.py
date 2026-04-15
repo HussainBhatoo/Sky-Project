@@ -3,7 +3,7 @@ Organisation Application — Module Student 2: Lucas Garcia Korotkov
 Handles departmental hierarchy (org chart) and dependency graph visualization.
 Lead Developer: Maurya Patel
 """
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Q
 
@@ -94,3 +94,25 @@ def dependencies(request):
             'teams': [],
             'error': str(error),
         })
+
+
+@login_required
+def department_detail(request, dept_id):
+    """
+    Shows a focused view of a single department, including all its teams
+    and key metrics.
+    """
+    try:
+        department = get_object_or_404(Department, department_id=dept_id)
+        teams = Team.objects.filter(department=department).annotate(
+            member_count=Count('members')
+        ).order_by('team_name')
+        
+        context = {
+            'department': department,
+            'teams': teams,
+            'total_teams': teams.count(),
+        }
+        return render(request, 'organisation/department_detail.html', context)
+    except Exception as error:
+        return render(request, 'organisation/org_chart.html', {'error': str(error)})

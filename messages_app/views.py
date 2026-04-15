@@ -14,14 +14,10 @@ from core.models import Message, Team
 @login_required
 def inbox(request):
     """
-    Displays all messages sent to teams, ordered by most recent.
-    Shows unread indicator for messages not yet marked as read.
-
-    :param request: Standard Django HttpRequest object
-    :return: Rendered messages_app/inbox.html template
+    Displays all messages officially 'sent' by any user, ordered by most recent.
     """
     try:
-        all_messages = Message.objects.select_related(
+        all_messages = Message.objects.filter(message_status='sent').select_related(
             'sender_user', 'team'
         ).order_by('-message_sent_at')
 
@@ -37,15 +33,53 @@ def inbox(request):
         django_messages.error(request, f'Error loading inbox: {error}')
         return render(request, 'messages_app/inbox.html', {'all_messages': []})
 
+@login_required
+def sent_messages(request):
+    """
+    Displays messages sent specifically by the logged-in user.
+    """
+    try:
+        all_messages = Message.objects.filter(
+            sender_user=request.user, 
+            message_status='sent'
+        ).select_related('sender_user', 'team').order_by('-message_sent_at')
+        
+        context = {
+            'all_messages': all_messages,
+            'active_tab': 'sent',
+            'tab_title': 'Sent Messages'
+        }
+        return render(request, 'messages_app/inbox.html', context)
+    except Exception as error:
+        django_messages.error(request, f'Error loading sent messages: {error}')
+        return redirect('messages_app:inbox')
+
+@login_required
+def draft_messages(request):
+    """
+    Displays draft messages created by the logged-in user.
+    """
+    try:
+        all_messages = Message.objects.filter(
+            sender_user=request.user, 
+            message_status='draft'
+        ).select_related('sender_user', 'team').order_by('-message_sent_at')
+        
+        context = {
+            'all_messages': all_messages,
+            'active_tab': 'drafts',
+            'tab_title': 'Drafts'
+        }
+        return render(request, 'messages_app/inbox.html', context)
+    except Exception as error:
+        django_messages.error(request, f'Error loading drafts: {error}')
+        return redirect('messages_app:inbox')
+
 
 @login_required
 def message_detail(request, message_id):
     """
     Displays a single message's full content.
-
-    :param request: Standard Django HttpRequest object
-    :param message_id: Primary key of the message
-    :return: Rendered messages_app/inbox.html with selected message
     """
     try:
         selected_message = get_object_or_404(
@@ -53,14 +87,25 @@ def message_detail(request, message_id):
             message_id=message_id,
         )
 
-        all_messages = Message.objects.select_related(
-            'sender_user', 'team'
-        ).order_by('-message_sent_at')
+        # Context awareness: maintain the current tab filter
+        prev_url = request.META.get('HTTP_REFERER', '')
+        active_tab = 'inbox'
+        if 'sent' in prev_url: active_tab = 'sent'
+        elif 'drafts' in prev_url: active_tab = 'drafts'
+
+        if active_tab == 'sent':
+            all_messages = Message.objects.filter(sender_user=request.user, message_status='sent')
+        elif active_tab == 'drafts':
+            all_messages = Message.objects.filter(sender_user=request.user, message_status='draft')
+        else:
+            all_messages = Message.objects.filter(message_status='sent')
+
+        all_messages = all_messages.select_related('sender_user', 'team').order_by('-message_sent_at')
 
         context = {
             'all_messages': all_messages,
             'selected_message': selected_message,
-            'active_tab': 'inbox',
+            'active_tab': active_tab,
         }
         return render(request, 'messages_app/inbox.html', context)
     except Exception as error:
@@ -95,18 +140,23 @@ def compose(request):
                 })
 
             team = get_object_or_404(Team, team_id=team_id)
+            is_draft = request.POST.get('action') == 'draft'
 
             Message.objects.create(
                 sender_user=request.user,
                 team=team,
                 message_subject=subject,
                 message_body=body,
-                message_status='sent',
-                message_sent_at=timezone.now(),
+                message_status='draft' if is_draft else 'sent',
+                message_sent_at=timezone.now() if not is_draft else None,
             )
 
-            django_messages.success(request, 'Message sent successfully.')
-            return redirect('messages_app:inbox')
+            if is_draft:
+                django_messages.success(request, 'Message saved to drafts.')
+                return redirect('messages_app:draft_messages')
+            else:
+                django_messages.success(request, 'Message sent successfully.')
+                return redirect('messages_app:inbox')
 
         # Pre-fill team if passed via GET
         prefill_team = None
