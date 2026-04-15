@@ -16,7 +16,7 @@
 </a>
 
 {% if team %}
-<!-- 📛 Team Header -->
+<!-- Team Header -->
 <div class="flex-between mb-2 animate-slide-up" style="animation-delay: 0.05s;">
     <div>
         <div class="flex-center gap-2 mb-1">
@@ -47,17 +47,17 @@
     </div>
 </div>
 
-<!-- 📝 Mission Card -->
+<!-- Mission Card -->
 {% if team.mission %}
-<div class="card mb-2 animate-slide-up" style="animation-delay: 0.1s;">
+<div class="card mb-2 animate-slide-up spell-tilt spell-shine" style="animation-delay: 0.1s;">
     <h4 style="color: var(--sky-header-blue); margin-bottom: 0.75rem;">Mission / Responsibilities</h4>
     <p style="font-size: 0.9rem; color: var(--muted-foreground); line-height: 1.6;">{{ team.mission }}</p>
 </div>
 {% endif %}
 
-<!-- 📞 Contacts & Links -->
+<!-- Contacts & Links -->
 <div class="grid-2 mb-2 animate-slide-up" style="animation-delay: 0.15s;">
-    <div class="card">
+    <div class="card spell-tilt">
         <h4 style="color: var(--sky-header-blue); margin-bottom: 1rem;">Contacts</h4>
         <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.9rem;">
             {% if team.lead_email %}
@@ -77,7 +77,7 @@
             {% endif %}
         </div>
     </div>
-    <div class="card">
+    <div class="card spell-tilt">
         <h4 style="color: var(--sky-header-blue); margin-bottom: 1rem;">Links</h4>
         <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.9rem;">
             {% for repo in repos %}
@@ -99,9 +99,9 @@
     </div>
 </div>
 
-<!-- 🏷️ Tech Tags -->
+<!-- Tech Tags -->
 {% if tech_tags %}
-<div class="card mb-2 animate-slide-up" style="animation-delay: 0.2s;">
+<div class="card mb-2 animate-slide-up spell-tilt" style="animation-delay: 0.2s;">
     <h4 style="color: var(--sky-header-blue); margin-bottom: 1rem;">Tech & Skills</h4>
     <div class="flex flex-wrap gap-1">
         {% for tag in tech_tags %}
@@ -111,8 +111,8 @@
 </div>
 {% endif %}
 
-<!-- 👥 Members Table -->
-<div class="card mb-2 animate-slide-up" style="animation-delay: 0.25s;">
+<!-- Members Table -->
+<div class="card mb-2 animate-slide-up spell-tilt" style="animation-delay: 0.25s;">
     <h4 style="color: var(--sky-header-blue); margin-bottom: 1rem;">
         <i class='bx bx-group' style="margin-right: 0.4rem;"></i> Team Members ({{ members|length }})
     </h4>
@@ -143,9 +143,9 @@
     {% endif %}
 </div>
 
-<!-- 🔗 Dependencies -->
+<!-- Dependencies -->
 <div class="grid-2 mb-2 animate-slide-up" style="animation-delay: 0.3s;">
-    <div class="card">
+    <div class="card spell-tilt">
         <h4 style="color: var(--sky-header-blue); margin-bottom: 1rem;">Upstream Dependencies</h4>
         {% if upstream_deps %}
         <div class="flex flex-wrap gap-1">
@@ -161,7 +161,7 @@
         </div>
         {% endif %}
     </div>
-    <div class="card">
+    <div class="card spell-tilt">
         <h4 style="color: var(--sky-header-blue); margin-bottom: 1rem;">Downstream Dependencies</h4>
         {% if downstream_deps %}
         <div class="flex flex-wrap gap-1">
@@ -179,8 +179,8 @@
     </div>
 </div>
 
-<!-- 🕓 Audit Footer -->
-<div class="card animate-slide-up" style="animation-delay: 0.35s; background: var(--sky-surface-strong);">
+<!-- Audit Footer -->
+<div class="card animate-slide-up spell-tilt" style="animation-delay: 0.35s; background: var(--sky-surface-strong);">
     <div class="flex-between" style="font-size: 0.8rem;">
         <span style="color: var(--muted-foreground);">
             <i class='bx bx-time' style="margin-right: 0.25rem;"></i>

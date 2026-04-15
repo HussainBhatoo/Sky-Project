@@ -1,10 +1,10 @@
-# 🚀 SKY ENGINEERING TEAM REGISTRY — COMPLETE PROJECT MASTER PLAN
+# SKY ENGINEERING TEAM REGISTRY — COMPLETE PROJECT MASTER PLAN
 ## 5COSC021W Software Development Group Project | CWK2 Implementation
 ### The Avengers — Group H | University of Westminster | 2025–26
 
 ---
 
-> **📌 READ THIS BEFORE ANYTHING ELSE**
+> ** READ THIS BEFORE ANYTHING ELSE**
 > This document is the single source of truth for the entire CWK2 build.
 > Every requirement, every model, every screen, every mark, every deadline — it's all here.
 > Nothing is missed. Cross-checked against: coursework brief, CWK2 rubric, CWK1 submitted
@@ -13,7 +13,7 @@
 
 ---
 
-## 📋 TABLE OF CONTENTS
+## TABLE OF CONTENTS
 
 1. [Project Overview](#1-project-overview)
 2. [Team Members & Roles](#2-team-members--roles)
@@ -60,7 +60,7 @@ A **Django web application** that replaces the Excel file with a:
 - Full audit trail
 - Django admin panel for management
 
-### 🔐 Authentication Requirements (Coursework Specs)
+### Authentication Requirements (Coursework Specs)
 - **Mandatory Corporate Email**: As per CWK1 specifications and CWK2 rubric, all user signups must provide a valid corporate email address.
 - **SSO Integration Simulation**: The registry simulates Sky's Single Sign-On (SSO) environment via custom validation in `accounts/forms.py`.
 
@@ -69,7 +69,7 @@ A **Django web application** that replaces the Excel file with a:
 - **University:** University of Westminster
 - **Year:** 2nd Year, 2025–26
 - **Module Leaders:** Aleka Psarrou / Babu Nadaf
-- **CWK1 (Design) = 40% of module** ← COMPLETED ✅ Submitted 4th March 2026
+- **CWK1 (Design) = 40% of module** ← COMPLETED  Submitted 4th March 2026
 - **CWK2 (Implementation) = 60% of module** ← WE ARE BUILDING THIS NOW
 
 ### Trello Board (Must Be Updated Regularly)
@@ -104,16 +104,16 @@ https://trello.com/invite/b/696e18dddc44e139524ec21f/ATTI20f3cc8f34b260cf8cf6781
 
 ## 3. DEADLINES & SUBMISSION REQUIREMENTS
 
-### 🔴 HARD DEADLINE: Thursday 30 April 2026, 1pm
+### HARD DEADLINE: Thursday 30 April 2026, 1pm
 
 **Late penalty:** 10 percentage points deducted if submitted within 24 hours late.
 **Zero marks** if more than 24 hours late (unless Mitigating Circumstances submitted).
 
 ### What Every Student Must Submit on Blackboard
-1. ✅ **Zipped Django project** (complete, all 5 parts integrated, with db.sqlite3)
-2. ✅ **CWK2 Group Template** (same document, all 5 students submit it)
-3. ✅ **CWK2 Individual Template** (each person's own separate document)
-4. ✅ **Link to 5–10 minute group video** (one video, all submissions include the same link)
+1.  **Zipped Django project** (complete, all 5 parts integrated, with db.sqlite3)
+2.  **CWK2 Group Template** (same document, all 5 students submit it)
+3.  **CWK2 Individual Template** (each person's own separate document)
+4.  **Link to 5–10 minute group video** (one video, all submissions include the same link)
 
 ### Group Demo / Viva
 - All team members MUST be present
@@ -159,7 +159,7 @@ https://trello.com/invite/b/696e18dddc44e139524ec21f/ATTI20f3cc8f34b260cf8cf6781
 
 **Total Group = 40 marks**
 
-### ⚠️ RUBRIC TRAP: Viva Has Its Own Marks
+### RUBRIC TRAP: Viva Has Its Own Marks
 The viva is marked separately inside Code Functionality and Version Control:
 - "Student explained own code well but poor understanding of remaining code" = partial credit only
 - "Student explained own code well AND good understanding of remaining code" = full credit
@@ -181,6 +181,8 @@ The viva is marked separately inside Code Functionality and Version Control:
 | Logout | Clear session, redirect to login |
 | User Profile | View + edit: name, username, email, change password |
 | Dashboard | Stat cards (total teams, departments, upstream/downstream counts), recent updates list, grid/list mode toggle, notifications, profile link |
+| Global Search | Real-time debounced AJAX search with high-fidelity results dropdown |
+| Design Spells | Professional micro-interactions (tilt, shine, pulse) applied globally |
 
 #### B. Django Admin Panel (Customised)
 The brief says: "There is a Django Admin so that will be the Administrator"
@@ -204,10 +206,15 @@ All admin management happens through Django's built-in /admin/ — we just custo
 - Each team: minimum 5 engineers (Team Members)
 - Departments from Sky data: xTV_Web, Native_TVs, Mobile, Reliability_Tool, Arch, Programme
 
-#### D. Audit Log System
 Auto-log ALL create/update/delete operations in the system.
 Display page: searchable table of who did what and when.
 Implementation: Django signals or middleware.
+
+#### E. Professionalization Layer (High-Fi)
+- **Design Spells**: Global CSS utility library for premium micro-interactions.
+- **Dynamic Lookup**: Debounced AJAX global search across all entities.
+- **Enterprise Docs**: ADRs and architecture diagrams for technical transparency.
+- **Emoji-Free Styling**: Strictly professional corporate aesthetic.
 
 ---
 
@@ -459,89 +466,89 @@ Font: 16px base, headings weight 600
 
 ```
 sky-team-registry/              ← Root (cloned from GitHub)
-│
-├── manage.py                   ← Django management script
-├── requirements.txt            ← All pip packages
-├── db.sqlite3                  ← Database (include in submission)
-├── .gitignore                  ← Python .gitignore
-├── README.md                   ← Usernames/passwords for marker
-│
-├── sky_registry/               ← Main Django project config
-│   ├── __init__.py
-│   ├── settings.py             ← App registration, DB config, AUTH_USER_MODEL
-│   ├── urls.py                 ← Master URL routing
-│   └── wsgi.py
-│
-├── core/                       ← Shared models (ALL 13 entities live here)
-│   ├── models.py               ← User, Team, Department, Meeting, etc.
-│   ├── admin.py                ← Django admin customisation (8 menu items)
-│   └── migrations/
-│
-├── accounts/                   ← GROUP: Login, Register, Profile, Logout
-│   ├── views.py
-│   ├── forms.py
-│   ├── urls.py
-│   └── templates/accounts/
-│       ├── login.html
-│       ├── register.html
-│       ├── profile.html
-│       └── forgot_password.html
-│
-├── teams/                      ← Student 1 (Lucas)
-│   ├── views.py
-│   ├── urls.py
-│   └── templates/teams/
-│       ├── teams_list.html
-│       └── team_detail.html
-│
-├── organisation/               ← Student 2 (Mohammed)
-│   ├── views.py
-│   ├── urls.py
-│   └── templates/organisation/
-│       ├── departments.html
-│       └── org_chart.html
-│
-├── messages_app/               ← Student 3 (Riagul)
-│   ├── views.py
-│   ├── urls.py
-│   └── templates/messages_app/
-│       ├── inbox.html
-│       └── compose.html
-│
-├── schedule/                   ← Student 4 — MAURYA
-│   ├── views.py
-│   ├── forms.py
-│   ├── urls.py
-│   └── templates/schedule/
-│       ├── schedule_home.html  ← Upcoming meetings + calendar
-│       ├── schedule_form.html  ← Create/edit meeting form
-│       └── meeting_detail.html
-│
-├── reports/                    ← Student 5
-│   ├── views.py
-│   ├── urls.py
-│   └── templates/reports/
-│       └── reports.html
-│
-├── templates/                  ← Shared base templates
-│   ├── base.html               ← CRITICAL: sidebar, navbar, CSS vars
-│   ├── dashboard.html
-│   ├── audit_log.html
-│   ├── admin/
-│   │   └── base.html           ← Custom override for Django Admin matching Sky Spectrum
-│   └── partials/
-│       ├── sidebar.html
-│       ├── navbar.html
-│       └── notifications.html
-│
-└── assets/                     ← CSS, JS, images (overriding old static folder)
-    ├── css/
-    │   ├── style.css           ← Sky blue design system from CWK1
-    │   └── sky-layout.css      ← Centralized structural layout & Django admin parity classes
-    ├── js/
-    │   └── main.js
-    └── images/
-        └── sky_logo.png
+
+ manage.py                   ← Django management script
+ requirements.txt            ← All pip packages
+ db.sqlite3                  ← Database (include in submission)
+ .gitignore                  ← Python .gitignore
+ README.md                   ← Usernames/passwords for marker
+
+ sky_registry/               ← Main Django project config
+    __init__.py
+    settings.py             ← App registration, DB config, AUTH_USER_MODEL
+    urls.py                 ← Master URL routing
+    wsgi.py
+
+ core/                       ← Shared models (ALL 13 entities live here)
+    models.py               ← User, Team, Department, Meeting, etc.
+    admin.py                ← Django admin customisation (8 menu items)
+    migrations/
+
+ accounts/                   ← GROUP: Login, Register, Profile, Logout
+    views.py
+    forms.py
+    urls.py
+    templates/accounts/
+        login.html
+        register.html
+        profile.html
+        forgot_password.html
+
+ teams/                      ← Student 1 (Lucas)
+    views.py
+    urls.py
+    templates/teams/
+        teams_list.html
+        team_detail.html
+
+ organisation/               ← Student 2 (Mohammed)
+    views.py
+    urls.py
+    templates/organisation/
+        departments.html
+        org_chart.html
+
+ messages_app/               ← Student 3 (Riagul)
+    views.py
+    urls.py
+    templates/messages_app/
+        inbox.html
+        compose.html
+
+ schedule/                   ← Student 4 — MAURYA
+    views.py
+    forms.py
+    urls.py
+    templates/schedule/
+        schedule_home.html  ← Upcoming meetings + calendar
+        schedule_form.html  ← Create/edit meeting form
+        meeting_detail.html
+
+ reports/                    ← Student 5
+    views.py
+    urls.py
+    templates/reports/
+        reports.html
+
+ templates/                  ← Shared base templates
+    base.html               ← CRITICAL: sidebar, navbar, CSS vars
+    dashboard.html
+    audit_log.html
+    admin/
+       base.html           ← Custom override for Django Admin matching Sky Spectrum
+    partials/
+        sidebar.html
+        navbar.html
+        notifications.html
+
+ assets/                     ← CSS, JS, images (overriding old static folder)
+     css/
+        style.css           ← Sky blue design system from CWK1
+        sky-layout.css      ← Centralized structural layout & Django admin parity classes
+     js/
+        main.js
+     images/
+         sky_logo.png
 ```
 
 ---
@@ -658,15 +665,15 @@ python manage.py createsuperuser
 ```
 
 Sidebar navigation items (in order):
-1. 🏠 Dashboard (`/dashboard/`)
-2. 👥 Teams (`/teams/`)
-3. 🏢 Departments / Organisation (`/organisation/`)
-4. 🔗 Dependencies (`/organisation/dependencies/`)
-5. 💬 Messages (`/messages/`)
-6. 📅 Schedule (`/schedule/`) ← Maurya's page
-7. 📊 Reports (`/reports/`)
-8. 📋 Audit Log (`/audit-log/`)
-9. ⚙️ Admin (`/admin/`) — only show if superuser
+1.  Dashboard (`/dashboard/`)
+2.  Teams (`/teams/`)
+3.  Departments / Organisation (`/organisation/`)
+4.  Dependencies (`/organisation/dependencies/`)
+5.  Messages (`/messages/`)
+6.  Schedule (`/schedule/`) ← Maurya's page
+7.  Reports (`/reports/`)
+8.  Audit Log (`/audit-log/`)
+9.  Admin (`/admin/`) — only show if superuser
 
 #### Step 1.5 — Master URLs in sky_registry/urls.py
 ```python
@@ -758,17 +765,17 @@ from django.dispatch import receiver
 Files in `schedule/`:
 ```
 schedule/
-├── __init__.py
-├── apps.py
-├── models.py       ← Import Meeting from core.models (no new models needed)
-├── views.py        ← All schedule views
-├── forms.py        ← MeetingForm
-├── urls.py         ← URL patterns
-└── templates/
-    └── schedule/
-        ├── schedule_home.html   ← Main page
-        ├── schedule_form.html   ← Create/Edit form
-        └── meeting_detail.html  ← Single meeting view
+ __init__.py
+ apps.py
+ models.py       ← Import Meeting from core.models (no new models needed)
+ views.py        ← All schedule views
+ forms.py        ← MeetingForm
+ urls.py         ← URL patterns
+ templates/
+     schedule/
+         schedule_home.html   ← Main page
+         schedule_form.html   ← Create/Edit form
+         meeting_detail.html  ← Single meeting view
 ```
 
 #### schedule/forms.py
@@ -896,7 +903,7 @@ Once all individual apps are working on their own branches:
 | **Mon 27 Apr** | Day 17 | Record 5-10 minute group video | **All together** |
 | **Tue 28 Apr** | Day 18 | Final review, zip project, verify submission checklist | **Maurya leads** |
 | **Wed 29 Apr** | Day 19 | Buffer — fix any last issues | **All** |
-| **🔴 Thu 30 Apr** | **DEADLINE** | **SUBMIT by 1pm — code + both templates + video link** | **Everyone** |
+| ** Thu 30 Apr** | **DEADLINE** | **SUBMIT by 1pm — code + both templates + video link** | **Everyone** |
 
 ---
 
@@ -1047,50 +1054,50 @@ Topics to cover with HARVARD REFERENCES:
 
 ## 15. CRITICAL TRAPS — DO NOT MISS
 
-### ❌ Trap 1: Viva Performance Is Marked Separately
+### Trap 1: Viva Performance Is Marked Separately
 The rubric has a specific row for "Performance during demonstration" inside Code Functionality and Version Control. You must understand ALL teammates' code at the viva, not just your own.
 
-### ❌ Trap 2: Feedback Must Be 7+ Instances Across the WHOLE Period
+### Trap 2: Feedback Must Be 7+ Instances Across the WHOLE Period
 Starting to log feedback in the last week = low marks. Must cover April 11 → April 29.
 Log EVERY code review, every PR comment, every WhatsApp feedback session.
 
-### ❌ Trap 3: Mentor Template Has 5 Specific Questions
+### Trap 3: Mentor Template Has 5 Specific Questions
 Missing any of the 5 questions = marks deducted. All 5 must be answered with examples.
 
-### ❌ Trap 4: Author Comment Must Be in Every File
+### Trap 4: Author Comment Must Be in Every File
 Every .py and key .html file needs: # Author: Maurya Patel (W2112200) at the top.
 
-### ❌ Trap 5: No Absolute File Paths
+### Trap 5: No Absolute File Paths
 Never use: `C:/Users/Maurya/...` — always use `BASE_DIR /` or relative paths.
 
-### ❌ Trap 6: Legal/Ethical Section REQUIRES Harvard References
+### Trap 6: Legal/Ethical Section REQUIRES Harvard References
 Writing about GDPR without citing it = low marks. Must use: Author (Year) format.
 
-### ❌ Trap 7: Audit Log Has No Owner
+### Trap 7: Audit Log Has No Owner
 Nobody was assigned the Audit Log page. Must be built as GROUP work.
 Use Django signals to auto-log changes. Build a simple display page.
 
-### ❌ Trap 8: 3 ERD Entities Have No UI Page
+### Trap 8: 3 ERD Entities Have No UI Page
 StandupInfo, WikiLink, BoardLink — in the DB but no dedicated page needed.
 Just make sure they're registered in admin.py so they can be managed.
 
-### ❌ Trap 9: Trello Must Be Updated Regularly
+### Trap 9: Trello Must Be Updated Regularly
 Module leader checks Trello. If it's been inactive since CWK1, marks at risk.
 Update after every meeting, every decision, every code review.
 
-### ❌ Trap 10: Template Without Code = 0 Marks
+### Trap 10: Template Without Code = 0 Marks
 "Sections in the template that don't have any text will receive no marks.
 Code files only will not receive any marks."
 Both template AND code are required together.
 
-### ❌ Trap 11: The Grid/List Toggle on Dashboard Is Required
+### Trap 11: The Grid/List Toggle on Dashboard Is Required
 The brief specifically mentions "Dashboard view Grid/List mode" — it must be implemented.
 
-### ❌ Trap 12: Dashboard Notifications Must Work
+### Trap 12: Dashboard Notifications Must Work
 Brief says dashboard should have "notifications" — implement a simple notification count
 (e.g. unread messages count).
 
-### ❌ Trap 13: Profile Must Support Password Change
+### Trap 13: Profile Must Support Password Change
 "update profile, change password if required" — both update and change password must work.
 
 ---
@@ -1224,12 +1231,12 @@ ALL apps import their models from `core/models.py`.
 They ALL read and write to the SAME `db.sqlite3` file.
 
 ```
-accounts/views.py   ──imports──→ from core.models import User
-teams/views.py      ──imports──→ from core.models import Team, Department, TeamMember
-organisation/views.py─imports──→ from core.models import Department, Team, Dependency
-messages_app/views.py─imports──→ from core.models import Message, Team, User
-schedule/views.py   ──imports──→ from core.models import Meeting, Team, User
-reports/views.py    ──imports──→ from core.models import Team, Department, TeamMember, Meeting, Message
+accounts/views.py   imports→ from core.models import User
+teams/views.py      imports→ from core.models import Team, Department, TeamMember
+organisation/views.pyimports→ from core.models import Department, Team, Dependency
+messages_app/views.pyimports→ from core.models import Message, Team, User
+schedule/views.py   imports→ from core.models import Meeting, Team, User
+reports/views.py    imports→ from core.models import Team, Department, TeamMember, Meeting, Message
                                                ↓
                                         db.sqlite3 (ONE file, shared by all)
 ```
@@ -1434,7 +1441,7 @@ def generate_pdf_report(request):
         ]))
         elements.append(no_mgr_table)
     else:
-        elements.append(Paragraph("✓ All teams have managers assigned.", styles['Normal']))
+        elements.append(Paragraph(" All teams have managers assigned.", styles['Normal']))
 
     # 4. Build the PDF
     doc.build(elements)
@@ -1455,7 +1462,7 @@ def generate_excel_report(request):
     # 1. Create workbook in memory
     wb = openpyxl.Workbook()
 
-    # ── Sheet 1: Summary ──────────────────────────────
+    # Sheet 1: Summary 
     ws_summary = wb.active
     ws_summary.title = "Summary"
 
@@ -1489,7 +1496,7 @@ def generate_excel_report(request):
     ws_summary.column_dimensions['A'].width = 35
     ws_summary.column_dimensions['B'].width = 15
 
-    # ── Sheet 2: All Teams ────────────────────────────
+    # Sheet 2: All Teams 
     ws_teams = wb.create_sheet("All Teams")
     headers = ['Team Name', 'Department', 'Team Leader', 'No. of Members',
                'No. of Upstream Deps', 'No. of Downstream Deps']
@@ -1514,7 +1521,7 @@ def generate_excel_report(request):
     for col in ws_teams.columns:
         ws_teams.column_dimensions[col[0].column_letter].width = 22
 
-    # ── Sheet 3: Teams Without Managers ──────────────
+    # Sheet 3: Teams Without Managers 
     ws_no_mgr = wb.create_sheet("No Manager")
     ws_no_mgr.append(['Team Name', 'Department'])
     for cell in ws_no_mgr[1]:
@@ -1524,7 +1531,7 @@ def generate_excel_report(request):
     for team in Team.objects.filter(team_leader_name='').select_related('department'):
         ws_no_mgr.append([team.team_name, team.department.department_name])
 
-    # ── Sheet 4: Departments ──────────────────────────
+    # Sheet 4: Departments 
     ws_depts = wb.create_sheet("Departments")
     ws_depts.append(['Department Name', 'Lead', 'No. of Teams', 'Description'])
     for cell in ws_depts[1]:
@@ -1599,10 +1606,10 @@ urlpatterns = [
     <!-- Download Buttons -->
     <div class="report-actions">
         <a href="{% url 'generate_pdf' %}" class="btn btn-primary">
-            📄 Download PDF Report
+             Download PDF Report
         </a>
         <a href="{% url 'generate_excel' %}" class="btn btn-secondary">
-            📊 Download Excel Report
+             Download Excel Report
         </a>
     </div>
 </div>
@@ -1643,7 +1650,7 @@ class Command(BaseCommand):
 
         self.stdout.write('Creating departments...')
 
-        # ── Departments ────────────────────────────────────────────────
+        # Departments 
         dept_data = [
             {
                 'name': 'xTV_Web',
@@ -1687,7 +1694,7 @@ class Command(BaseCommand):
             departments[d['name']] = dept
             self.stdout.write(f"  Created department: {d['name']}")
 
-        # ── Teams (min 3 per department) ───────────────────────────────
+        # Teams (min 3 per department) 
         teams_data = [
             # xTV_Web
             {'dept': 'xTV_Web', 'name': 'Streaming Core', 'leader': 'Alice Turner',
@@ -1750,7 +1757,7 @@ class Command(BaseCommand):
             teams[t['name']] = team
             self.stdout.write(f"  Created team: {t['name']}")
 
-        # ── Team Members (min 5 per team) ─────────────────────────────
+        # Team Members (min 5 per team) 
         member_templates = [
             ('Senior Engineer', 'se'),
             ('Software Engineer', 'eng'),
@@ -1779,7 +1786,7 @@ class Command(BaseCommand):
                     email=f"{fn.lower()}.{ln.lower()}@sky.uk",
                 )
 
-        # ── Dependencies ───────────────────────────────────────────────
+        # Dependencies 
         dependencies = [
             ('Streaming Core', 'SRE Core', 'upstream'),
             ('Streaming Core', 'Platform Arch', 'upstream'),
@@ -1799,7 +1806,7 @@ class Command(BaseCommand):
                     dependency_type=dep_type,
                 )
 
-        # ── Contact Channels ───────────────────────────────────────────
+        # Contact Channels 
         for team_name, team_obj in teams.items():
             slug = team_name.lower().replace(' ', '-')
             ContactChannel.objects.create(
@@ -1813,7 +1820,7 @@ class Command(BaseCommand):
                 channel_value=f'{slug}@sky.uk'
             )
 
-        # ── Repository Links ───────────────────────────────────────────
+        # Repository Links 
         for team_name, team_obj in teams.items():
             slug = team_name.lower().replace(' ', '-')
             RepositoryLink.objects.create(
@@ -1823,7 +1830,7 @@ class Command(BaseCommand):
             )
 
         self.stdout.write(self.style.SUCCESS(
-            f'\n✅ Database populated successfully!\n'
+            f'\n Database populated successfully!\n'
             f'   Departments: {Department.objects.count()}\n'
             f'   Teams:       {Team.objects.count()}\n'
             f'   Members:     {TeamMember.objects.count()}\n'

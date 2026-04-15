@@ -1,11 +1,11 @@
-# 🤝 Group Collaboration Workflow
+# Group Collaboration Workflow
 **Internal Guidelines — The Avengers (Group H)**
 
 This document defines how we work together to ensure our code integrates perfectly without conflicts.
 
 ---
 
-## 🌳 1. Git & Branching Strategy
+## 1. Git & Branching Strategy
 To avoid breaking the `main` branch, we follow a feature-branch workflow:
 
 1.  **Main Branch**: This is the "Production" code. Never commit directly to `main`.
@@ -26,7 +26,7 @@ To avoid breaking the `main` branch, we follow a feature-branch workflow:
 
 ---
 
-## 🕵️ 2. Peer Review Process
+## 2. Peer Review Process
 Before code is merged into `main`, it must be checked:
 - **Lead Reviewer**: Maurya Patel.
 - **Rules**:
@@ -37,7 +37,7 @@ Before code is merged into `main`, it must be checked:
 
 ---
 
-## 🎨 3. UI Consistency (The "Sky Look")
+## 3. UI Consistency (The "Sky Look")
 If you want to add a new CSS style:
 1.  Check `static/css/style.css` first.
 2.  If it doesn't exist, discuss it in the group chat.
@@ -45,7 +45,7 @@ If you want to add a new CSS style:
 
 ---
 
-## 🔄 4. Daily Integration Sync
+## 4. Daily Integration Sync
 Every day at **6:00 PM**, we do a "Merge Window":
 1.  Maurya reviews and merges all approved PRs.
 2.  Everyone else runs `git pull origin main` to get the latest shared code.
@@ -53,7 +53,7 @@ Every day at **6:00 PM**, we do a "Merge Window":
 
 ---
 
-## 📁 5. Folder Ownership
+## 5. Folder Ownership
 To avoid "too many cooks," stay within your app folder:
 - **Riagul**: `teams/`
 - **Lucas**: `organisation/`

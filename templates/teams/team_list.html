@@ -15,7 +15,7 @@
         <h1 class="spectrum-text" style="font-size: 2rem; letter-spacing: -0.02em;">Teams</h1>
         <p style="color: var(--sky-header-blue); opacity: 0.6; font-weight: 500; font-size: 0.95rem;">{{ total_count }} team{{ total_count|pluralize }} registered across all departments</p>
     </div>
-    <!-- 🔀 Grid / List View Toggle -->
+    <!-- Grid / List View Toggle -->
     <div class="flex-center gap-1" style="background: var(--surface-strong); border-radius: var(--border-radius); padding: 0.25rem; border: 1px solid var(--border);">
         <a href="?search={{ search_query }}&department={{ dept_filter }}&status={{ status_filter }}&view=grid"
            class="btn {% if view_mode == 'grid' %}btn-primary{% else %}btn-ghost{% endif %}"
@@ -32,7 +32,7 @@
     </div>
 </div>
 
-<!-- 🔍 Search & Filter Bar -->
+<!-- Search & Filter Bar -->
 <form method="get" action="{% url 'teams:team_list' %}" class="filter-bar mb-2 animate-slide-up" style="animation-delay: 0.1s;">
     <input type="hidden" name="view" value="{{ view_mode }}">
     <div style="position: relative; flex: 1; max-width: 400px;">
@@ -73,12 +73,12 @@
 </div>
 {% endif %}
 
-<!-- 📇 Teams Grid / List -->
+<!-- Teams Grid / List -->
 {% if teams %}
 
 {% if view_mode == 'list' %}
-<!-- ── LIST VIEW ── -->
-<div class="card animate-slide-up" style="animation-delay: 0.2s; padding: 0; overflow: hidden;">
+<!-- LIST VIEW  -->
+<div class="card animate-slide-up spell-tilt" style="animation-delay: 0.2s; padding: 0; overflow: hidden;">
     <table style="width: 100%; border-collapse: collapse; font-size: 0.875rem;">
         <thead>
             <tr style="background: var(--surface-strong); border-bottom: 2px solid var(--border);">
@@ -127,10 +127,10 @@
 </div>
 
 {% else %}
-<!-- ── GRID VIEW ── -->
+<!-- GRID VIEW  -->
 <div class="grid-3 animate-slide-up" style="animation-delay: 0.2s;">
     {% for team in teams %}
-    <a href="{% url 'teams:team_detail' team.team_id %}" class="card" style="text-decoration: none; color: inherit; cursor: pointer;">
+    <a href="{% url 'teams:team_detail' team.team_id %}" class="card spell-tilt spell-shine" style="text-decoration: none; color: inherit; cursor: pointer;">
         <div class="flex-between mb-1">
             <h4 style="font-size: 1rem; color: var(--sky-header-blue); padding-right: 0.5rem;">{{ team.team_name }}</h4>
             <span class="chip {% if team.status == 'Active' %}chip-active{% elif team.status == 'Restructuring' %}chip-restructuring{% else %}chip-disbanded{% endif %}">

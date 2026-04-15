@@ -1,7 +1,7 @@
-# 📅 4. MAURYA PATEL — SCHEDULE APP (`schedule/`)
+# 4. MAURYA PATEL — SCHEDULE APP (`schedule/`)
 **Sky Engineering Team Registry | Individual Implementation Roadmap & Lead Docs**
 
-## 🎯 Goal
+## Goal
 Manage time across the engineering organization. Your app handles the logistics of when teams can meet to resolve dependencies.
 
 ---
@@ -14,7 +14,7 @@ Manage time across the engineering organization. Your app handles the logistics 
 
 ---
 
-## 📂 WHERE to build it
+## WHERE to build it
 - **Views**: `schedule/views.py`
 - **URLs**: `schedule/urls.py`
 - **Forms**: `schedule/forms.py` (Crucial for validation)
@@ -22,7 +22,7 @@ Manage time across the engineering organization. Your app handles the logistics 
 
 ---
 
-## 🚀 HOW to implement (Code Skeletons)
+## HOW to implement (Code Skeletons)
 
 ### 1. The Pre-fill logic (schedule/views.py)
 ```python
@@ -59,7 +59,7 @@ Use **Glassmorphism** for the calendar background.
             <div class="day-slot {% if day.has_meeting %}booked{% endif %}">
                 {{ day.num }}
                 {% if day.has_meeting %}
-                    <span class="indicator">●</span>
+                    <span class="indicator"></span>
                 {% endif %}
             </div>
         {% endfor %}
@@ -70,7 +70,7 @@ Use **Glassmorphism** for the calendar background.
 
 ---
 
-## 🎤 MOCK VIVA QUESTIONS (Maurya's Section)
+## MOCK VIVA QUESTIONS (Maurya's Section)
 1. **"How did you integrate the Schedule app with the Teams app?"**
    - *Answer*: I checked for a `team_id` in the GET parameters of the request. If present, I used it to set the `initial` value of the Team field in my Django form, making the user experience seamless when they navigate from a specific team page.
 2. **"What happens if two people try to book the same slot?"**
@@ -80,7 +80,7 @@ Use **Glassmorphism** for the calendar background.
 
 ---
 
-## ✅ MAURYA'S CHECKLIST
+## MAURYA'S CHECKLIST
 - [x] Users can cancel their own meetings.
 - [x] The calendar correctly identifies "Today's" date.
 - [x] Form includes a 'Purpose' field (Mission/Sync/Emergency).

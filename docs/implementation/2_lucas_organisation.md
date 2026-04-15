@@ -1,12 +1,12 @@
-# 🏢 2. LUCAS — ORGANISATION APP (`organisation/`)
+# 2. LUCAS — ORGANISATION APP (`organisation/`)
 **Sky Engineering Team Registry | Individual Implementation Roadmap**
 
-## 🎯 Goal
+## Goal
 Provide the big-picture view of Sky engineering. You are responsible for showing the hierarchical structure of the 6 departments and managing inter-team dependency maps.
 
 ---
 
-## 🛠️ WHAT to build
+## WHAT to build
 1. **Department Index**: A list showing all 6 departments with their leads and team counts.
 2. **Interactive Org Chart**: A visual structure showing Department → Team links.
 3. **Dependency Visualizer**:
@@ -16,7 +16,7 @@ Provide the big-picture view of Sky engineering. You are responsible for showing
 
 ---
 
-## 📂 WHERE to build it
+## WHERE to build it
 - **Views**: `organisation/views.py`
 - **URLs**: `organisation/urls.py`
 - **Templates**: `templates/organisation/dept_list.html`, `templates/organisation/dependencies.html`
@@ -24,7 +24,7 @@ Provide the big-picture view of Sky engineering. You are responsible for showing
 
 ---
 
-## 🚀 HOW to implement (Code Skeletons)
+## HOW to implement (Code Skeletons)
 
 ### 1. Dependency List View (organisation/views.py)
 ```python
@@ -73,7 +73,7 @@ def dependency_view(request):
 
 ---
 
-## 🎤 MOCK VIVA QUESTIONS (Lucas's Section)
+## MOCK VIVA QUESTIONS (Lucas's Section)
 1. **"How did you implement the dependency relationship?"**
    - *Answer*: I used a self-referencing relationship in the `Dependency` model. It tracks a `from_team` and a `to_team`. This allows for a many-to-many relationship where any team can depend on multiple others.
 2. **"How did you import the Excel data into Django?"**
@@ -83,7 +83,7 @@ def dependency_view(request):
 
 ---
 
-## ✅ LUCAS'S CHECKLIST
+## LUCAS'S CHECKLIST
 - [ ] `populate_data.py` includes all 6 departments from the Excel file.
 - [ ] Departments are sorted alphabetically.
 - [ ] Dependency view allows switching between 'Graph' and 'List'.

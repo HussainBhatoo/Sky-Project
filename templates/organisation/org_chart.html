@@ -19,16 +19,16 @@
     </div>
 </div>
 
-<!-- 🗂️ Tabs: Departments / Org Chart -->
+<!-- Tabs: Departments / Org Chart -->
 <div class="tabs mb-3 animate-slide-up" style="animation-delay: 0.1s;">
     <button class="tab-btn active" onclick="switchTab('list', this)" id="tab-list">Departments</button>
     <button class="tab-btn" onclick="switchTab('org', this)" id="tab-org">Org Chart</button>
 </div>
 
-<!-- 📋 TAB 1: Departments List -->
+<!-- TAB 1: Departments List -->
 <div id="panel-list" class="animate-slide-up" style="animation-delay: 0.15s;">
     {% for item in dept_data %}
-    <div class="card mb-2">
+    <div class="card mb-2 spell-tilt spell-shine">
         <div class="flex-between mb-2">
             <div>
                 <h3 style="color: var(--sky-header-blue);">{{ item.department.department_name }}</h3>
@@ -42,7 +42,7 @@
         </div>
         <div class="grid-3">
             {% for team in item.teams %}
-            <a href="{% url 'teams:team_detail' team.team_id %}" style="text-decoration: none; color: inherit; border: 1px solid var(--border); border-radius: 12px; padding: 0.85rem 1rem; transition: all 0.2s ease; display: block;" onmouseover="this.style.background='var(--sky-tint-5)'" onmouseout="this.style.background='transparent'">
+            <a href="{% url 'teams:team_detail' team.team_id %}" class="spell-tilt" style="text-decoration: none; color: inherit; border: 1px solid var(--border); border-radius: 12px; padding: 0.85rem 1rem; transition: all 0.2s ease; display: block;" onmouseover="this.style.background='var(--sky-tint-5)'" onmouseout="this.style.background='transparent'">
                 <div class="flex-between mb-1">
                     <span style="font-size: 0.9rem; font-weight: 600;">{{ team.team_name }}</span>
                     <span class="chip {% if team.status == 'Active' %}chip-active{% elif team.status == 'Restructuring' %}chip-restructuring{% else %}chip-disbanded{% endif %}" style="font-size: 0.65rem;">
@@ -65,10 +65,10 @@
     {% endfor %}
 </div>
 
-<!-- 🏗️ TAB 2: Org Chart -->
+<!-- TAB 2: Org Chart -->
 <div id="panel-org" style="display: none;" class="animate-slide-up">
     {% for item in dept_data %}
-    <div class="card mb-2">
+    <div class="card mb-2 spell-tilt">
         <div class="flex-center gap-3" style="flex-wrap: wrap;">
             <!-- Department Node -->
             <div class="org-node org-node-dept" style="min-width: 140px;">

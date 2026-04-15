@@ -22,11 +22,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Sky Engineering Registry{% endblock %}</title>
     
-    <!-- 🧬 Global Design System (Vanilla High-Fi) -->
+    <!-- Global Design System (Vanilla High-Fi) -->
     <link rel="stylesheet" href="{% static 'css/sky-layout.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     
-    <!-- 📦 Core Iconography (Boxicons) -->
+    <!-- Core Iconography (Boxicons) -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     
     {% block extra_head %}{% endblock %}
@@ -35,11 +35,11 @@
     <!-- Sidebar toggle moved to top-navbar left zone -->
 
     <div class="app-container">
-        <!-- 🧭 Sidebar Navigation: The command center for the registry -->
+        <!-- Sidebar Navigation: The command center for the registry -->
         <nav class="sidebar">
             <div class="sidebar-header">
                 <a href="{% url 'core:dashboard' %}" class="logo-link">
-                    <!-- 🎨 Sky Spectrum Branding -->
+                    <!-- Sky Spectrum Branding -->
                     <img src="{% static 'images/Sky-spectrum-rgb.png' %}" alt="Sky Logo" class="sky-logo-img sidebar-logo">
                 </a>
             </div>
@@ -107,7 +107,7 @@
             </nav>
 
         <div class="main-wrapper">
-            <!-- 🔍 High-Fi Utility Navbar: 3-Zone Flex Layout -->
+            <!-- High-Fi Utility Navbar: 3-Zone Flex Layout -->
             <header class="top-navbar" style="display: flex; align-items: center; justify-content: space-between; height: 60px;">
                 
                 <!-- LEFT ZONE: Burger Menu -->
@@ -124,7 +124,7 @@
                             <i class='bx bx-search'></i>
                             <input type="text" placeholder="Search teams, leads or projects..." id="search-input">
                         </div>
-                        <!-- 💎 Dynamic Results Dropdown (Logic placeholder) -->
+                        <!-- Dynamic Results Dropdown (Logic placeholder) -->
                         <div class="search-results-dropdown" id="search-results">
                             <!-- Populated via High-Fi JS -->
                         </div>
@@ -142,7 +142,7 @@
                     
                     <div class="nav-divider-vertical"></div>
                     
-                    <!-- 👤 User Profile Dropdown -->
+                    <!-- User Profile Dropdown -->
                     <div class="nav-user-dropdown" id="user-dropdown-container" style="display: flex; align-items: center;">
                         <div class="nav-avatar-trigger" id="user-dropdown-btn" style="display: flex; align-items: center;">
                             <div class="avatar-circle small">
@@ -168,14 +168,14 @@
                 </div>
             </header>
 
-            <!-- 📍 Dynamic Content Injection Point -->
+            <!-- Dynamic Content Injection Point -->
             <main class="content-area animate-slide-up">
                 {% block content %}{% endblock %}
             </main>
         </div>
     </div>
 
-    <!-- ⚡ High-Fi Core Logic Subsystem (Vanilla JS) -->
+    <!-- High-Fi Core Logic Subsystem (Vanilla JS) -->
     <script>
         /**
          * GLOBAL UI ARCHITECTURE CONTROLLER
@@ -185,25 +185,54 @@
             const searchInput = document.getElementById('search-input');
             const resultsDropdown = document.getElementById('search-results');
             
-            // 🔎 Mock High-Fi Search Interaction logic
+            // Real High-Fi Dynamic Search Logic
             if (searchInput) {
+                let debounceTimer;
                 searchInput.addEventListener('input', (e) => {
-                    const query = e.target.value.toLowerCase();
+                    const query = e.target.value.trim();
+                    clearTimeout(debounceTimer);
+
                     if (query.length > 1) {
-                        resultsDropdown.innerHTML = `
-                            <div class="search-result-header">SEARCHING FOR: "${query}"</div>
-                            <div class="search-result-item">
-                                <i class='bx bxs-search-alt'></i>
-                                <span>No direct matches found. Try specific team names.</span>
-                            </div>
-                        `;
-                        resultsDropdown.classList.add('is-active');
+                        debounceTimer = setTimeout(() => {
+                            fetch(`/search/?q=${encodeURIComponent(query)}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.results && data.results.length > 0) {
+                                        resultsDropdown.innerHTML = `
+                                            <div class="search-result-header">RESULTS FOR: "${query}"</div>
+                                            ${data.results.map(item => `
+                                                <a href="${item.url}" class="search-result-item" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 12px; transition: background 0.2s ease;">
+                                                    <i class='bx ${item.icon}' style="color: var(--sky-primary); font-size: 1.2rem;"></i>
+                                                    <div style="flex: 1; min-width: 0;">
+                                                        <div style="font-weight: 600; font-size: 0.9rem; color: var(--sky-header-blue); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${item.title}</div>
+                                                        <div style="font-size: 0.7rem; color: var(--muted-foreground); text-transform: uppercase; letter-spacing: 0.5px;">${item.category}</div>
+                                                    </div>
+                                                </a>
+                                            `).join('')}
+                                        `;
+                                        resultsDropdown.classList.add('is-active');
+                                    } else {
+                                        resultsDropdown.innerHTML = `
+                                            <div class="search-result-header">NO RESULTS FOR: "${query}"</div>
+                                            <div class="search-result-item" style="opacity: 0.6; pointer-events: none;">
+                                                <i class='bx bx-info-circle'></i>
+                                                <span>Try specific team names or departments.</span>
+                                            </div>
+                                        `;
+                                        resultsDropdown.classList.add('is-active');
+                                    }
+                                })
+                                .catch(err => {
+                                    console.error("Search Fail:", err);
+                                });
+                        }, 300); // 300ms debounce
                     } else {
                         resultsDropdown.classList.remove('is-active');
+                        resultsDropdown.innerHTML = '';
                     }
                 });
 
-                // Clear search on focus out
+                // Clear search and close on focus out
                 document.addEventListener('click', (e) => {
                     if (!document.getElementById('global-search').contains(e.target)) {
                         resultsDropdown.classList.remove('is-active');
@@ -211,7 +240,7 @@
                 });
             }
 
-            // 🍔 Sidebar Toggle Logic
+            //  Sidebar Toggle Logic
             const sidebarToggle = document.getElementById('sidebar-toggle');
             if (sidebarToggle) {
                 // Initialize from localStorage

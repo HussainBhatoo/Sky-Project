@@ -21,7 +21,7 @@ class Command(BaseCommand):
     help = 'Populates the database with real Sky Engineering team data.'
 
     def handle(self, *args, **kwargs):
-        self.stdout.write(self.style.WARNING('\n🚀 Starting Sky Registry data population...\n'))
+        self.stdout.write(self.style.WARNING('\n Starting Sky Registry data population...\n'))
 
         with transaction.atomic():
             StandupInfo.objects.all().delete()

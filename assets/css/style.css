@@ -2,7 +2,7 @@
 
 /* ===== HIGH-FI COMPONENTS ===== */
 
-/* 🗂️ Cards & Surfaces */
+/* Cards & Surfaces */
 .card {
   background: var(--card);
   border: 1px solid var(--border);
@@ -19,7 +19,7 @@
   box-shadow: var(--shadow-lg);
 }
 
-/* ⚡ Quick Action Tiles (Spectral) */
+/* Quick Action Tiles (Spectral) */
 .quick-card {
   border-radius: 18px;
   padding: 1.75rem;
@@ -57,7 +57,7 @@
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
 }
 
-/* 🔘 Buttons */
+/* Buttons */
 .btn {
   padding: 0.75rem 1.5rem;
   border-radius: 12px;
@@ -213,7 +213,7 @@
     font-weight: 600;
 }
 
-/* 💎 Search Dropdown High-Fi Styles */
+/* Search Dropdown High-Fi Styles */
 .search-results-dropdown {
     position: absolute;
     top: calc(100% + 8px);
@@ -261,7 +261,7 @@
     background: var(--sky-surface-strong);
 }
 
-/* 🔔 Notification Pulse */
+/* Notification Pulse */
 .notification-bell {
     position: relative;
     font-size: 1.4rem;
@@ -288,6 +288,26 @@
     border: 2px solid white;
     margin-left: -5px;
     margin-top: -15px;
+    position: relative;
+}
+
+.pulse-dot::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: inherit;
+    border-radius: 50%;
+    animation: statusPulse 2s infinite;
+    z-index: -1;
+}
+
+@keyframes statusPulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    70% { transform: scale(3); opacity: 0; }
+    100% { transform: scale(3); opacity: 0; }
 }
 
 /* ===== FORM & AUTH REFINEMENTS (Student 4 / Lead) ===== */
@@ -349,7 +369,7 @@
    Messages, Reports, Auth, Profile)
    ============================================================ */
 
-/* 🏷️ CHIPS — Status, Department, Dependency */
+/* CHIPS — Status, Department, Dependency */
 .chip {
     display: inline-flex;
     align-items: center;
@@ -374,7 +394,7 @@
 .chip-clickable { cursor: pointer; }
 .chip-clickable:hover { transform: translateY(-1px); box-shadow: var(--shadow-sm); }
 
-/* 🗂️ TABS */
+/* TABS */
 .tabs {
     display: flex;
     gap: 0.25rem;
@@ -404,7 +424,7 @@
     font-weight: 700;
 }
 
-/* 📊 STAT CARDS */
+/* STAT CARDS */
 .stat-card {
     background: var(--card);
     border: 1px solid var(--border);
@@ -419,7 +439,7 @@
 .stat-card .stat-value { font-size: 2.5rem; font-weight: 900; color: var(--sky-header-blue); line-height: 1; margin-bottom: 0.5rem; }
 .stat-card .stat-label { font-size: 0.8rem; font-weight: 600; color: var(--muted-foreground); text-transform: uppercase; letter-spacing: 0.08em; }
 
-/* 📋 DATA TABLES */
+/* DATA TABLES */
 .data-table {
     width: 100%;
     border-collapse: collapse;
@@ -443,7 +463,7 @@
 .data-table tbody td a { color: var(--sky-primary); font-weight: 600; }
 .data-table tbody td a:hover { text-decoration: underline; }
 
-/* 📅 CALENDAR GRID */
+/* CALENDAR GRID */
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -464,7 +484,7 @@
 .calendar-grid .cal-day.has-event { background: var(--sky-tint-10); font-weight: 600; }
 .calendar-grid .cal-day.is-empty { visibility: hidden; }
 
-/* 🔍 FILTER BAR */
+/* FILTER BAR */
 .filter-bar {
     display: flex;
     align-items: center;
@@ -506,7 +526,7 @@
 
 .filter-select:focus { border-color: var(--sky-focus); box-shadow: 0 0 0 3px rgba(0, 126, 204, 0.15); }
 
-/* 🫥 EMPTY STATE */
+/* EMPTY STATE */
 .empty-state {
     display: flex;
     flex-direction: column;
@@ -521,13 +541,13 @@
 .empty-state .empty-title { font-size: 1.1rem; font-weight: 700; color: #aaa; margin-bottom: 0.5rem; }
 .empty-state .empty-desc { font-size: 0.9rem; color: #bbb; }
 
-/* 🎯 GRID UTILITIES */
+/* GRID UTILITIES */
 .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
 .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
 .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
 .grid-2-1 { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; }
 
-/* 📐 SPACING & LAYOUT UTILITIES */
+/* SPACING & LAYOUT UTILITIES */
 .flex { display: flex; }
 .flex-between { display: flex; justify-content: space-between; align-items: center; }
 .flex-center { display: flex; align-items: center; }
@@ -541,7 +561,7 @@
 .mb-4 { margin-bottom: 2rem; }
 .p-0 { padding: 0; }
 
-/* 🔘 BUTTON DESTRUCTIVE */
+/* BUTTON DESTRUCTIVE */
 .btn-destructive {
     background: var(--sky-negative);
     color: white;
@@ -555,7 +575,7 @@
     transform: translateY(-1px);
 }
 
-/* 🔘 BUTTON GHOST */
+/* BUTTON GHOST */
 .btn-ghost {
     background: transparent;
     border: none;
@@ -567,7 +587,7 @@
 
 .btn-ghost:hover { background: var(--sky-tint-5); border-radius: 8px; }
 
-/* 🔵 UNREAD INDICATOR */
+/* UNREAD INDICATOR */
 .unread-dot {
     width: 8px;
     height: 8px;
@@ -577,7 +597,7 @@
     flex-shrink: 0;
 }
 
-/* 📧 MESSAGE LIST ITEM */
+/* MESSAGE LIST ITEM */
 .msg-item {
     display: flex;
     align-items: center;
@@ -593,14 +613,14 @@
 .msg-item.is-unread { background: rgba(0, 15, 245, 0.03); }
 .msg-item:last-child { border-bottom: none; }
 
-/* 📐 FORM TEXTAREA */
+/* FORM TEXTAREA */
 textarea.form-control {
     min-height: 100px;
     resize: vertical;
     font-family: inherit;
 }
 
-/* 🧩 ORG CHART NODE */
+/* ORG CHART NODE */
 .org-node {
     display: inline-flex;
     flex-direction: column;
@@ -621,7 +641,7 @@ textarea.form-control {
 .org-node-team { background: var(--sky-surface-strong); color: var(--sky-header-blue); }
 .org-node-sub { font-size: 0.7rem; font-weight: 500; color: var(--muted-foreground); margin-top: 0.25rem; }
 
-/* 📱 RESPONSIVE GRID ADJUSTMENTS */
+/* RESPONSIVE GRID ADJUSTMENTS */
 @media (max-width: 1024px) {
     .grid-4 { grid-template-columns: repeat(2, 1fr); }
     .grid-3 { grid-template-columns: repeat(2, 1fr); }
@@ -849,3 +869,74 @@ body.sidebar-collapsed .sidebar-footer {
 .dropdown-item.text-danger:hover i {
   color: var(--sky-negative);
 }
+/* ===== DESIGN SPELLS (Micro-interactions) ===== */
+
+/* Tilt Effect */
+.spell-tilt {
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    will-change: transform;
+}
+
+.spell-tilt:hover {
+    transform: perspective(1000px) rotateX(2deg) rotateY(1deg) scale(1.01);
+}
+
+/* Shine Effect */
+.spell-shine {
+    position: relative;
+    overflow: hidden;
+}
+
+.spell-shine::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -150%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.05) 45%,
+        rgba(255, 255, 255, 0.3) 50%,
+        rgba(255, 255, 255, 0.05) 55%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    transform: rotate(-45deg);
+    transition: all 0.8s ease;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 2;
+}
+
+.spell-shine:hover::after {
+    left: 100%;
+    top: 100%;
+    opacity: 1;
+}
+
+/* Pulse Utilities for Status Indicators */
+.pulse-status {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    position: relative;
+}
+
+.pulse-status::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: inherit;
+    border-radius: 50%;
+    animation: statusPulse 2s infinite;
+}
+
+.pulse-primary { background: var(--sky-primary); }
+.pulse-success { background: var(--sky-positive); }
+.pulse-warning { background: var(--sky-attention); }
+.pulse-danger { background: var(--sky-negative); }

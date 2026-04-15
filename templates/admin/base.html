@@ -6,22 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% block admin_title %}{{ title }} | Sky Admin{% endblock %}{% endblock %}</title>
     
-    <!-- 📦 Django Admin Base CSS (Loaded First) -->
+    <!-- Django Admin Base CSS (Loaded First) -->
     <link rel="stylesheet" href="{% block stylesheet %}{% static 'admin/css/base.css' %}{% endblock %}">
     {% block extrastyle %}{% endblock %}
 
-    <!-- 🧬 Global Design System (Vanilla High-Fi) - LOADED LAST TO ENSURE PARITY -->
+    <!-- Global Design System (Vanilla High-Fi) - LOADED LAST TO ENSURE PARITY -->
     <link rel="stylesheet" href="{% static 'css/sky-layout.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     
-    <!-- 📦 Core Iconography (Boxicons) -->
+    <!-- Core Iconography (Boxicons) -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     
-    <!-- 🖋️ Typography (Inter) -->
+    <!-- Typography (Inter) -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
-        /* 🚀 SKY SPECTRUM ADMIN HIJACK - TOTAL PARITY */
+        /* SKY SPECTRUM ADMIN HIJACK - TOTAL PARITY */
         
         /* Kill Default Admin Chrome */
         #header, #nav-sidebar, .nav-sidebar, #branding, .breadcrumbs { display: none !important; }
@@ -69,7 +69,7 @@
 <body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}">
 
     <div class="app-container">
-        <!-- 🧭 Sidebar Navigation: Exactly as base.html -->
+        <!-- Sidebar Navigation: Exactly as base.html -->
         <nav class="sidebar">
             <div class="sidebar-header">
                 <a href="{% url 'core:dashboard' %}" class="logo-link">
@@ -102,7 +102,7 @@
         </nav>
 
         <div class="main-wrapper">
-            <!-- 🔍 Utility Navbar -->
+            <!-- Utility Navbar -->
             <header class="top-navbar">
                 <div class="navbar-left">
                     <button id="sidebar-toggle" class="sidebar-toggle-btn">
@@ -179,7 +179,7 @@
         </div>
     </div>
 
-    <!-- ⚡ JavaScript Persistence -->
+    <!-- JavaScript Persistence -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const sidebarToggle = document.getElementById('sidebar-toggle');

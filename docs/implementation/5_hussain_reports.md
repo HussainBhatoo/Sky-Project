@@ -1,12 +1,12 @@
-# 📊 5. HUSSAIN — REPORTS APP (`reports/`)
+# 5. HUSSAIN — REPORTS APP (`reports/`)
 **Sky Engineering Team Registry | Individual Implementation Roadmap**
 
-## 🎯 Goal
+## Goal
 Summarize and Export. Your app is used by Sky Executives to see the health of the engineering registry and download data for offline review.
 
 ---
 
-## 🛠️ WHAT to build
+## WHAT to build
 1. **Report Hub**: A dashboard showing total stats (Teams per Dept, Active vs Disbanded).
 2. **Growth Chart**: A simple CSS-based bar chart showing team counts.
 3. **PDF Generator**: A button that generates a formal "Sky Registry Summary" PDF using the `reportlab` library.
@@ -15,7 +15,7 @@ Summarize and Export. Your app is used by Sky Executives to see the health of th
 
 ---
 
-## 📂 WHERE to build it
+## WHERE to build it
 - **Views**: `reports/views.py`
 - **URLs**: `reports/urls.py`
 - **Templates**: `templates/reports/hub.html`
@@ -23,7 +23,7 @@ Summarize and Export. Your app is used by Sky Executives to see the health of th
 
 ---
 
-## 🚀 HOW to implement (Code Skeletons)
+## HOW to implement (Code Skeletons)
 
 ### 1. View: PDF Export logic (reports/views.py)
 ```python
@@ -72,7 +72,7 @@ def export_pdf(request):
 
 ---
 
-## 🎤 MOCK VIVA QUESTIONS (Hussain's Section)
+## MOCK VIVA QUESTIONS (Hussain's Section)
 1. **"Which third-party libraries did you use for file generation?"**
    - *Answer*: I used `ReportLab` for PDF generation because it allows for high-precision layout control, and `OpenPyXL` for Excel (.xlsx) files as it handles complex spreadsheet data structure perfectly with Django.
 2. **"How does the statistics engine calculate its data?"**
@@ -82,7 +82,7 @@ def export_pdf(request):
 
 ---
 
-## ✅ HUSSAIN'S CHECKLIST
+## HUSSAIN'S CHECKLIST
 - [ ] PDF includes the Sky logo (check `static/images/logo.png`).
 - [ ] Excel export includes all 13 fields from the database.
 - [ ] Users can filter reports by 'Date Range'.

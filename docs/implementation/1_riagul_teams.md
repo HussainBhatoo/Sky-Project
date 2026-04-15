@@ -1,12 +1,12 @@
-# 👥 1. RIAGUL — TEAMS APP (`teams/`)
+# 1. RIAGUL — TEAMS APP (`teams/`)
 **Sky Engineering Team Registry | Individual Implementation Roadmap**
 
-## 🎯 Goal
+## Goal
 Build the central directory of the application. You are responsible for showing WHO the teams are, WHAT they do, and HOW to contact them.
 
 ---
 
-## 🛠️ WHAT to build
+## WHAT to build
 1. **Teams Gallery**: A grid/list of all teams with search and department filtering.
 2. **Team Detail Page**: The "Profile" of a team.
 3. **Mission & Vision**: Displaying the newly added `mission` field.
@@ -16,14 +16,14 @@ Build the central directory of the application. You are responsible for showing 
 
 ---
 
-## 📂 WHERE to build it
+## WHERE to build it
 - **Views**: `teams/views.py`
 - **URLs**: `teams/urls.py`
 - **Templates**: `templates/teams/team_list.html`, `templates/teams/team_detail.html`
 
 ---
 
-## 🚀 HOW to implement (Code Skeletons)
+## HOW to implement (Code Skeletons)
 
 ### 1. View Logic (teams/views.py)
 ```python
@@ -80,7 +80,7 @@ Use the **Sky Spectrum** for the mission header.
 
 ---
 
-## 🎤 MOCK VIVA QUESTIONS (Riagul's Section)
+## MOCK VIVA QUESTIONS (Riagul's Section)
 1. **"How did you handle the tech stack tags?"**
    - *Answer*: I stored them as a comma-separated string in the database. In the `views.py`, I parsed that string into a list so I could loop through it in the template and display each as a Bootstrap badge.
 2. **"How does the search functionality work?"**
@@ -90,7 +90,7 @@ Use the **Sky Spectrum** for the mission header.
 
 ---
 
-## ✅ RIAGUL'S CHECKLIST
+## RIAGUL'S CHECKLIST
 - [ ] Team list supports both 'Grid' and 'List' modes.
 - [ ] Team Detail shows the Slack channel clearly.
 - [ ] "Disband" button is only visible to Admin users.

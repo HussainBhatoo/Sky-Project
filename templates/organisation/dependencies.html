@@ -17,13 +17,13 @@
     </div>
 </div>
 
-<!-- 🗂️ Tabs -->
+<!-- Tabs -->
 <div class="tabs mb-2 animate-slide-up" style="animation-delay: 0.1s;">
     <button class="tab-btn active" onclick="switchDepTab('graph', this)" id="dep-tab-graph">Graph View</button>
     <button class="tab-btn" onclick="switchDepTab('list', this)" id="dep-tab-list">List View</button>
 </div>
 
-<!-- 🎯 Focus Team Selector -->
+<!-- Focus Team Selector -->
 <form method="get" action="{% url 'organisation:dependencies' %}" class="filter-bar mb-3 animate-slide-up" style="animation-delay: 0.15s;">
     <div class="form-group" style="margin-bottom: 0;">
         <label style="font-size: 0.8rem; font-weight: 700; color: var(--sky-header-blue);">Focus Team</label>
@@ -35,10 +35,10 @@
     </div>
 </form>
 
-<!-- 📊 TAB 1: Graph View (SVG) -->
+<!-- TAB 1: Graph View (SVG) -->
 <div id="dep-panel-graph" class="animate-slide-up" style="animation-delay: 0.2s;">
     {% if focus_team %}
-    <div class="card" style="overflow-x: auto;">
+    <div class="card spell-tilt" style="overflow-x: auto;">
         <!-- Legend -->
         <div class="flex-center gap-3 mb-2" style="font-size: 0.75rem; color: var(--muted-foreground);">
             <span class="flex-center gap-1"><span style="width: 12px; height: 12px; border-radius: 4px; background: var(--sky-primary); display: inline-block;"></span> Focus Team</span>
@@ -61,12 +61,12 @@
     {% endif %}
 </div>
 
-<!-- 📋 TAB 2: List View -->
+<!-- TAB 2: List View -->
 <div id="dep-panel-list" style="display: none;" class="animate-slide-up">
     {% if focus_team %}
     <div class="grid-2">
         <!-- Upstream -->
-        <div class="card">
+        <div class="card spell-tilt">
             <h4 style="color: var(--sky-header-blue); margin-bottom: 1rem;">Upstream Dependencies ({{ upstream_deps|length }})</h4>
             {% if upstream_deps %}
             <div style="display: flex; flex-direction: column; gap: 0.5rem;">
@@ -88,7 +88,7 @@
         </div>
 
         <!-- Downstream -->
-        <div class="card">
+        <div class="card spell-tilt">
             <h4 style="color: var(--sky-header-blue); margin-bottom: 1rem;">Downstream Dependencies ({{ downstream_deps|length }})</h4>
             {% if downstream_deps %}
             <div style="display: flex; flex-direction: column; gap: 0.5rem;">

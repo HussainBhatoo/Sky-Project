@@ -1,10 +1,10 @@
-# 🗺️ Student 4 Roadmap: Maurya Patel (Lead)
+# Student 4 Roadmap: Maurya Patel (Lead)
 
 This is the comprehensive roadmap for **Maurya Patel** (Group Lead & Student 4). It covers the remaining individual work for the **Schedule** app and the group-wide **Lead** responsibilities.
 
 ---
 
-## 📅 1. Individual: Schedule App (`schedule/`)
+## 1. Individual: Schedule App (`schedule/`)
 **Objective**: Build a robust meeting management system with calendar visualization.
 
 ### A. Meeting CRUD System
@@ -22,7 +22,7 @@ This is the comprehensive roadmap for **Maurya Patel** (Group Lead & Student 4).
 
 ---
 
-## 🏛️ 2. Group Lead: Foundation & Integration
+## 2. Group Lead: Foundation & Integration
 **Objective**: Finalize core features and ensure parity across all 5 apps.
 
 ### A. Authentication & User (Accounts)
@@ -42,7 +42,7 @@ This is the comprehensive roadmap for **Maurya Patel** (Group Lead & Student 4).
 
 ---
 
-## 🚩 Deadlines & Compliance
+## Deadlines & Compliance
 - **Deadline**: Thursday, 30 April, 1 PM.
 - **Viva Prep**: Be ready to explain the `initial` data logic in forms and the `AuditLog` signal implementation.
 

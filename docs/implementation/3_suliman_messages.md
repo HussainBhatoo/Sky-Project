@@ -1,12 +1,12 @@
-# 💬 3. SULIMAN — MESSAGES APP (`messages_app/`)
+# 3. SULIMAN — MESSAGES APP (`messages_app/`)
 **Sky Engineering Team Registry | Individual Implementation Roadmap**
 
-## 🎯 Goal
+## Goal
 Enable collaboration. Your app is the "Slack-lite" of the registry, allowing users to send formal inquiries to other teams or individuals.
 
 ---
 
-## 🛠️ WHAT to build
+## WHAT to build
 1. **Inbox**: A list of messages received, with clear "Read/Unread" indicators.
 2. **Tabbed View**: Clean buttons to switch between Inbox, Sent, and Drafts.
 3. **Compose UI**: A search-enabled "To" field (search for User or Team).
@@ -15,14 +15,14 @@ Enable collaboration. Your app is the "Slack-lite" of the registry, allowing use
 
 ---
 
-## 📂 WHERE to build it
+## WHERE to build it
 - **Views**: `messages_app/views.py`
 - **URLs**: `messages_app/urls.py`
 - **Templates**: `templates/messages_app/inbox.html`, `templates/messages_app/compose.html`
 
 ---
 
-## 🚀 HOW to implement (Code Skeletons)
+## HOW to implement (Code Skeletons)
 
 ### 1. View logic with Flags (messages_app/views.py)
 ```python
@@ -69,7 +69,7 @@ def compose(request):
 
 ---
 
-## 🎤 MOCK VIVA QUESTIONS (Suliman's Section)
+## MOCK VIVA QUESTIONS (Suliman's Section)
 1. **"How did you handle the unread status of a message?"**
    - *Answer*: I added a `BooleanField` called `is_read` to the `Message` model. When the inbox retrieves messages, it checks this field. In the template, I add a special CSS class (`unread`) if the field is false, which applies a bold font or a blue dot indicator.
 2. **"Can I send a message to an entire team, or just an individual?"**
@@ -79,7 +79,7 @@ def compose(request):
 
 ---
 
-## ✅ SULIMAN'S CHECKLIST
+## SULIMAN'S CHECKLIST
 - [ ] Inbox shows most recent messages at the top.
 - [ ] Compose page includes a "Draft" button to save without sending.
 - [ ] Users receive a notification count on the dashboard for unread messages.
