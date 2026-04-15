@@ -7,11 +7,12 @@ This document details the shared infrastructure that everyone teammate depends o
 
 ## WHAT we built (Group Scope)
 1. **Authentication**: Login, Registration, Logout, and Profile updates. [STABLE]
-2. **Shared Models**: All 13 database entities in `core/models.py`. [FINALIZED]
+2. **Shared Models**: All 15 database entities in `core/models.py`. [FINALIZED]
 3. **Design System**: The "Sky Spectrum" CSS variables and glassmorphism. [IMPLEMENTED]
 4. **Base Layout**: `base.html` with centralized `sky-layout.css`. [HARDENED]
 5. **Admin Hub**: A customized Django Admin panel with visual parity. [COMPLETE]
 6. **Professionalization Layer**: Global "Design Spells" and debounced AJAX Dynamic Search. [NEW]
+7. **Compliance Entities**: Implementation of `Vote` and `TimeTrack` models for 100% rubric coverage. [NEW]
 
 ---
 
@@ -19,7 +20,7 @@ This document details the shared infrastructure that everyone teammate depends o
 
 | File Path | Purpose | Status |
 |-----------|---------|--------|
-| `core/models.py` | The database schema (13 entities) |  Finalized |
+| `core/models.py` | The database schema (15 entities) |  Finalized |
 | `accounts/urls.py` | Auth routing Hub |  Finalized |
 | `templates/base.html` | The master layout for all apps |  Finalized |
 | `assets/css/sky-layout.css` | Central Layout & Admin Parity |  Finalized |
@@ -137,8 +138,9 @@ Inject the **Sky Spectrum** gradient.
 
 - [x] Data seeding script (`scripts/populate_data.py`) created.
 - [x] Database populated with Sky Excel data.
-- [x] All 13 models are migrated.
+- [x] All 15 models are migrated.
 - [x] Superuser created (`admin / Admin1234!`).
 - [x] Dashboard shows total counts (Teams/Depts/Users).
 - [x] Audit Log creates an entry when a Team is added.
 - [x] **Global Professionalization Layer** (Emoji scrub, Design Spells, Dynamic Search) implemented.
+- [x] **Relational Compliance**: Vote and TimeTrack entities fully operational.

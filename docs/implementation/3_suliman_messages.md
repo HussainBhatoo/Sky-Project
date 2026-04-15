@@ -16,6 +16,14 @@ Enable collaboration. Your app is the "Slack-lite" of the registry, allowing use
 
 ---
 
+## 📊 Database Contribution (Student 3)
+You are the primary custodian of the **Message** entity.
+- **Message Status Persistence**: Integrated the `message_status` field to distinguish between `Draft` and `Sent` states.
+- **Relational Messaging**: Hardened the links between Users (Senders) and Teams (Recipients) for the communication bus.
+- *Reference*: See [ENTITY_LOG.md](./ENTITY_LOG.md) for full mapping.
+
+---
+
 ## WHERE to build it
 - **Views**: `messages_app/views.py`
 - **URLs**: `messages_app/urls.py`

@@ -17,10 +17,11 @@ Build the central directory of the application. You are responsible for showing 
 
 ---
 
-## WHERE to build it
-- **Views**: `teams/views.py`
-- **URLs**: `teams/urls.py`
-- **Templates**: `templates/teams/team_list.html`, `templates/teams/team_detail.html`
+## 📊 Database Contribution (Student 1)
+You are the primary custodian of the **Team** entity. Your implementation includes the expansion of the schema beyond CW1 basics:
+- **Enhanced Team Entity**: Integrated `mission`, `tech_tags`, and `status`.
+- **New Entity 14 (Vote)**: Developed the endorsement system allowing engineers to vote for teams.
+- *Reference*: See [ENTITY_LOG.md](./ENTITY_LOG.md) for full mapping.
 
 ---
 

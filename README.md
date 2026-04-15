@@ -28,11 +28,17 @@ graph TD
     
     subgraph "Core Modules"
         Dashboard[Unified Stats Hub]
-        Teams[Team & Member Directory]
-        Org[Org Chart & Dependencies]
+        Teams[Directory & Profiles]
+        Org[Org Chart & Depts]
         Messages[Communication Bus]
-        Schedule[Meeting & Release Logistics]
-        Reports[Analytics & Governance]
+        Schedule[Meeting Logistics]
+        Reports[Governance & Auditing]
+    end
+
+    subgraph "Database Entities (15)"
+        E1_13[Original 13 Baseline]
+        E14[Vote / Endorsements]
+        E15[TimeTrack / Compliance]
     end
     
     Logic --- Dashboard
@@ -41,6 +47,9 @@ graph TD
     Logic --- Messages
     Logic --- Schedule
     Logic --- Reports
+    DB --- E1_13
+    DB --- E14
+    DB --- E15
 ```
 
 ## High-Fidelity Features & "Design Spells"

@@ -17,6 +17,14 @@ Provide the big-picture view of Sky engineering. You are responsible for showing
 
 ---
 
+## 📊 Database Contribution (Student 2)
+You are the primary custodian of the **Department** and **Dependency** entities.
+- **Enhanced Department Entity**: Implemented recursive detail linking and lead information display.
+- **Dependency Mapping**: Managed the self-referencing links between teams to visualize the engineering hierarchy.
+- *Reference*: See [ENTITY_LOG.md](./ENTITY_LOG.md) for full mapping.
+
+---
+
 ## WHERE to build it
 - **Views**: `organisation/views.py`
 - **URLs**: `organisation/urls.py`

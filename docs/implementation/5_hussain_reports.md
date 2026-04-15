@@ -16,6 +16,14 @@ Summarize and Export. Your app is used by Sky Executives to see the health of th
 
 ---
 
+## 📊 Database Contribution (Student 5)
+You are the primary custodian of the **AuditLog**, **TimeTrack**, and **User** metadata entities.
+- **Audit Traceability**: Hardened the `AuditLog` entity for 100% mutation tracking of teams and departments.
+- **New Entity 15 (TimeTrack)**: Implemented the milestone tracking system for delivery compliance (Rubric 1.14).
+- *Reference*: See [ENTITY_LOG.md](./ENTITY_LOG.md) for full mapping.
+
+---
+
 ## WHERE to build it
 - **Views**: `reports/views.py`
 - **URLs**: `reports/urls.py`

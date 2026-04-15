@@ -15,6 +15,14 @@ Manage time across the engineering organization. Your app handles the logistics 
 
 ---
 
+## 📊 Database Contribution (Student 4)
+You are the primary custodian of the **Meeting** and **StandupInfo** entities.
+- **Enhanced Meeting Entity**: Integrated `platform_type` and `meeting_link` for operational readiness.
+- **Logistics Logic**: Implemented the dual-view (Weekly/Monthly) toggle to visualize meeting density.
+- *Reference*: See [ENTITY_LOG.md](./ENTITY_LOG.md) for full mapping.
+
+---
+
 ## WHERE to build it
 - **Views**: `schedule/views.py`
 - **URLs**: `schedule/urls.py`
