@@ -94,3 +94,4 @@ Use **Glassmorphism** for the calendar background.
 - [x] The calendar correctly identifies "Today's" date.
 - [x] Form includes a 'Purpose' field (Mission/Sync/Emergency).
 - [x] Successfully integrated logic with Riagul (Teams) and Suliman (Messages).
+- [x] Signal-based audit logging for meeting mutations.

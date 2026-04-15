@@ -93,7 +93,7 @@ Use the **Sky Spectrum** for the mission header.
 ---
 
 ## RIAGUL'S CHECKLIST
-- [ ] Team list supports both 'Grid' and 'List' modes.
-- [ ] Team Detail shows the Slack channel clearly.
-- [ ] "Disband" button is only visible to Admin users.
-- [ ] Each page has your author comment at the top.
+- [x] Team list supports both 'Grid' and 'List' modes.
+- [x] Team Detail shows the Slack channel clearly.
+- [x] "Disband" button is only visible to Admin users.
+- [x] Each page has your author comment at the top.

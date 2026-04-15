@@ -89,7 +89,7 @@ def compose(request):
 ---
 
 ## SULIMAN'S CHECKLIST
-- [ ] Inbox shows most recent messages at the top.
-- [ ] Compose page includes a "Draft" button to save without sending.
-- [ ] Users receive a notification count on the dashboard for unread messages.
-- [ ] All forms include `{% csrf_token %}` for security.
+- [x] Inbox shows most recent messages at the top.
+- [x] Compose page includes a "Draft" button to save without sending.
+- [x] Users receive a notification count on the dashboard for unread messages.
+- [x] All forms include `{% csrf_token %}` for security.

@@ -93,7 +93,7 @@ def dependency_view(request):
 ---
 
 ## LUCAS'S CHECKLIST
-- [ ] `populate_data.py` includes all 6 departments from the Excel file.
-- [ ] Departments are sorted alphabetically.
-- [ ] Dependency view allows switching between 'Graph' and 'List'.
-- [ ] Code is formatted with clear comments explaining the self-referencing model.
+- [x] `populate_data.py` includes all 6 departments from the Excel file.
+- [x] Departments are sorted alphabetically.
+- [x] Dependency view allows switching between 'Graph' and 'List'.
+- [x] Code is formatted with clear comments explaining the self-referencing model.

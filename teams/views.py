@@ -92,6 +92,7 @@ def team_detail(request, team_id):
         repos = RepositoryLink.objects.filter(team=team)
         boards = BoardLink.objects.filter(team=team)
 
+
         upstream_deps = Dependency.objects.filter(
             to_team=team, dependency_type='upstream'
         ).select_related('from_team')
@@ -115,6 +116,7 @@ def team_detail(request, team_id):
             'downstream_deps': downstream_deps,
             'tech_tags': tech_tags,
             'vote_count': vote_count,
+            'has_voted': has_voted,
             'has_voted': has_voted,
         }
         return render(request, 'teams/team_detail.html', context)
@@ -142,4 +144,23 @@ def vote_team(request, team_id):
         return redirect('teams:team_detail', team_id=team_id)
     except Exception as error:
         messages.error(request, f"Error processing vote: {str(error)}")
+        return redirect('teams:team_list')
+
+@login_required
+def disband_team(request, team_id):
+    """
+    Sets a team's status to 'Disbanded'. Only accessible by superusers/admins.
+    """
+    if not request.user.is_superuser:
+        messages.error(request, "Access denied. Only administrators can disband teams.")
+        return redirect('teams:team_detail', team_id=team_id)
+
+    try:
+        team = get_object_or_404(Team, team_id=team_id)
+        team.status = 'Disbanded'
+        team.save()
+        messages.warning(request, f"Team {team.team_name} has been disbanded.")
+        return redirect('teams:team_detail', team_id=team_id)
+    except Exception as error:
+        messages.error(request, f"Error disbanding team: {str(error)}")
         return redirect('teams:team_list')

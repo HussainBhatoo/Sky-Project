@@ -51,6 +51,15 @@
             {% if has_voted %}Endorsed{% else %}Endorse Team{% endif %} 
             <span class="badge ml-1" style="background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 10px;">{{ vote_count }}</span>
         </a>
+        {% if user.is_superuser and team.status != 'Disbanded' %}
+        <form action="{% url 'teams:disband_team' team.team_id %}" method="POST" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-ghost" style="color: var(--sky-accent); background: rgba(255, 60, 60, 0.1); font-size: 0.85rem;" 
+                    onclick="return confirm('Are you sure you want to disband this team? This action is reversible by changing status in Admin.')">
+                <i class='bx bx-trash'></i> Disband
+            </button>
+        </form>
+        {% endif %}
     </div>
 </div>
 

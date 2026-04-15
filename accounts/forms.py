@@ -7,6 +7,8 @@ class UserSignupForm(UserCreationForm):
     Custom Signup Form that includes the mandatory email field 
     required by the Sky Engineering Portal specifications.
     """
+    first_name = forms.CharField(required=True, label='First Name')
+    last_name = forms.CharField(required=True, label='Last Name')
     email = forms.EmailField(
         required=True,
         help_text='Must be an official @sky.com or @sky.uk email'
@@ -14,7 +16,7 @@ class UserSignupForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = UserCreationForm.Meta.fields + ('email',)
+        fields = UserCreationForm.Meta.fields + ('first_name', 'last_name', 'email')
 
     def clean_email(self):
         """Ensure email is unique across the registry and has a valid corporate domain."""

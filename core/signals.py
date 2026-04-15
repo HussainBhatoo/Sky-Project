@@ -12,7 +12,8 @@ Group Lead: Maurya Patel (W2112200)
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 
-from core.models import Team, Department, Meeting, Message, AuditLog
+from django.contrib.auth.signals import user_logged_in
+from core.models import Team, Department, Meeting, Message, AuditLog, Vote
 
 
 def _log(action_type, entity_type, entity_id, summary):
@@ -106,3 +107,28 @@ def message_post_delete(sender, instance, **kwargs):
     """Log Message DELETE events automatically."""
     _log('DELETE', 'Message', instance.message_id,
          f'Message "{instance.message_subject}" was deleted.')
+
+
+# ─── VOTE SIGNALS ─────────────────────────────────────────────────────────────
+
+@receiver(post_save, sender=Vote)
+def vote_post_save(sender, instance, created, **kwargs):
+    """Log Vote creation events automatically."""
+    if created:
+        _log('CREATE', 'Vote', instance.vote_id,
+             f'User "{instance.voter.username}" endorsed team "{instance.team.team_name}".')
+
+
+@receiver(post_delete, sender=Vote)
+def vote_post_delete(sender, instance, **kwargs):
+    """Log Vote deletion (un-endorse) events automatically."""
+    _log('DELETE', 'Vote', instance.vote_id,
+         f'User "{instance.voter.username}" removed endorsement for team "{instance.team.team_name}".')
+
+
+# ─── AUTH SIGNALS ─────────────────────────────────────────────────────────────
+
+@receiver(user_logged_in)
+def log_user_login(sender, request, user, **kwargs):
+    """Log User Login events automatically."""
+    _log('UPDATE', 'User', user.id, f'User "{user.username}" logged in successfully.')

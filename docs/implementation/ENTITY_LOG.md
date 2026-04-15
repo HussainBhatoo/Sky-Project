@@ -16,7 +16,7 @@ The following 13 entities formed the original system core. In CW2, several were 
 | :--- | :--- | :--- | :--- | :--- |
 | **01** | **User** | Authentication & SSO | Extended with `audit_actions` relationship for traceability. | ✅ Hardened |
 | **02** | **Department** | Organisational grouping | Added unique `department_id` and recursive Detail linking. | ✅ Enhanced |
-| **03** | **Team** | Team profiles | Added `mission`, `tech_tags`, `status`, and `lead_email`. | ✅ High-Fi Upgrade |
+| **03** | **Team** | Team profiles | Added `mission`, `tech_tags`, `status` (Active/Disbanded), and `lead_email`. | ✅ High-Fi Upgrade |
 | **04** | **TeamMember** | Registry of engineers | Hardened relational integrity with Team model. | ✅ Stable |
 | **05** | **Dependency** | Upstream/Downstream links | Integrated into visual Org Chart & interactive mapping. | ✅ Integrated |
 | **06** | **ContactChannel**| External links (Slack/Teams)| Standardized types (`slack`, `teams`, `email`). | ✅ Stable |
@@ -26,7 +26,7 @@ The following 13 entities formed the original system core. In CW2, several were 
 | **10** | **StandupInfo** | Daily sync coordination | One-to-One mapping per team for precise scheduling. | ✅ Hardened |
 | **11** | **Message** | In-app communication | Added `message_status` (`draft`/`sent`) for bus logic. | ✅ Functional |
 | **12** | **Meeting** | Schedule coordination | Added `platform_type` and `meeting_link` integration. | ✅ Enhanced |
-| **13** | **AuditLog** | Edit history | Explicitly mapped to `actor_user` for accountability. | ✅ Reporting Ready |
+| **13** | **AuditLog** | Edit history | Now monitors Logins, Votes, and Team Lifecycle events (Disband). | ✅ Reporting Ready |
 
 ---
 

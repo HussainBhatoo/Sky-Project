@@ -176,10 +176,10 @@ The viva is marked separately inside Code Functionality and Version Control:
 |---------|---------|
 | Home/Landing Page | Links to User Login, Admin Login, Sign Up, Forgot Password |
 | User Login | Email + Password form, session management, redirect to dashboard |
-| User Registration | Local only (NO Google/OAuth), fields: full name, username, email, password, confirm password, password rules shown |
+| User Registration | Local only (NO Google/OAuth), fields: First Name, Last Name, Username, Email, Password, Confirm Password |
 | Forgot Password | Reset password flow |
 | Logout | Clear session, redirect to login |
-| User Profile | View + edit: name, username, email, change password |
+| User Profile | View + edit: First Name, Last Name, Username, Email, Change Password |
 | Dashboard | Stat cards (total teams, departments, upstream/downstream counts), recent updates list, grid/list mode toggle, notifications, profile link |
 | Global Search | Real-time debounced AJAX search with high-fidelity results dropdown |
 | Design Spells | Professional micro-interactions (tilt, shine, pulse) applied globally |
@@ -208,9 +208,11 @@ All admin management happens through Django's built-in /admin/ — we just custo
 - Each team: minimum 5 engineers (Team Members)
 - Departments from Sky data: xTV_Web, Native_TVs, Mobile, Reliability_Tool, Arch, Programme
 
-Auto-log ALL create/update/delete operations in the system.
-Display page: searchable table of who did what and when.
-Implementation: Django signals tracking User, Action Type, Entity, and Changes.
+Auto-log ALL create/update/delete operations, login events, and voting activities across the system.
+Display page: Searchable table of who did what and when with high-fidelity formatting.
+Implementation: Django signals tracking User, Action Type (LOGIN/LOGOUT/CREATE/UPDATE/DELETE), Entity, and Changes.
+#### D. Management Logic
+- **Disband Team**: Administrative capability to mark a team as "Disbanded" via the UI, preserving record history while halting active registry operations.
 
 #### E. Professionalization Layer (High-Fi)
 - **Design Spells**: Global CSS utility library for premium micro-interactions.
@@ -229,7 +231,8 @@ Implementation: Django signals tracking User, Action Type, Entity, and Changes.
 | Team Detail Page | Team mission/responsibilities, manager, contact channels (Slack/Teams/email), team members table, code repositories list, upstream + downstream dependencies |
 | Email Team Button | Compose message to team from team detail page |
 | Schedule Meeting Button | Quick link to schedule meeting for this team |
-| Team Voting | "Endorse Team" button on detail page with status toggle |
+| Team Voting | "Endorse Team" button on detail page with status toggle (Audit Logged) |
+| Disband Team | Admin-only button to toggle team status to 'Disbanded' |
 | Skills/Tags | Display team's tech stack / skills as badge chips |
 
 #### Student 2 — Lucas — Organisation App (`organisation/`)
@@ -261,9 +264,8 @@ Implementation: Django signals tracking User, Action Type, Entity, and Changes.
 #### Student 5 — Hussain — Reports App (`reports/`)
 | Feature | Details |
 |---------|---------|
-| Reports Dashboard | Overview of available reports |
-| Generate PDF Report | PDF with: total no. of teams, summary stats, teams without managers |
-| Generate Excel Report | Same data in Excel (.xlsx) format |
+| Reports Dashboard | Overview of available reports with real-time stats |
+| Generate CSV Report | Comprehensive CSV export of team, department, and dependency data |
 | Team Summary Report | Name, department, member count, dependency count |
 | Teams Without Managers | List of teams missing a manager |
 
