@@ -9,9 +9,9 @@ This document tracks the final validation status of all integrated modules again
 | **Teams** | Riagul Hossain | audit_teams.md | *PENDING FINAL SIGN-OFF* |
 | **Organisation** | Lucas Korotkov | audit_organisation.md | *PENDING FINAL SIGN-OFF* |
 | **Messaging** | Suliman Roshid | [audit_messages.md](audit_messages.md) | **PASS** |
-| **Schedule** | Maurya Patel | audit_schedule.md | *PENDING FINAL SIGN-OFF* |
+| **Schedule** | Maurya Patel | [audit_schedule.md](audits/audit_schedule.md) | **PASS** |
 | **Reports** | Hussain Bhatoo | audit_reports.md | *PENDING FINAL SIGN-OFF* |
 | **Audit Log** | GROUP | audit_auditlog.md | *PENDING FINAL SIGN-OFF* |
 
-## Final Completion Status: 37.5% (3/8 Modules Fully Audited)
+## Final Completion Status: 50.0% (4/8 Modules Fully Audited)
 *Note: Technical implementation is 100% complete; this index tracks the formal documentation of verification results.*

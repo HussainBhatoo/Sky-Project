@@ -64,3 +64,15 @@ class MeetingForm(forms.ModelForm):
             'meeting_link': 'Meeting Link (optional)',
             'agenda_text': 'Agenda',
         }
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        start_datetime = cleaned_data.get('start_datetime')
+        end_datetime = cleaned_data.get('end_datetime')
+
+        if start_datetime and end_datetime:
+            if end_datetime <= start_datetime:
+                raise forms.ValidationError(
+                    "The end date and time must be after the start date and time."
+                )
+        return cleaned_data

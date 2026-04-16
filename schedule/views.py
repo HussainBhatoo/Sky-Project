@@ -70,7 +70,10 @@ def schedule_calendar(request):
         # Always pass a form instance so the template renders the fields
         form = MeetingForm(initial={"team": prefill_team_id} if prefill_team_id else {})
 
-        meetings = Meeting.objects.select_related("team", "created_by_user").order_by("start_datetime")
+        # Filter out past meetings for the 'Upcoming' list
+        meetings = Meeting.objects.select_related("team", "created_by_user").filter(
+            start_datetime__gte=timezone.now()
+        ).order_by("start_datetime")
         if team_filter:
             meetings = meetings.filter(team__team_id=team_filter)
 
@@ -97,29 +100,38 @@ def schedule_calendar(request):
 def schedule_weekly(request):
     """
     Weekly view: displays meetings in a simple list for the current week.
+    Supports ?week_offset=N to navigate future/past weeks.
     """
     try:
+        week_offset = int(request.GET.get("week_offset", 0))
         today = timezone.now().date()
-        # Find start of week (Monday)
-        start_of_week = today - timedelta(days=today.weekday())
+        
+        # Calculate the start of the targeted week (Monday)
+        start_of_week = today - timedelta(days=today.weekday()) + timedelta(weeks=week_offset)
         end_of_week = start_of_week + timedelta(days=6)
 
+        # Filter meetings for this specific week range
         meetings = Meeting.objects.filter(
             start_datetime__date__range=[start_of_week, end_of_week]
         ).select_related("team", "created_by_user").order_by("start_datetime")
 
         teams = Team.objects.all().order_by("team_name")
         
-        # Calendar context for sidebar (current month)
+        # Important: Include the form so the Sidebar creation works in Weekly view
+        form = MeetingForm()
+        
+        # Calendar context for sidebar (using current month/now for the mini-widget)
         now = timezone.now()
-        calendar_ctx = _build_calendar_context(now.year, now.month, meetings)
+        calendar_ctx = _build_calendar_context(now.year, now.month, Meeting.objects.filter(start_datetime__month=now.month))
 
         context = {
             "meetings": meetings,
             "teams": teams,
+            "form": form,
             "active_view": "weekly",
             "start_of_week": start_of_week,
             "end_of_week": end_of_week,
+            "week_offset": week_offset,
             "today": now,
         }
         context.update(calendar_ctx)

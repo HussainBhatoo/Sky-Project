@@ -253,15 +253,17 @@ Implementation: Django signals tracking User, Action Type (LOGIN/LOGOUT/CREATE/U
 | **Audit Logging** | **Signal-based CRUD tracking for all messages** | ✅ PASS |
 | **Validation** | **Form-level mandatory body and character boundary checks** | ✅ PASS |
 
-#### Student 4 — MAURYA — Schedule App (`schedule/`)
-| Feature | Details |
-|---------|---------|
-| Upcoming Meetings List | All upcoming meetings for user's teams, sorted by date |
-| Schedule Meeting Form | Meeting title, Team dropdown (FK), Date + Time picker, End time |
-| Monthly Calendar View | Interactive visual calendar showing meetings plotted by month |
-| Weekly View | Focused list view navigation for current week logistics |
-| Meeting Detail | View individual meeting info, agenda, link |
-| Edit/Delete Meeting | Edit existing meeting details |
+#### Student 4 — MAURYA — Schedule App (`schedule/`) [COMPLETED & AUDITED]
+| Feature | Details | Status |
+|---------|---------| :--- |
+| Upcoming Meetings List | All upcoming meetings for user's teams, sorted by date | ✅ PASS |
+| Schedule Meeting Form | Meeting title, Team dropdown (FK), Date + Time picker, End time | ✅ PASS |
+| Monthly Calendar View | Interactive visual calendar showing meetings plotted by month | ✅ PASS |
+| Weekly View | Focused list view navigation for current week logistics | ✅ PASS |
+| Meeting Detail | View individual meeting info, agenda, link | ✅ PASS |
+| Edit/Delete Meeting | Edit existing meeting details | ✅ PASS |
+| **Validation** | **Formal datetime logic validation (Start < End)** | ✅ PASS |
+| **Logic Filtering** | **Past meeting exclusion from upcoming lists** | ✅ PASS |
 
 #### Student 5 — Hussain — Reports App (`reports/`)
 | Feature | Details |

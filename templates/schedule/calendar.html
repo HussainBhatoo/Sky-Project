@@ -72,9 +72,19 @@
             {% if active_view == 'weekly' %}Weekly Schedule{% else %}Upcoming Meetings{% endif %}
         </h3>
         {% if active_view == 'weekly' %}
-        <p style="font-size: 0.85rem; color: var(--muted-foreground); margin-bottom: 1.5rem;">
-            Showing sessions from <strong>{{ start_of_week|date:"d M" }}</strong> to <strong>{{ end_of_week|date:"d M Y" }}</strong>
-        </p>
+        <div class="flex-between mb-1">
+            <p style="font-size: 0.85rem; color: var(--muted-foreground);">
+                Showing sessions from <strong>{{ start_of_week|date:"d M" }}</strong> to <strong>{{ end_of_week|date:"d M Y" }}</strong>
+            </p>
+            <div class="flex gap-1">
+                <a href="?active_view=weekly&week_offset={{ week_offset|add:'-1' }}" class="btn btn-ghost" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">
+                    <i class='bx bx-chevron-left'></i> Prev Week
+                </a>
+                <a href="?active_view=weekly&week_offset={{ week_offset|add:'1' }}" class="btn btn-ghost" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">
+                    Next Week <i class='bx bx-chevron-right'></i>
+                </a>
+            </div>
+        </div>
         {% endif %}
 
         {% if meetings %}
@@ -165,7 +175,10 @@
         <!-- Quick Filter by Team -->
         <div class="card spell-tilt mt-2" style="padding: 1rem;">
             <h4 style="font-size: 0.85rem; color: var(--sky-header-blue); margin-bottom: 0.75rem;">Filter by Team</h4>
-            <form method="get" action="{% url 'schedule:calendar' %}">
+            <form method="get" action="{% if active_view == 'weekly' %}{% url 'schedule:weekly' %}{% else %}{% url 'schedule:calendar' %}{% endif %}">
+                {% if active_view == 'weekly' %}
+                    <input type="hidden" name="week_offset" value="{{ week_offset }}">
+                {% endif %}
                 <select name="team_id" class="filter-select" style="width: 100%;" onchange="this.form.submit()">
                     <option value="">All Teams</option>
                     {% for team in teams %}
