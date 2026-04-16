@@ -7,7 +7,7 @@ import csv
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.utils import timezone
 
 from core.models import Team, Department, TeamMember, Meeting, Dependency
@@ -38,6 +38,11 @@ def reports_home(request):
             member_count=Count('members')
         ).order_by('-member_count')[:10]  # Top 10 largest teams
 
+        # Management Gap Analysis (Rubric Requirement)
+        manager_less_teams = Team.objects.filter(
+            Q(team_leader_name='') | Q(team_leader_name__isnull=True)
+        ).select_related('department')
+
         context = {
             'total_departments': total_departments,
             'total_teams': total_teams,
@@ -46,6 +51,7 @@ def reports_home(request):
             'total_dependencies': total_dependencies,
             'department_stats': department_stats,
             'team_stats': team_stats,
+            'manager_less_teams': manager_less_teams,
         }
         return render(request, 'reports/reports_home.html', context)
     except Exception as error:

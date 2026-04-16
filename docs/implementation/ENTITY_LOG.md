@@ -4,7 +4,7 @@
 This document tracks the evolution of the system's data architecture, highlighting the enhancements made to the original 13 baseline entities and the implementation of 2 additional entities for full rubric compliance in Coursework 2.
 
 > [!TIP]
-> **For full technical mapping (PKs, FKs, Fields, and ERDs), please refer to the [Detailed Database Specification](./DOCS_DATABASE_SPEC.md).**
+> **For full technical mapping (PKs, FKs, Fields, and ERDs), please refer to the [Detailed Database Specification](./DATABASE_SPEC.md).**
 
 ---
 

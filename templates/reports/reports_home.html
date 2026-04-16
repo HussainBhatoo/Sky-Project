@@ -114,6 +114,47 @@
         </div>
     </div>
 </div>
+</div>
+
+<!-- Management Gaps (Rubric Requirement) -->
+<div class="card animate-slide-up mt-3 mb-3" style="animation-delay: 0.3s; border-left: 4px solid #ef4444;">
+    <h4 style="color: #b91c1c; margin-bottom: 1rem;">
+        <i class='bx bx-error-circle' style="margin-right: 0.4rem;"></i> Management Gaps: Teams Without Leaders
+    </h4>
+    <p style="font-size: 0.9rem; color: var(--muted-foreground); margin-bottom: 1.5rem;">
+        The following teams currently have no "Team Leader Name" assigned. This list is critical for organizational oversight.
+    </p>
+    <div style="overflow-x: auto;">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Team Name</th>
+                    <th>Department</th>
+                    <th>Action Required</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for team in manager_less_teams %}
+                <tr>
+                    <td style="font-weight: 600;">
+                        <a href="{% url 'teams:team_detail' team.team_id %}" style="text-decoration: none;">{{ team.team_name }}</a>
+                    </td>
+                    <td>{{ team.department.department_name|default:"—" }}</td>
+                    <td>
+                        <span class="chip chip-bug">Needs Leader</span>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="text-center" style="padding: 2rem; color: #059669; font-weight: 500;">
+                        <i class='bx bx-check-double'></i> All teams currently have assigned leaders.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 
 <!-- Print Styles -->
 <style>

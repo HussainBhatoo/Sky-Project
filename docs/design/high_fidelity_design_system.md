@@ -8,9 +8,9 @@ The Sky Team Registry initially utilized a baseline design system that met core 
 
 ## Decision
 We have decided to implement a "High-Fidelity" enhancement layer, consisting of:
-1.  **Design Spells:** A library of CSS-driven micro-interactions (tilt, shine, pulse) applied to all card-based components.
-2.  **Global Semantic Search:** A real-time, debounced AJAX search engine replacing the previous static/mock input.
-3.  **Documentation Standards:** Elevating project READMEs and technical specs to enterprise-level quality.
+1. **Design Spells:** A library of CSS-driven micro-interactions (tilt, shine, pulse) applied to all card-based components.
+2. **Global Semantic Search:** A real-time, debounced AJAX search engine replacing the previous static/mock input.
+3. **Documentation Standards:** Elevating project READMEs and technical specs to enterprise-level quality.
 
 ## Rationale
 - **User Experience:** Micro-interactions provide subtle feedback that makes the interface feel more responsive and premium.
@@ -19,5 +19,5 @@ We have decided to implement a "High-Fidelity" enhancement layer, consisting of:
 
 ## Consequences
 - **Positive:** Significant increase in visual quality; improved navigation speed; better documentation for future developers.
-- **Neutral:** Slight increase in CSS payload (minimal due to vanilla implementation); requirement for backend endpoint management for search.
-- **Negative:** None identified; performance remains high due to avoidances of heavy JS frameworks (React/Tailwind) for these specific visual details.
+- **Neutral:** Slight increase in CSS payload (minimal due to avoidances of heavy JS frameworks).
+- **Negative:** None identified; performance remains high due to lightweight implementation.
