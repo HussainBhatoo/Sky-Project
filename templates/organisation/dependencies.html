@@ -185,6 +185,8 @@
             svg += '<line x1="' + (from.x + 145) + '" y1="' + (from.y + 15) + '" x2="' + (to.x - 5) + '" y2="' + (to.y + 15) + '" stroke="#ccc" stroke-width="1.5" marker-end="url(#arrow)"/>';
         });
 
+        var teamIdMap = {{ team_id_map|safe }};
+
         // Draw nodes
         allNames.forEach(function(name) {
             var pos = nodePositions[name];
@@ -195,8 +197,13 @@
             var textColor = isCenter ? 'white' : '#333';
             var stroke = isCenter ? '#030213' : isUp ? '#c4b5fd' : '#fed7aa';
             var displayName = name.length > 22 ? name.substring(0, 20) + '...' : name;
+            var teamId = teamIdMap[name];
 
-            svg += '<g style="cursor:pointer;">';
+            var onClick = "window.location.href='?focus=" + encodeURIComponent(name) + "'";
+            var onDblClick = "window.location.href='/teams/" + teamId + "/'";
+
+            svg += '<g style="cursor:pointer;" onclick="' + onClick + '" ondblclick="' + onDblClick + '" class="graph-node">';
+            svg += '<title>' + name + ' (Click to focus, Double-click for details)</title>';
             svg += '<rect x="' + (pos.x - 5) + '" y="' + pos.y + '" width="150" height="30" rx="6" fill="' + fill + '" stroke="' + stroke + '" stroke-width="1.5"/>';
             svg += '<text x="' + (pos.x + 70) + '" y="' + (pos.y + 19) + '" text-anchor="middle" fill="' + textColor + '" font-size="11">' + displayName + '</text>';
             svg += '</g>';

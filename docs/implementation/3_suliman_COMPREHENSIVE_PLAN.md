@@ -43,5 +43,6 @@ Build a real-time communication hub for engineering leads. This module facilitat
 ---
 
 ## Progress Tracking
-- [ ] Form validation implemented (Subject and Content required).
-- [ ] Read/Unread CSS toggles working correctly.
+- [x] Form validation implemented (Subject and Content required).
+- [x] Read/Unread CSS toggles working correctly.
+- [x] Draft resumption and message deletion verified.

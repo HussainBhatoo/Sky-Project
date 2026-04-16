@@ -34,13 +34,22 @@
                 <a href="{% url 'organisation:department_detail' item.department.department_id %}" style="text-decoration: none;">
                     <h3 style="color: var(--sky-header-blue);">{{ item.department.department_name }}</h3>
                 </a>
-                <p style="font-size: 0.8rem; color: var(--muted-foreground);">
-                    Head: {{ item.department.department_lead_name }}
+                <p style="font-size: 0.8rem; color: var(--muted-foreground); display: flex; align-items: center; gap: 0.5rem;">
+                    <span>Head: {{ item.department.department_lead_name }}</span>
+                    {% if item.department.specialization %}
+                    <span style="opacity: 0.4;">|</span>
+                    <span style="color: var(--sky-primary); font-weight: 500;">{{ item.department.specialization }}</span>
+                    {% endif %}
                 </p>
             </div>
-            <span class="chip chip-department">
-                <i class='bx bx-group' style="font-size: 0.8rem;"></i> {{ item.teams|length }} teams
-            </span>
+            <div class="flex gap-1">
+                <span class="chip" style="background: rgba(3, 2, 19, 0.03); color: var(--sky-header-blue); border: 1px solid var(--border); font-size: 0.75rem;">
+                    <i class='bx {% if item.has_voted %}bxs-heart{% else %}bx-heart{% endif %}' style="color: var(--sky-primary); margin-right: 0.2rem;"></i> {{ item.department.vote_count }}
+                </span>
+                <span class="chip chip-department">
+                    <i class='bx bx-group' style="font-size: 0.8rem;"></i> {{ item.teams|length }} teams
+                </span>
+            </div>
         </div>
         <div class="grid-3">
             {% for team in item.teams %}

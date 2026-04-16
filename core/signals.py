@@ -126,6 +126,24 @@ def vote_post_delete(sender, instance, **kwargs):
          f'User "{instance.voter.username}" removed endorsement for team "{instance.team.team_name}".')
 
 
+# ─── MESSAGE SIGNALS ──────────────────────────────────────────────────────────
+
+@receiver(post_save, sender=Message)
+def message_post_save(sender, instance, created, **kwargs):
+    """Log Message creation (sent/draft) events automatically."""
+    if created:
+        verbosity = 'saved a draft' if instance.message_status == 'draft' else 'sent a message'
+        _log('CREATE', 'Message', instance.message_id,
+             f'User "{instance.sender_user.username}" {verbosity} to team "{instance.team.team_name}".')
+
+
+@receiver(post_delete, sender=Message)
+def message_post_delete(sender, instance, **kwargs):
+    """Log Message deletion events automatically."""
+    _log('DELETE', 'Message', instance.message_id,
+         f'User "{instance.sender_user.username}" deleted a message/draft intended for "{instance.team.team_name}".')
+
+
 # ─── AUTH SIGNALS ─────────────────────────────────────────────────────────────
 
 @receiver(user_logged_in)

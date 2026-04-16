@@ -7,20 +7,21 @@ Enable collaboration. Your app is the "Slack-lite" of the registry, allowing use
 ---
 
 ## WHAT to build
-1. **Inbox**: A list of messages received, with clear "Read/Unread" indicators.
+1. **Inbox**: Personalized view showing messages sent to teams where the user is a member.
 2. **Sent & Drafts Tabs**: Dedicated tabs to track outbound correspondence and in-progress saves.
-3. **Tabbed View**: Clean buttons to switch between Inbox, Sent, and Drafts.
-3. **Compose UI**: A search-enabled "To" field (search for User or Team).
-4. **Message Detail**: A clean reading pane for individual messages.
-5. **Team Communication**: Enable formal inquiries between engineering teams.
+3. **Draft Resumption**: Ability to reopen a saved draft, pre-filling all previous fields for editing.
+4. **Message Management**: Capability to delete sent messages or drafts (sender-only permission).
+5. **Reply Integration**: One-click reply from any received message.
+6. **Message Detail**: A clean reading pane for individual messages with contextual action buttons.
 
 ---
 
 ## 📊 Database Contribution (Student 3)
 You are the primary custodian of the **Message** entity.
+- **Audit Persistence**: Integrated automated signal-based logging in `signals.py` for every message creation and deletion.
 - **Message Status Persistence**: Integrated the `message_status` field to distinguish between `Draft` and `Sent` states.
-- **Relational Messaging**: Hardened the links between Users (Senders) and Teams (Recipients) for the communication bus.
-- *Reference*: See [ENTITY_LOG.md](./ENTITY_LOG.md) for full mapping.
+- **Relational Messaging**: Hardened the links between Users (Senders) and Teams (Recipients).
+- *Reference*: See [ENTITY_LOG.md](./ENTITY_LOG.md) for full mapping and [audit_messages.md](../audit_messages.md) for verification.
 
 ---
 
@@ -91,5 +92,10 @@ def compose(request):
 ## SULIMAN'S CHECKLIST
 - [x] Inbox shows most recent messages at the top.
 - [x] Compose page includes a "Draft" button to save without sending.
+- [x] Drafts can be resumed, edited, and sent after the initial save.
+- [x] Message deletion implemented for sent messages and drafts.
 - [x] Users receive a notification count on the dashboard for unread messages.
+- [x] Mandatory body validation and character limits (5,000) enforced. [NEW]
+- [x] Automated Audit Logging via Django signals verified. [NEW]
+- [x] Advanced Reply feature with subject/body pre-filling verified. [NEW]
 - [x] All forms include `{% csrf_token %}` for security.

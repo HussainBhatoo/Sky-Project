@@ -24,7 +24,7 @@ The following 13 entities formed the original system core. In CW2, several were 
 | **08** | **BoardLink** | Project Mgmt links (Jira) | Integrated with Team Detail "Links" sidebar. | ✅ Integrated |
 | **09** | **WikiLink** | Info silos (Confluence) | Integrated with Team Detail "Links" sidebar. | ✅ Integrated |
 | **10** | **StandupInfo** | Daily sync coordination | One-to-One mapping per team for precise scheduling. | ✅ Hardened |
-| **11** | **Message** | In-app communication | Added `message_status` (`draft`/`sent`) for bus logic. | ✅ Functional |
+| **11** | **Message** | In-app communication | Added `message_status` (`draft`/`sent`) and automated signal-based auditing. | ✅ PRODUCTION READY |
 | **12** | **Meeting** | Schedule coordination | Added `platform_type` and `meeting_link` integration. | ✅ Enhanced |
 | **13** | **AuditLog** | Edit history | Now monitors Logins, Recoveries, Votes, and Team Lifecycle events (Disband). | ✅ Audited & Active |
 
@@ -39,6 +39,12 @@ Pursuant to **Rubric Requirement 1.14**, two completely new entities were implem
 - **Role**: Provides a quantitative metric for team recognition and "Team Health" visualizations.
 - **Structure**: `voter` (FK to User), `team` (FK to Team), `voted_at` (Timestamp).
 - **Compliance**: Used for peer-recognition features and custom reporting.
+
+### Entity 11: Message
+- **Relational Integrity**: Foreign Keys to `User` and `Team`.
+- **Status Persistence**: Now handles full lifecycle: `Draft` -> `Sent`.
+- **CRUD Operations**: Verified support for creation, retrieval, updates (drafts), and deletion.
+- **Filtering Logic**: Implemented personalized inboxing based on team membership.
 
 ### Entity 15: TimeTrack (Compliance)
 - **Purpose**: A distinct entity for tracking engineering time spent on organizational milestones.

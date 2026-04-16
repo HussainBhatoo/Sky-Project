@@ -37,12 +37,12 @@ class Command(BaseCommand):
 
             # Real Sky departments
             dept_data = [
-                {'name': 'xTV_Web',         'head': 'Sebastian Holt / Nora Chandler', 'desc': "Responsible for Sky's cross-platform TV and Web streaming clients. Covers infrastructure scalability, security, CI/CD, and full-stack web development for Sky's Lightning xTV and Client Web platforms."},
-                {'name': 'Native TVs',       'head': 'Mason Briggs',                  'desc': "Owns development of native TV applications for Roku TV and Apple TV platforms. Focuses on agile delivery, performance, patch management, and fault-tolerant systems."},
-                {'name': 'Mobile',           'head': 'Violet Ramsey / Adam Sinclair', 'desc': "Builds and maintains Sky's mobile applications. Covers caching, version control, CI/CD pipelines, UI performance, and API integration."},
-                {'name': 'Reliability_Tool', 'head': 'Lucy Vaughn',                   'desc': "Platform reliability, tooling, and developer experience. Includes serverless computing, encryption, UX design, hackathon innovation, and frontend framework development."},
-                {'name': 'Arch',             'head': 'Theodore Knox',                 'desc': "Architecture and platform design. Responsible for API integrations, SDK development, microservice governance, service mesh, and inter-service communication."},
-                {'name': 'Programme',        'head': 'Bella Monroe',                  'desc': "Programme delivery and emerging technology research. Covers quantum computing simulations, parallel processing, and AI-assisted engineering initiatives."},
+                {'name': 'xTV_Web',         'head': 'Sebastian Holt / Nora Chandler', 'spec': 'Web, OTT, Streaming', 'desc': "Responsible for Sky's cross-platform TV and Web streaming clients. Covers infrastructure scalability, security, CI/CD, and full-stack web development for Sky's Lightning xTV and Client Web platforms."},
+                {'name': 'Native TVs',       'head': 'Mason Briggs',                  'spec': 'Roku, AppleTV, SmartTV', 'desc': "Owns development of native TV applications for Roku TV and Apple TV platforms. Focuses on agile delivery, performance, patch management, and fault-tolerant systems."},
+                {'name': 'Mobile',           'head': 'Violet Ramsey / Adam Sinclair', 'spec': 'iOS, Android, Flutter', 'desc': "Builds and maintains Sky's mobile applications. Covers caching, version control, CI/CD pipelines, UI performance, and API integration."},
+                {'name': 'Reliability_Tool', 'head': 'Lucy Vaughn',                   'spec': 'SRE, Platform, DevOps', 'desc': "Platform reliability, tooling, and developer experience. Includes serverless computing, encryption, UX design, hackathon innovation, and frontend framework development."},
+                {'name': 'Arch',             'head': 'Theodore Knox',                 'spec': 'Architecture, Microservices', 'desc': "Architecture and platform design. Responsible for API integrations, SDK development, microservice governance, service mesh, and inter-service communication."},
+                {'name': 'Programme',        'head': 'Bella Monroe',                  'spec': 'AI, Innovation, Delivery', 'desc': "Programme delivery and emerging technology research. Covers quantum computing simulations, parallel processing, and AI-assisted engineering initiatives."},
             ]
 
             depts = {}
@@ -50,6 +50,7 @@ class Command(BaseCommand):
                 dept = Department.objects.create(
                     department_name=d['name'],
                     department_lead_name=d['head'],
+                    specialization=d['spec'],
                     description=d['desc'],
                 )
                 depts[d['name']] = dept

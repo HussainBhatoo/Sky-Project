@@ -14,17 +14,85 @@
 
 <div class="flex-between mb-2 animate-slide-up" style="animation-delay: 0.05s;">
     <div>
-        <h1 style="font-size: 1.75rem; color: var(--sky-header-blue);">{{ department.department_name }}</h1>
+        <div class="flex align-center gap-1">
+            <h1 style="font-size: 1.75rem; color: var(--sky-header-blue);">{{ department.department_name }}</h1>
+            {% if department.specialization %}
+            <span class="chip" style="background: var(--sky-primary-soft); color: var(--sky-primary); border: 1px solid var(--sky-primary); font-size: 0.75rem; font-weight: 600;">
+                {{ department.specialization }}
+            </span>
+            {% endif %}
+        </div>
         <p style="color: var(--muted-foreground); font-size: 0.95rem;">
             Head of Department: <strong style="color: var(--sky-primary);">{{ department.department_lead_name }}</strong>
         </p>
     </div>
     <div class="flex gap-1">
+        <button 
+            id="endorse-btn" 
+            class="btn {% if has_voted %}btn-primary{% else %}btn-outline{% endif %}"
+            style="display: flex; align-items: center; gap: 0.5rem; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);"
+            onclick="toggleEndorsement({{ department.department_id }})"
+        >
+            <i class='bx {% if has_voted %}bxs-heart{% else %}bx-heart{% endif %}'></i>
+            <span>{% if has_voted %}Endorsed{% else %}Endorse{% endif %}</span>
+            <span id="vote-count" style="background: rgba(255,255,255,0.2); padding: 0.1rem 0.5rem; border-radius: 10px; font-size: 0.8rem;">
+                {{ vote_count }}
+            </span>
+        </button>
         <span class="chip chip-department" style="font-size: 0.9rem; padding: 0.5rem 1rem;">
             <i class='bx bx-group'></i> {{ total_teams }} Teams
         </span>
     </div>
 </div>
+
+<script>
+/**
+ * Toggles the department endorsement status via AJAX.
+ * Updates the button appearance and vote count without reloading.
+ * 
+ * @param {number} deptId - The ID of the department to endorse/unendorse
+ */
+async function toggleEndorsement(deptId) {
+    const btn = document.getElementById('endorse-btn');
+    const icon = btn.querySelector('i');
+    const text = btn.querySelector('span');
+    const count = document.getElementById('vote-count');
+    
+    try {
+        const response = await fetch(`/organisation/department/${deptId}/endorse/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (data.voted) {
+            btn.classList.remove('btn-outline');
+            btn.classList.add('btn-primary');
+            icon.classList.remove('bx-heart');
+            icon.classList.add('bxs-heart');
+            text.innerText = 'Endorsed';
+        } else {
+            btn.classList.remove('btn-primary');
+            btn.classList.add('btn-outline');
+            icon.classList.remove('bxs-heart');
+            icon.classList.add('bx-heart');
+            text.innerText = 'Endorse';
+        }
+        count.innerText = data.vote_count;
+        
+        // Add subtle pop animation
+        btn.style.transform = 'scale(1.1)';
+        setTimeout(() => btn.style.transform = 'scale(1)', 150);
+        
+    } catch (error) {
+        console.error('Endorsement failed:', error);
+    }
+}
+</script>
 
 <div class="card mb-2 animate-slide-up spell-tilt" style="animation-delay: 0.1s;">
     <h3 style="color: var(--sky-header-blue); margin-bottom: 1.5rem;">

@@ -243,13 +243,15 @@ Implementation: Django signals tracking User, Action Type (LOGIN/LOGOUT/CREATE/U
 | Org Chart Tab | Visual hierarchy with interactive nodes linking to department pages |
 | Dependencies Page | Graph View: interactive/visual dependency map (upstream + downstream), List View: table split into upstream/downstream panels, Focus team selector, Direction filter, Depth filter |
 
-#### Student 3 — Suliman — Messages App (`messages_app/`)
-| Feature | Details |
-|---------|---------|
-| Inbox | List of received messages with timestamps, clickable to read |
-| Compose / New Message | To (recipient/team selector), Subject, Message body, Send button |
-| Sent | List of sent messages accessible via 'Sent' tab |
-| Drafts | Saved draft messages with "Save as Draft" functionality |
+#### Student 3 — Suliman — Messages App (`messages_app/`) [COMPLETED & AUDITED]
+| Feature | Details | Status |
+|---------|---------| :--- |
+| Inbox | List of received messages with timestamps, clickable to read | ✅ PASS |
+| Compose / New Message | To (recipient/team selector), Subject, Message body, Send button | ✅ PASS |
+| Sent | List of sent messages accessible via 'Sent' tab | ✅ PASS |
+| Drafts | Saved draft messages with "Save as Draft" functionality | ✅ PASS |
+| **Audit Logging** | **Signal-based CRUD tracking for all messages** | ✅ PASS |
+| **Validation** | **Form-level mandatory body and character boundary checks** | ✅ PASS |
 
 #### Student 4 — MAURYA — Schedule App (`schedule/`)
 | Feature | Details |

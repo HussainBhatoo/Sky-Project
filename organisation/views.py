@@ -3,11 +3,12 @@ Organisation Application — Module Student 2: Lucas Garcia Korotkov
 Handles departmental hierarchy (org chart) and dependency graph visualization.
 Lead Developer: Maurya Patel
 """
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Q
+from django.http import JsonResponse
 
-from core.models import Department, Team, Dependency
+from core.models import Department, Team, Dependency, DepartmentVote
 
 
 @login_required
@@ -22,7 +23,13 @@ def org_chart(request):
     try:
         departments = Department.objects.prefetch_related('teams').annotate(
             team_count=Count('teams'),
+            vote_count=Count('votes')
         ).order_by('department_name')
+
+        # Check which depts user has voted for
+        user_votes = []
+        if request.user.is_authenticated:
+            user_votes = DepartmentVote.objects.filter(voter=request.user).values_list('department_id', flat=True)
 
         dept_data = []
         for dept in departments:
@@ -30,6 +37,7 @@ def org_chart(request):
             dept_data.append({
                 'department': dept,
                 'teams': teams,
+                'has_voted': dept.department_id in user_votes,
             })
 
         context = {
@@ -87,6 +95,7 @@ def dependencies(request):
             'upstream_deps': upstream_deps,
             'downstream_deps': downstream_deps,
             'all_deps': all_deps,
+            'team_id_map': {team.team_name: team.team_id for team in teams},
         }
         return render(request, 'organisation/dependencies.html', context)
     except Exception as error:
@@ -108,11 +117,43 @@ def department_detail(request, dept_id):
             member_count=Count('members')
         ).order_by('team_name')
         
+        vote_count = department.votes.count()
+        has_voted = False
+        if request.user.is_authenticated:
+            has_voted = DepartmentVote.objects.filter(voter=request.user, department=department).exists()
+
         context = {
             'department': department,
             'teams': teams,
             'total_teams': teams.count(),
+            'vote_count': vote_count,
+            'has_voted': has_voted,
         }
         return render(request, 'organisation/department_detail.html', context)
     except Exception as error:
         return render(request, 'organisation/org_chart.html', {'error': str(error)})
+
+
+@login_required
+def toggle_department_endorsement(request, dept_id):
+    """
+    Toggles a user's endorsement (vote) for a specific department.
+    Used for AJAX endorsement updates.
+    """
+    department = get_object_or_404(Department, department_id=dept_id)
+    vote_queryset = DepartmentVote.objects.filter(voter=request.user, department=department)
+    
+    if vote_queryset.exists():
+        vote_queryset.delete()
+        voted = False
+    else:
+        DepartmentVote.objects.create(voter=request.user, department=department)
+        voted = True
+        
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return JsonResponse({
+            'voted': voted,
+            'vote_count': department.votes.count()
+        })
+        
+    return redirect('organisation:department_detail', dept_id=dept_id)

@@ -24,6 +24,13 @@ The Sky Engineering Team Registry has undergone a comprehensive functional and s
 - **Admin**: Dedicated administrative portal reachable from the entry point.
 - **Status**: **PASS (32/32 checks)**
 
+#### Messaging Service Audit Results (April 2026)
+- **Functions**: Full Inbox/Sent/Drafts/Compose lifecycle verified.
+- **Security**: Mandatory body validation and 5,000-character payload limits enforced.
+- **Traceability**: Signal-based audit logging for all message mutations.
+- **UX**: Advanced Reply feature with subject/body pre-filling.
+- **Status**: **PASS (49/49 checks)** ([audit_messages.md](./docs/audit_messages.md))
+
 ---
 *Lead Developer: Maurya Patel | Internal Sky UK Project*
 The **Sky Engineering Team Registry** is a mission-critical platform designed to map, manage, and visualize the complex hierarchy of engineering teams across Sky. Built on a "High-Fidelity" design philosophy, it serves as the central intelligence surface for cross-team dependencies, internal communications, and organizational transparency.
