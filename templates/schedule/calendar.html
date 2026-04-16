@@ -77,10 +77,10 @@
                 Showing sessions from <strong>{{ start_of_week|date:"d M" }}</strong> to <strong>{{ end_of_week|date:"d M Y" }}</strong>
             </p>
             <div class="flex gap-1">
-                <a href="?active_view=weekly&week_offset={{ week_offset|add:'-1' }}" class="btn btn-ghost" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">
+                <a href="?active_view=weekly&week_offset={{ week_offset|add:'-1' }}{% if selected_team %}&team_id={{ selected_team }}{% endif %}" class="btn btn-ghost" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">
                     <i class='bx bx-chevron-left'></i> Prev Week
                 </a>
-                <a href="?active_view=weekly&week_offset={{ week_offset|add:'1' }}" class="btn btn-ghost" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">
+                <a href="?active_view=weekly&week_offset={{ week_offset|add:'1' }}{% if selected_team %}&team_id={{ selected_team }}{% endif %}" class="btn btn-ghost" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">
                     Next Week <i class='bx bx-chevron-right'></i>
                 </a>
             </div>
@@ -95,7 +95,9 @@
                     <div>
                         <h4 style="font-size: 1rem; color: var(--sky-header-blue);">{{ meeting.meeting_title }}</h4>
                         <p style="font-size: 0.8rem; color: var(--muted-foreground); margin-top: 0.25rem;">
-                            <span class="chip chip-department">{{ meeting.team.team_name }}</span>
+                            <a href="{% url 'teams:team_detail' meeting.team.team_id %}" style="text-decoration: none;">
+                                <span class="chip chip-department">{{ meeting.team.team_name }}</span>
+                            </a>
                         </p>
                         {% if meeting.agenda_text %}
                         <p style="font-size: 0.85rem; color: #888; margin-top: 0.5rem;">{{ meeting.agenda_text|truncatewords:20 }}</p>
