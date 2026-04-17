@@ -37,13 +37,35 @@ def dashboard(request):
 def audit_log(request):
     """
     Displays a comprehensive history of all system-wide actions.
-    Ordered chronologically with the most recent actions first.
-    
-    :param request: Standard Django HttpRequest object
-    :return: Rendered audit_log.html template with full log history
+    Supports filtering by search query, action type, and entity type.
     """
-    logs = AuditLog.objects.all().order_by('-action_changed_at')
-    return render(request, 'audit_log.html', {'logs': logs})
+    query = request.GET.get('q')
+    action_type = request.GET.get('action')
+    entity_type = request.GET.get('entity')
+    
+    logs = AuditLog.objects.all()
+    
+    if query:
+        logs = logs.filter(
+            Q(change_summary__icontains=query) | 
+            Q(actor_user__username__icontains=query) |
+            Q(entity_type__icontains=query)
+        )
+        
+    if action_type:
+        logs = logs.filter(action_type=action_type)
+        
+    if entity_type:
+        logs = logs.filter(entity_type=entity_type)
+        
+    logs = logs.order_by('-action_changed_at')
+    
+    return render(request, 'audit_log.html', {
+        'logs': logs,
+        'query': query,
+        'action_type': action_type,
+        'entity_type': entity_type
+    })
 
 @login_required
 def profile_view(request):

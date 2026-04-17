@@ -184,7 +184,7 @@ The viva is marked separately inside Code Functionality and Version Control:
 | Global Search | Real-time debounced AJAX search with high-fidelity results dropdown |
 | Design Spells | Professional micro-interactions (tilt, shine, pulse) applied globally |
 | Team Voting | Distinct `Vote` table (Rubric 1.14) for team endorsements (toggle) |
-| Audit Log | Searchable activity feed with signal-based tracking |
+| Audit Log | Searchable activity feed with high-fidelity signal tracking | ✅ COMPLETED |
 
 #### B. Django Admin Panel (Customised)
 The brief says: "There is a Django Admin so that will be the Administrator"
@@ -761,13 +761,11 @@ Departments to create from Sky Excel file:
 Each department needs min 3 teams.
 Each team needs min 5 team members.
 
-#### Step 2.5 — Audit Log System (Maurya sets up)
+#### Step 2.5 — Audit Log System (Maurya sets up) [COMPLETED]
 Use Django signals in `core/signals.py`:
-```python
-from django.db.models.signals import post_save, post_delete
-from django.dispatch import receiver
-# Auto-create AuditLog entry on every save/delete of Team, Dept, etc.
-```
+- implemented high-fi actor detection via `RequestUserMiddleware`.
+- 100% signal coverage for all 15 database entities.
+- Searchable UI with Q-filtering for Action, Entity, and Keywords.
 
 ---
 

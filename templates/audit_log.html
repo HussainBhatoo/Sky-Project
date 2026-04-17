@@ -1,54 +1,110 @@
 {% extends 'base.html' %}
 
-{% block title %}Audit Log | Sky Registry{% endblock %}
+{% block title %}System Audit Log | Sky Registry{% endblock %}
 
 {% block content %}
-<div class="header mb-2">
-    <h1>System Audit Log</h1>
-    <p class="text-muted">Tracking all administrative changes and system modifications.</p>
+<div class="header mb-2" style="display: flex; justify-content: space-between; align-items: flex-end;">
+    <div>
+        <h1 class="spectrum-text">System Audit Log</h1>
+        <p class="text-muted">Tracking all administrative changes and system mutations across the registry.</p>
+    </div>
+    {% if query or action_type or entity_type %}
+    <a href="{% url 'core:audit_log' %}" class="btn btn-secondary btn-sm" style="padding: 0.5rem 1rem; font-size: 0.8rem;">
+        <i class='bx bx-x'></i> Clear Filters
+    </a>
+    {% endif %}
 </div>
 
-<div class="card">
-    <div style="margin-bottom: 2rem; display: flex; gap: 1rem;">
-        <input type="text" placeholder="Filter by user or entity..." style="padding: 0.75rem 1rem; border-radius: var(--border-radius); border: 1px solid #ddd; flex: 1;">
-        <button class="btn btn-primary">Search Log</button>
-    </div>
+<div class="spectrum-bar"></div>
 
-    <table style="width: 100%; border-collapse: collapse;">
-        <thead>
-            <tr style="text-align: left; border-bottom: 2px solid var(--surface-strong); color: var(--text-muted); font-size: 0.85rem;">
-                <th style="padding: 1rem;">Action</th>
-                <th style="padding: 1rem;">Entity Type</th>
-                <th style="padding: 1rem;">Entity ID</th>
-                <th style="padding: 1rem;">Performed By</th>
-                <th style="padding: 1rem;">Timestamp</th>
-                <th style="padding: 1rem;">Changes</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for log in logs %}
-            <tr style="border-bottom: 1px solid var(--surface-strong);">
-                <td style="padding: 1rem;">
-                    <span class="badge {% if log.action_type == 'CREATE' %}badge-green{% elif log.action_type == 'DELETE' %}badge-red{% else %}badge-blue{% endif %}">
-                        {{ log.action_type }}
-                    </span>
-                </td>
-                <td style="padding: 1rem;">{{ log.entity_type }}</td>
-                <td style="padding: 1rem;">{{ log.entity_id }}</td>
-                <td style="padding: 1rem; font-weight: 600;">{{ log.actor_user.username }}</td>
-                <td style="padding: 1rem; font-size: 0.85rem; color: var(--text-muted);">{{ log.action_changed_at|date:"d/m/Y H:i:s" }}</td>
-                <td style="padding: 1rem;">
-                    <div style="font-size: 0.85rem; max-width: 400px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="{{ log.change_summary }}">
-                        {{ log.change_summary }}
-                    </div>
-                </td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="6" style="padding: 2rem; text-align: center; color: var(--text-muted);">No logs available.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<div class="card glass-card" style="padding: 2rem;">
+    <!-- Enhanced Search & Filter Bar -->
+    <form method="GET" action="{% url 'core:audit_log' %}" style="margin-bottom: 2.5rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+        <div style="flex: 2; min-width: 300px; position: relative;">
+            <i class='bx bx-search' style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--sky-primary); font-size: 1.2rem;"></i>
+            <input type="text" name="q" value="{{ query|default:'' }}" placeholder="Search by result, user or logic..." 
+                   style="padding: 0.85rem 1rem 0.85rem 3rem; border-radius: 12px; border: 1px solid rgba(0,15,245,0.1); width: 100%; outline: none; transition: all 0.2s;"
+                   onfocus="this.style.borderColor='var(--sky-primary)'; this.style.boxShadow='0 0 0 4px rgba(0,15,245,0.05)';"
+                   onblur="this.style.borderColor='rgba(0,15,245,0.1)'; this.style.boxShadow='none';">
+        </div>
+        
+        <select name="action" style="padding: 0.85rem 1rem; border-radius: 12px; border: 1px solid rgba(0,15,245,0.1); outline: none;">
+            <option value="">All Actions</option>
+            <option value="CREATE" {% if action_type == 'CREATE' %}selected{% endif %}>CREATE</option>
+            <option value="UPDATE" {% if action_type == 'UPDATE' %}selected{% endif %}>UPDATE</option>
+            <option value="DELETE" {% if action_type == 'DELETE' %}selected{% endif %}>DELETE</option>
+        </select>
+
+        <select name="entity" style="padding: 0.85rem 1rem; border-radius: 12px; border: 1px solid rgba(0,15,245,0.1); outline: none;">
+            <option value="">All Entities</option>
+            <option value="Team" {% if entity_type == 'Team' %}selected{% endif %}>Team</option>
+            <option value="Department" {% if entity_type == 'Department' %}selected{% endif %}>Department</option>
+            <option value="Meeting" {% if entity_type == 'Meeting' %}selected{% endif %}>Meeting</option>
+            <option value="Message" {% if entity_type == 'Message' %}selected{% endif %}>Message</option>
+            <option value="User" {% if entity_type == 'User' %}selected{% endif %}>User</option>
+        </select>
+
+        <button type="submit" class="btn btn-primary">
+            <i class='bx bx-filter-alt'></i> Filter Log
+        </button>
+    </form>
+
+    <div class="table-glass" style="border: 1px solid rgba(0,15,245,0.05);">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="text-align: left; border-bottom: 2px solid rgba(0,15,245,0.05); color: var(--sky-header-blue); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">
+                    <th style="padding: 1.25rem 1.5rem;">Action</th>
+                    <th style="padding: 1.25rem 1.5rem;">Entity / ID</th>
+                    <th style="padding: 1.25rem 1.5rem;">Performed By</th>
+                    <th style="padding: 1.25rem 1.5rem;">Timestamp</th>
+                    <th style="padding: 1.25rem 1.5rem;">Change Summary</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in logs %}
+                <tr style="border-bottom: 1px solid rgba(0,15,245,0.03); transition: background 0.2s;" onmouseover="this.style.background='rgba(0,15,245,0.02)'" onmouseout="this.style.background='transparent'">
+                    <td style="padding: 1.25rem 1.5rem;">
+                        <span class="badge {% if log.action_type == 'CREATE' %}badge-green{% elif log.action_type == 'DELETE' %}badge-red{% else %}badge-blue{% endif %}" style="font-weight: 700;">
+                            {{ log.action_type }}
+                        </span>
+                    </td>
+                    <td style="padding: 1.25rem 1.5rem;">
+                        <div style="font-weight: 700; color: var(--sky-header-blue);">{{ log.entity_type }}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted); font-family: monospace;">ID: {{ log.entity_id }}</div>
+                    </td>
+                    <td style="padding: 1.25rem 1.5rem;">
+                        {% if log.actor_user %}
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--sky-spectrum-diagonal); font-size: 0.8rem; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700;">
+                                {{ log.actor_user.username|first|upper }}
+                            </div>
+                            <span style="font-weight: 600;">{{ log.actor_user.username }}</span>
+                        </div>
+                        {% else %}
+                        <span style="font-style: italic; color: var(--text-muted); opacity: 0.6;">System (Automatic)</span>
+                        {% endif %}
+                    </td>
+                    <td style="padding: 1.25rem 1.5rem; font-size: 0.85rem; color: var(--text-muted);">
+                        <div style="font-weight: 600;">{{ log.action_changed_at|date:"d M Y" }}</div>
+                        <div>{{ log.action_changed_at|date:"H:i:s" }}</div>
+                    </td>
+                    <td style="padding: 1.25rem 1.5rem;">
+                        <div style="font-size: 0.9rem; max-width: 500px; line-height: 1.4;" title="{{ log.change_summary }}">
+                            {{ log.change_summary }}
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="padding: 4rem; text-align: center;">
+                        <i class='bx bx-spreadsheet' style="font-size: 3rem; color: var(--sky-primary); opacity: 0.2; display: block; margin-bottom: 1rem;"></i>
+                        <div style="font-weight: 600; color: var(--sky-header-blue);">No logs found matching your criteria</div>
+                        <div style="color: var(--text-muted); font-size: 0.9rem;">Try adjusting your filters or search query.</div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endblock %}
