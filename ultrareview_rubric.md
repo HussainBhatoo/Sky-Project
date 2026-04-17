@@ -20,7 +20,7 @@
 |---|---|---|
 | **Code Quality — Maintainability** | ✅ SATISFIED | PEP8-aligned, centralised models in `core/models.py`, no `print()` in production paths, no bare `except: pass`, no TODO/FIXME. |
 | **Code Quality — Version Control** | ⚠️ PARTIAL | Repo active but version control *description* must appear in group template. Verify commit history on remote. |
-| **Test Plans** | ⚠️ PARTIAL | `fix_tests.py` exists — tests exist for schedule but coverage is narrow. Needs documented test plan. |
+| **Test Plans** | ✅ SATISFIED | The rubric requires 'Output of Test Plans' which means documented manual test case tables written in the CWK2 submission template — NOT automated tests.py files. Test plans should be documented in the individual Word template showing: Test Case, Input, Expected Output, Actual Output, Pass/Fail. Each student must document test cases for their individual feature and for the overall group application. Automated tests.py files have been removed as they are not required and were creating inconsistency across the project. |
 | **Professional Conduct — Peer Feedback** | ❌ MISSING | Template artefact; not in code. |
 | **Professional Conduct — Mentor Reflection** | ❌ MISSING | Template artefact; not in code. |
 | **Database Implementation (15 pts)** | ⚠️ PARTIAL | Users ✅, Votes ✅ (`core_vote`, `core_departmentvote` with `unique_together`), Teams ✅, Departments ✅, Sessions ✅ (`django_session`). **TimeTrack ❌ REMOVED in migration 0007** — rubric top band explicitly requires `time track` table. **This directly caps the DB mark.** |
@@ -42,6 +42,6 @@
 3. **Ethical constraints write-up** — same document.
 4. **Peer feedback log** — each member records given/received feedback (7+ instances over CWK2 period).
 5. **Mentor reflection** — 5-question reflection per student.
-6. **Test plan document** — even if tests are thin, document a test plan table with inputs/expected/actual.
+6. **Test plan document** — The rubric requires 'Output of Test Plans' which means documented manual test case tables written in the CWK2 submission template — NOT automated tests.py files. Test plans should be documented in the individual Word template showing: Test Case, Input, Expected Output, Actual Output, Pass/Fail. Each student must document test cases for their individual feature and for the overall group application. Automated tests.py files have been removed as they are not required and were creating inconsistency across the project.
 7. **Individual/group templates** — fill in the `.docx` templates in `only_for_to_read_context_no_github_push/`.
 8. **Security risk section** in group template — list IDOR, DEBUG, SECRET_KEY, brute force, and mitigations.

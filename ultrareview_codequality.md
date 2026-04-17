@@ -8,7 +8,7 @@
 | PEP8 compliance | ✅ | all | No linter output captured, but style is consistent |
 | Meaningful variable names | ✅ | all | No `a/b/x/temp/data` sprawl |
 | No copy-paste code | ✅ | — | No 3+ repeated blocks flagged |
-| No `print()` in production | ✅ | only dev scripts in `scripts/`, `fix_template.py`, `fix_tests.py` | 17 total, all in tooling |
+| No `print()` in production | ✅ | only dev scripts in `scripts/`, `fix_template.py` | 16 total, all in tooling |
 | No `bare except: pass` | ✅ | — | Zero found |
 | No TODO/FIXME/XXX | ✅ | — | Zero found |
 | No `pdb`/`breakpoint()` | ✅ | — | |
@@ -27,6 +27,6 @@
 | 2 | Broad `except Exception` | 🟡 MEDIUM | views (16 sites) | — | Narrow to `ValidationError`, `IntegrityError`, etc. |
 | 3 | `requirements.txt` not pinned | 🟢 LOW | `requirements.txt` | — | `django==5.1.5` etc. |
 | 4 | Inline styles in templates (100+) | 🟢 LOW | most templates | — | Intentional for design fidelity — acceptable, but callable-out in group template |
-| 5 | Leftover patch scripts | 🟢 LOW | `fix_template.py`, `fix_tests.py` (repo root) | — | Move to `scripts/` or delete before submission |
+| 5 | Leftover patch scripts | 🟢 LOW | `fix_template.py` (repo root) | — | Move to `scripts/` or delete before submission. `fix_tests.py` has been deleted. |
 | 6 | `requirements.txt` missing deps? | 🟢 LOW | `requirements.txt` | — | Only lists django, reportlab, openpyxl, pillow — confirm this fully represents imports |
 | 7 | Authorship blocks | 🟢 LOW | every `.py` file | top | Verify 5-member attribution header present across repo |

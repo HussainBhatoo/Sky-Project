@@ -43,7 +43,7 @@
 | 6 | Legal & Ethical write-up missing | (none) | — | Create `docs/legal_ethical.md` with cited sources (GDPR, DPA 2018, CMA, BCS) — 10 rubric marks |
 | 7 | Peer feedback log missing | individual template | — | Each student records 7+ feedback instances with justification |
 | 8 | Mentor reflection missing | individual template | — | 5-question reflective response per student |
-| 9 | Test plan document missing | (none) | — | Document test plan table (individual + group) |
+| 9 | Test plan document missing | (none) | — | Document manual test plan table (individual + group) in Word template. The rubric requires 'Output of Test Plans' which means documented manual test case tables written in the CWK2 submission template — NOT automated tests.py files. Automated tests.py files have been removed as they are not required and were creating inconsistency across the project. |
 
 ### 🟡 MEDIUM
 | # | Issue | File | Line | Fix |
@@ -52,7 +52,7 @@
 | 11 | Broad `except Exception` in 16 views | views across apps | — | Narrow to `ValidationError`, `IntegrityError`, etc. |
 | 12 | Votes table empty | seed data | — | Seed 5–10 votes so rubric marker sees voting works |
 | 13 | No dedicated notifications UI | `core/dashboard.html` | — | Add notifications card alongside activity trail |
-| 14 | `fix_template.py` / `fix_tests.py` in repo root | repo root | — | Move to `scripts/` or delete |
+| 14 | `scripts/fix_tests.py` artifact | `scripts/` | — | DELETED — not required after tests.py removal. |
 
 ### 🟢 LOW
 | # | Issue | File | Line | Fix |
@@ -77,5 +77,5 @@
 1. **Restore the TimeTrack table** (model + migration + seed). Rubric top-band DB requirement.
 2. **Fix IDOR in `message_detail`** — add sender/recipient filter. Security rubric.
 3. **Write Legal & Ethical constraints document** with cited sources — worth 10 rubric marks currently scoring zero.
-4. **Fill in individual + group templates** (authorship, peer feedback, mentor reflection, test plan, version control description). Covers ~50 rubric marks currently MISSING.
+4. **Fill in individual + group templates** (authorship, peer feedback, mentor reflection, version control description). For Test Plans, document manual test case tables in the Word template showing: Test Case, Input, Expected Output, Actual Output, Pass/Fail. Automated tests.py files are NOT required and have been removed. |
 5. **Scrub `CREDENTIALS.md` and `SECRET_KEY`** — move secrets to env; treat as a security risk to document, not hide.
