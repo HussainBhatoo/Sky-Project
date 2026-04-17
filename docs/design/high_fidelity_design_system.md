@@ -1,16 +1,16 @@
-# ADR: Adoption of High-Fidelity "Design Spells" & Global Search
+# ADR: Adoption of Interactive Visual Enhancements & Global Search
 
 **Date:** 2026-04-15
 **Status:** Accepted
 
 ## Context
-The Sky Team Registry initially utilized a baseline design system that met core functional requirements but lacked the premium, production-ready "wow factor" expected for internal Sky engineering tools. Feedback indicated a need for higher visual fidelity and more efficient discovery mechanisms for the large volume of team data (46+ teams).
+The Sky Team Registry initially utilized a baseline design system that met core functional requirements but lacked the polished, interactive feel required for a modern engineering tool. Feedback indicated a need for improved visual experience and more efficient discovery mechanisms for the large volume of team data (46+ teams).
 
 ## Decision
-We have decided to implement a "High-Fidelity" enhancement layer, consisting of:
-1. **Design Spells:** A library of CSS-driven micro-interactions (tilt, shine, pulse) applied to all card-based components.
-2. **Global Semantic Search:** A real-time, debounced AJAX search engine replacing the previous static/mock input.
-3. **Documentation Standards:** Elevating project READMEs and technical specs to enterprise-level quality.
+We have decided to implement an enhancement layer, consisting of:
+1. **Interactive Elements:** A library of CSS-driven micro-interactions (hover effects, pulses) applied to various UI components.
+2. **Global Search:** A real-time, debounced AJAX search engine replacing the previous static/mock input.
+3. **Documentation Cleanup:** Improving project READMEs and technical specs to better describe the system architecture.
 
 ## Rationale
 - **User Experience:** Micro-interactions provide subtle feedback that makes the interface feel more responsive and premium.

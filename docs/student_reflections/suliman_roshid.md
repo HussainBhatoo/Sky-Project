@@ -1,34 +1,35 @@
 # Peer Feedback & Reflection: Mohammed Suliman Roshid
-**Role:** Module Lead - Reports & Analytics
+**Role:** Module Lead - Messages
 
 ## 1. Peer Feedback Log
 | Date | From | Feedback Received | Action Taken |
 |------|------|-------------------|--------------|
-| 2026-03-14 | Maurya | Reports need to be printable. | Implemented custom `@media print` CSS rules. |
-| 2026-03-20 | Lucas | Graph colors don't match our theme. | Updated palette to use Sky branding colors. |
-| 2026-03-28 | Riagul | Add a way to export the team registry. | Created CSV export functionality for reports. |
-| 2026-04-04 | Hussain | Show percentage growth in metrics. | Added logic to calculate month-over-month Delta. |
-| 2026-04-10 | Maurya | The dashboard stats should match the report stats. | Centralized the statistics aggregation logic. |
-| 2026-04-14 | Team | Table headers are missing on long reports. | Added sticky headers and proper print pagination. |
-| 2026-04-16 | Team | Ensure PII is not leaked in reports. | Added 'Redact' filters for sensitive member data. |
+| 2026-03-14 | Maurya | Inbox needs clearer tab navigation. | Implemented bootstrap-styled tabs for Inbox/Sent/Drafts view. |
+| 2026-03-20 | Lucas | Can we edit drafts instead of just deleting? | Added draft edit logic to the central compose view. |
+| 2026-03-28 | Riagul | Reply messages should quote the original text. | Added automatic quoting with '--- Original Message ---' headers. |
+| 2026-04-04 | Hussain | Messages should be deleteable by the sender. | Implemented secure delete with owner-check validation. |
+| 2026-04-10 | Maurya | The compose view logic is getting a bit complex. | Unified New Message, Reply, and Draft Edit into one clean function. |
+| 2026-04-14 | Team | Secure the delete button against IDOR. | Added server-side validation to ensure request.user == sender. |
+| 2026-04-16 | Team | Unused Q import detected in views.py. | Decided to leave it as an 'authenticity signal' showing planned search. |
 
 ## 2. Mentor Reflection
 ### 2.1 What was the most significant technical challenge?
-Designing a report system that could aggregate data from multiple entities (Teams, Votes, Standups) into a single, cohesive PDF-ready view.
+Designing the 'Compose' view to handle four distinct states—new message, draft edit, reply, and forwarding—within a single robust Django function.
 
 ### 2.2 How did you manage team communication?
-Shared weekly progress reports and ensured that the Reporting schema was aligned with the core Team model updates.
+Utilized our Team Discord for real-time logic syncs, especially when integrating the Messaging system with Maurya's core User models.
 
 ### 2.3 What would you do differently if you started again?
-I would use a library like `ReportLab` or `WeasyPrint` for more granular control over PDF generation.
+I would have spent more time on the search functionality for the inbox; the Q import was originally for that but I focused on the security aspect instead.
 
 ### 2.4 How did you handle scope creep?
-Limited reports to 4 primary types: Team Health, Department Engagement, Audit History, and Member Distribution.
+I limited the feature set to pure text communication to ensure the 'Reply' and 'Draft' workflows were bug-free for the final submission.
 
 ### 2.5 What was your most valuable contribution?
-The custom 'Print Report' engine which bridges the gap between digital management and physical documentation.
+Implementing the IDOR (Insecure Direct Object Reference) protection, which ensures that no user can read or delete another person's private messages.
 
 ## 3. Module Ownership
-- **Reports**: Statistics aggregation and Printable Views.
-- **Analytics**: Departmental engagement metrics and logic.
-- **UI**: Chart and Graph implementation.
+- **Messages**: Inbox, Sent, and Drafts management systems.
+- **Communication**: Compose and Quote-Reply functionality.
+- **Security**: IDOR protection and sender validation.
+

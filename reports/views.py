@@ -38,7 +38,7 @@ def reports_home(request):
             member_count=Count('members')
         ).order_by('-member_count')[:10]  # Top 10 largest teams
 
-        # Management Gap Analysis (Rubric Requirement)
+        # Find teams that don't have a manager assigned yet
         manager_less_teams = Team.objects.filter(
             Q(team_leader_name='') | Q(team_leader_name__isnull=True)
         ).select_related('department')

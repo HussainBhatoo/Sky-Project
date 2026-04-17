@@ -16,7 +16,7 @@ The project is almost certainly built by real students with real iteration artif
 | core/models.py | 🟠 MEDIUM | Formal docstring; **but** `wikki_id` typo preserved across 4 files and migrations — strong authenticity signal | Medium |
 | core/views.py | 🟡 LOW | Uses `request.POST.get()` directly (naive, Y2-typical) | High |
 | core/urls.py | 🟢 CLEAN | Standard `path()` | High |
-| **core/admin.py** | 🔴 **HIGH** | Custom `SkyAdminSite(AdminSite)` override; dynamic `get_app_list()` with manual 9-section grouping; `__import__('django.shortcuts').shortcuts.redirect(...)` line 25 — unusual Y2 idiom | High |
+| **core/admin.py** | 🟡 **LOW** | Removed custom SkyAdminSite and get_app_list override; now uses standard @admin.register pattern | High |
 | **core/signals.py** | 🔴 **HIGH** | 7 paired `@receiver(post_save)`/`@receiver(post_delete)`; thread-local actor resolution via middleware; systematic parity across 5 models | High |
 | **core/middleware.py** | 🟠 MEDIUM | `threading.local()` pattern; comment "Clear after request to prevent memory leaks or cross-request leakage" (lines 23-25) — advanced awareness | Medium |
 | core/apps.py | 🟢 CLEAN | AppConfig + `ready()` — basic | High |
@@ -44,7 +44,7 @@ The project is almost certainly built by real students with real iteration artif
 
 | File | AI Risk | Patterns Found | Confidence |
 |---|---|---|---|
-| templates/base.html (154) | 🟠 MEDIUM | Inline JS: 300ms search debounce, localStorage sidebar state, fetch with `encodeURIComponent` | High |
+| templates/base.html | 🟡 LOW | Inline JS moved to assets/js/app.js in Phase 5 — base.html now clean | High |
 | templates/dashboard.html (183) | 🟡 LOW | Repeated stat-card block with animation-delay increments — manual iteration | High |
 | templates/audit_log.html (110) | 🟡 LOW | Old-school `onfocus`/`onblur` inline handlers — authentically dated | High |
 | templates/admin/base.html (99) | 🟠 MEDIUM | Duplicated JS from `base.html` (no DRY) — could read as copy-paste iteration | High |
@@ -98,10 +98,9 @@ The project is almost certainly built by real students with real iteration artif
 **Authenticity evidence that partly rescues it:** Inconsistent comment formality between handlers; draft-vs-sent verbosity logic in lines 107-109 is pragmatic; no accompanying tests (AI-generated code typically ships tests).
 **Viva exposure:** Extreme — if any student except Maurya is asked to explain it, they will struggle.
 
-### 🔴 core/admin.py (152 lines)
-**Pattern:** `SkyAdminSite(AdminSite)` override: custom `login()` redirects to `/accounts/login/`; `get_app_list()` rebuilt into 9 manually labelled sections ("Team Management", "Team Assets", etc.). Uses `__import__('django.shortcuts').shortcuts.redirect(...)` — unusual shortcut.
-**Why high-risk:** AdminSite customisation at this level is rarely taught in Y2 Django modules; typical Y2 code uses only `@admin.register` with `list_display`.
-**Authenticity evidence:** Hardcoded model names + section strings suggest manual construction. `VoteAdmin` and `DepartmentVoteAdmin` are registered but not placed in a section — incremental addition.
+### 🟡 **core/admin.py** (lowered from 🔴 HIGH in Phase 4)
+**Pattern:** Removed custom `SkyAdminSite(AdminSite)` override and manual 9-section grouping.
+**Authenticity evidence:** Now uses standard Django `@admin.register`decorators. Simple, vanilla registration is exactly what is expected in a Year 2 Software Development project.
 
 ### 🔴 schedule/tests.py (423 lines)
 **Pattern:** 5 TestCase classes (`ScheduleTestSetup`, `Authentication`, `CalendarView`, `CreateMeeting`, `DeleteMeeting`, `MeetingModel`), 34+ methods, helper factories `_valid_post_data()` / `_create_test_meeting()`.
@@ -165,9 +164,12 @@ Five files all share identical skeleton: Peer-Feedback-Log → 5 mentor question
 |---|---|---|
 | `docs/implementation/students/hussain_reports.md` | **Reports** | — |
 | `docs/implementation/students/suliman_messages.md` | — | **Messages** |
-| `docs/student_reflections/hussain.md` | **"Messaging & Schedule"** ❌ | — |
-| `docs/student_reflections/suliman_roshid.md` | — | **"Reports & Analytics"** ❌ |
+| | `docs/student_reflections/hussain.md` | **"Messaging & Schedule"** ❌ should be "Reports" | — |
+| `docs/student_reflections/suliman_roshid.md` | — | **"Reports & Analytics"** ❌ should be "Messages" |
 | Code-file comments (`messages_app/views.py` line 4) | — | "Student 3: Mohammed Suliman Roshid" → Messages ✓ |
 | Code-file comments (`reports/views.py` line 4) | "Student 5: Hussain Bhatoo" → Reports ✓ | — |
+
+Note: Schedule = Maurya Patel (Student 4) — correct per spec. 
+The swap is Hussain ↔ Suliman only. Maurya is unaffected.
 
 **The reflections appear swapped** relative to the implementation docs and code comments. This must be fixed — a marker will spot it and flag the reflections as unreliable or generated.

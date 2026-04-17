@@ -1,13 +1,13 @@
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
-from core.admin import sky_admin_site
 from core import views
 
 # Main URL Configuration for Sky Engineering Team Registry
 urlpatterns = [
     # System Administration Portal
-    path('admin/', sky_admin_site.urls),
+    path('admin/login/', RedirectView.as_view(url='/accounts/login/', query_string=True)),
+    path('admin/', admin.site.urls),
     
     # Authentication Hub (Login, Signup, JWT Simulation)
     path('accounts/', include('accounts.urls')),

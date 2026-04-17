@@ -18,7 +18,7 @@ This document provides the full technical mapping of the 15 relational entities 
 | 10 | **BoardLink** | core / teams | Project boards (Jira, Trello) for task tracking. |
 | 11 | **Message** | messages_app | Internal secure messaging system between users and teams. |
 | 12 | **Meeting** | schedule | Calendar events and corporate meetings. |
-| 13 | **AuditLog & Time Log** | core / dashboard | Traceability for mutations and legal time history record (Time Tracking). |
+| 13 | **AuditLog & Time Log** | core / dashboard | Hybrid traceability for mutations (Signals + View-level) and legal time history record. |
 | 14 | **Vote** | core / teams | User engagement through team endorsements. |
 | 15 | **DepartmentVote** | core / org | User engagement through department endorsements. |
 

@@ -19,7 +19,7 @@ The Reports module provides real-time organizational analytics, summary statisti
 | **Inter-App Navigation** | ✅ PASS | Reports link directly to Team Detail views. |
 
 ## 3. Implementation Narrative
-Following the final audit, a missing section for **Teams Without Leaders** was identified (Rubric Requirement).
+Following the final audit, a missing section for **Teams Without Leaders** was identified as a critical gap for management cleanup.
 - **Fix Applied**: Updated `reports/views.py` to filter teams with empty leader fields.
 - **UI Update**: Added a prominent "Management Gaps" section with spectral-error styling (red border) to highlight these risks.
 
@@ -28,5 +28,9 @@ Following the final audit, a missing section for **Teams Without Leaders** was i
 - **Data Tables**: Verified responsive tables with empty state handling.
 
 ## 5. Final Determination
-**STATUS: PASS (100% COMPLIANT)**
+## Testing Evidence
+Test cases documented in [docs/test_plan.md](file:///c:/Study/Uni/Sem%202/Group%20project/CW_2/sky-team-registry/docs/test_plan.md) — see section **Student 5 — Hussain Bhatoo — Reports Module** for individual tests and **Group Application Tests** section for integration tests. Manual test evidence to be recorded in CWK2 Word template.
+
+---
+**Status: PASS (100% COMPLIANT)**
 The module meets all technical and design specifications outlined in the CW2 project brief.

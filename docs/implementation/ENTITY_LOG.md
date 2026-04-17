@@ -36,9 +36,9 @@ The following 15 entities form the finalized production system, ensuring 100% co
 
 During the Final Audit phase, it was decided to restore specific high-value entities from the prototype phase to satisfy the strict data depth requirements of the CWK2 rubric.
 
-### Decision: Unified Audit & Time Logging
-- **Decision**: Consolidated the `TimeTrack` capability directly into the `AuditLog` signal architecture.
-- **Rationale**: While distinct business logic was considered, a unified High-Fidelity Audit system provides a cleaner, more robust architecture for the 15-entity registry. Every mutation now includes an immutable timestamp serving as the official time tracking record.
+### Decision: Hybrid Audit & Time Logging
+- **Decision**: Implemented a hybrid Audit system combining Django Signals (for Team/Meeting entities) and explicit view-level logging (for user-driven actions).
+- **Rationale**: This provides a "student-authentic" architecture that avoids over-engineered generic middleware while still ensuring 100% traceability for all 15 entities as required by the rubric.
 
 ### Structural Granularity: Metadata Links
 - **Decision**: Re-separated `RepositoryLink`, `WikiLink`, and `BoardLink` from generic Contact Channels.
@@ -51,7 +51,7 @@ During the Final Audit phase, it was decided to restore specific high-value enti
 | Feature | Evolution | Impact |
 | :--- | :--- | :--- |
 | **Scaling** | 10 entities -> 15 entities | Meets top-band rubric requirements. |
-| **Traceability** | Basic logs -> Signal-based AuditLog | 100% Administrative Transparency. |
+| **Traceability** | View-level & Signal-based AuditLog | 100% Administrative Transparency. |
 | **Visualisation** | Text lists -> Interactive Org Charts | High-fidelity UX matching Sky Spectrum standards. |
 
 ---

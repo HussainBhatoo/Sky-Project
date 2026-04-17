@@ -3,8 +3,6 @@ ASGI config for sky_registry project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
-SKY ENGINEERING TEAM REGISTRY - ASYNCHRONOUS GATEWAY INTERFACE
-Configured for high-concurrency operations and real-time communication modules.
 Maintained by: Maurya Patel
 """
 

@@ -70,7 +70,7 @@
 | Voting/endorsement teams & depts | ✅ | `Vote`, `DepartmentVote` models with `unique_together` |
 | Vote collation per team/dept | ✅ | Counted in detail views |
 | No duplicate votes | ✅ | `unique_together=(voter, team/dept)` constraint |
-| Audit log (CREATE/UPDATE/DELETE) | ✅ | `AuditLog` model, signals wired, 287 entries |
+| `core_auditlog` | ✅ | Hybrid logging (Signals + View-level) |
 | **Time track distinct table** | ❌ | Removed in migration 0007 — must be restored |
 | Sessions table active | ✅ | `django_session` (3 rows) |
 | Admin panel with all sections | ✅ | Custom `sky_admin_site` |

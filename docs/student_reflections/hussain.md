@@ -1,34 +1,35 @@
 # Peer Feedback & Reflection: Abdul-lateef Hussain
-**Role:** Module Lead - Messaging & Schedule
+**Role:** Module Lead - Reports
 
 ## 1. Peer Feedback Log
 | Date | From | Feedback Received | Action Taken |
 |------|------|-------------------|--------------|
-| 2026-03-13 | Maurya | Messaging system needs status labels. | Added 'Sent' and 'Draft' status badges. |
-| 2026-03-19 | Lucas | Multi-select for message recipients? | Implemented multi-checkbox recipient list. |
-| 2026-03-27 | Riagul | Meeting times are showing in UTC. | Localized time display to GMT/London. |
-| 2026-04-06 | Suliman | Calendar is missing the current day highlight. | Added CSS emphasis for the current date. |
-| 2026-04-12 | Maurya | Reply logic is broken. | Fixed the parent message ID passing in views. |
-| 2026-04-15 | Lucas | Security: IDOR in message detail. | Implemented sender/recipient verification filters. |
-| 2026-04-16 | Team | Draft messages are showing in Inbox. | Added `.filter(message_status='sent')` to views. |
+| 2026-03-13 | Maurya | Reports dashboard needs clear summary cards. | Added total team and member counters to the top. |
+| 2026-03-19 | Lucas | Can we see which teams lack a manager? | Implemented Management Gap Analysis filtering with Q objects. |
+| 2026-03-27 | Riagul | Reports should show team counts per department. | Added Count() aggregation to the department statistics. |
+| 2026-04-06 | Suliman | Add a way to export registry data for audit. | Implemented CSV export using HttpResponse and csv.writer. |
+| 2026-04-12 | Maurya | Reports layout breaks when trying to print. | Added @media print CSS rules to hide navigation elements. |
+| 2026-04-15 | Lucas | Management gap not catching empty strings. | Refined Q object filters to include both nulls and empty fields. |
+| 2026-04-16 | Team | PDF export button is showing but not wired. | Decision: Removed PDF stub to focus on CSV data reliability. |
 
 ## 2. Mentor Reflection
 ### 2.1 What was the most significant technical challenge?
-Implementing the 'Reply' logic which required correctly mapping parent and child messages while maintaining a flat database structure.
+Successfully aggregating statistics from multiple related tables (Teams and Departments) using Django's `annotate` and `Count` functions without creating slow queries.
 
 ### 2.2 How did you manage team communication?
-Collaborated closely with the Core lead to ensure the Messaging UI felt like a native part of the central Dashboard.
+Collaborated closely with Lucas (Organisation) and Riagul (Teams) to ensure the reporting data correctly captured their module-specific fields like team leaders and department specialisations.
 
 ### 2.3 What would you do differently if you started again?
-I would use a dedicated Calendar library like `FullCalendar` for the Schedule module for better interactive features.
+I would integrate a library like `Chart.js` earlier in the project to provide more visual analytics alongside the data tables.
 
 ### 2.4 How did you handle scope creep?
-Focused on the core 'Notification' aspect of messaging rather than building a full email-style client.
+Limited the report types to four core areas (Health, Department Stats, Management Gaps, and CSV Exports) to ensure they were all high-fidelity.
 
 ### 2.5 What was your most valuable contribution?
-The real-time notification logic which ensures team members see urgent messages immediately upon login.
+The 'Management Gap Analysis' feature, which identifies teams without a named leader—a key requirement for the Sky Engineering registry business logic.
 
 ## 3. Module Ownership
-- **Messaging**: Compose, Inbox, and Reply systems.
-- **Schedule**: Meeting creation and Interactive Calendar.
-- **Security**: Message-level permission controls.
+- **Reports**: Statistics aggregation, summary metrics, and management gap analysis.
+- **Analytics**: Departmental breakdown and team density calculations.
+- **Exports**: Integration with CSV writer for data portability.
+

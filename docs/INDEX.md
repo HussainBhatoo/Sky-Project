@@ -34,4 +34,4 @@ This index is the single entry point for project documentation.
   - [Hussain - Reports](implementation/students/hussain_reports.md)
 
 ## Design decision records
-- [High-Fidelity Design System ADR](design/high_fidelity_design_system.md)
+- [Interactive Visual Enhancements ADR](design/high_fidelity_design_system.md)

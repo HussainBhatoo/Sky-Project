@@ -21,15 +21,18 @@ The application logic is designed to prevent unauthorised access to data (Sectio
 ---
 
 ## 2. Ethical Considerations
-...[BCS content]...
+
+Our team followed the BCS Code of Conduct principles throughout the development of the Sky Engineering Team Registry, specifically focusing on the public interest and professional competence (BCS, 2021). We ensured that no real personal data was used in the system; all 46 teams, their leaders, and the 100+ members are fictional test data based on the registry brief provided by the University of Westminster (Westminster, 2026). Ethical considerations also extended to our transparency regarding security; we have openly documented that `DEBUG=True` was left on during this development phase to assist with marker review, despite it being a known risk that exposes local server paths (OWASP, 2021). All data is stored locally in a SQLite database and is never shared with third-party services, adhering to the principle of duty to our relevant authority (BCS, 2021).
 
 ---
 
 ## 3. Professional Practice (HCI & UX)
 
-- **Accessibility (WCAG 2.1):** The UI uses high-contrast "Sky Spectrum" tokens (Deep Navy #001937 and Bright Blue #0073C5) to ensure contrast ratios meet AA standards.
-- **Data Integrity:** The use of Django Signals for Audit Logging ensures a "gold standard" of accountability, where every CREATE, UPDATE, and DELETE action is logged for transparency.
-- **Security-First Design:** Sensitive operations and administrative views are protected using Django's session-based authentication framework.
+- **Accessibility (WCAG 2.1):** The UI uses high-contrast "Sky Spectrum" tokens (Deep Navy #001937 and Bright Blue #0073C5) to ensure contrast ratios meet AA standards for readability.
+- **Data Integrity:** The application implements a robust Audit Logging system using a combination of Django Signals (for core registries like Teams) and explicit view-level logging for user actions (like messaging and endorsements). This ensures 100% accountability and transparency for all system mutations.
+- **Security-First Design:** Sensitive operations and administrative views are protected using Django's session-based authentication framework, specifically preventing Broken Access Control (OWASP, 2021).
+- **Data Protection:** The app stores basic PII such as corporate emails and names, which are protected by Django’s built-in authentication system and hashed password storage as required by the UK Data Protection Act (DPA, 2018). Users also have the 'Right to erasure' as an admin can manually delete their accounts upon request (UK GDPR, 2021).
+
 
 ---
 

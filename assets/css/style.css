@@ -399,9 +399,8 @@
 .text-center { text-align: center; }
 
 /* ============================================================
-   PHASE 1: EXTENDED COMPONENT LIBRARY
-   Added for full module conversion (Schedule, Teams, Org, 
-   Messages, Reports, Auth, Profile)
+   EXTENDED COMPONENT LIBRARY
+   Shared components for all system modules.
    ============================================================ */
 
 /* CHIPS — Status, Department, Dependency */

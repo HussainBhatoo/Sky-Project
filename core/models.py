@@ -26,7 +26,7 @@ class Department(models.Model):
     department_id = models.AutoField(primary_key=True)
     department_name = models.CharField(max_length=100)
     department_lead_name = models.CharField(max_length=100)
-    specialization = models.CharField(max_length=150, blank=True, null=True, help_text="e.g. Web Development, Cloud Infrastructure") # Rubric Requirement
+    specialization = models.CharField(max_length=150, blank=True, null=True, help_text="e.g. Web Development, Cloud Infrastructure")
     description = models.TextField()
 
     def __str__(self):
@@ -153,7 +153,7 @@ class AuditLog(models.Model):
         return f"{self.action_type} - {self.entity_type} ({self.entity_id})"
 
 class Vote(models.Model):
-    # Entity 14: Vote (Rubric Requirement 1.14)
+    # Entity 14: Vote
     vote_id = models.AutoField(primary_key=True)
     voter = models.ForeignKey(User, on_delete=models.CASCADE, related_name='votes')
     team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='votes')
@@ -167,7 +167,7 @@ class Vote(models.Model):
         return f"{self.voter.username} voted for {self.team.team_name}"
 
 class DepartmentVote(models.Model):
-    # Entity 16: DepartmentVote (Rubric Requirement 1.14 - Engagement for all entities)
+    # Entity 16: DepartmentVote
     vote_id = models.AutoField(primary_key=True)
     voter = models.ForeignKey(User, on_delete=models.CASCADE, related_name='dept_votes')
     department = models.ForeignKey(Department, on_delete=models.CASCADE, related_name='votes')

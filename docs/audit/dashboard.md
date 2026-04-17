@@ -44,5 +44,8 @@
 | Notification Bell Removal? | **PASS** | Visual confirms bell is gone from `base.html`. |
 | Design Spell Check? | **PASS** | Tilt and shine effects active on all dashboard cards. |
 
+## Testing Evidence
+General system dashboard metrics and view toggles are verified via the **Group Application Tests** section in [docs/test_plan.md](file:///c:/Study/Uni%20Sem%202/Group%20project/CW_2/sky-team-registry/docs/test_plan.md). Manual test evidence to be recorded in CWK2 Word template.
+
 ---
 **Audit Result: 100% COMPLIANT**

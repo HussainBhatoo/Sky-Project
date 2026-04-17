@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Q
 from django.http import JsonResponse
 
-from core.models import Department, Team, Dependency, DepartmentVote
+from core.models import Department, Team, Dependency, DepartmentVote, AuditLog
 
 
 @login_required
@@ -146,9 +146,25 @@ def toggle_department_endorsement(request, dept_id):
     if vote_queryset.exists():
         vote_queryset.delete()
         voted = False
+        # Log endorsement removal
+        AuditLog.objects.create(
+            actor_user=request.user,
+            action_type='DELETE',
+            entity_type='DepartmentVote',
+            entity_id=dept_id,
+            change_summary=f"User '{request.user.username}' removed endorsement for department '{department.department_name}'."
+        )
     else:
         DepartmentVote.objects.create(voter=request.user, department=department)
         voted = True
+        # Log endorsement creation
+        AuditLog.objects.create(
+            actor_user=request.user,
+            action_type='CREATE',
+            entity_type='DepartmentVote',
+            entity_id=dept_id,
+            change_summary=f"User '{request.user.username}' endorsed department '{department.department_name}'."
+        )
         
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         return JsonResponse({

@@ -33,7 +33,5 @@
 - Username, Password, Email, First/Last Name fields? **PASS**
 - CSRF token present? **PASS**
 
-### Functionality Tests
-- New user registration? **PASS** (Creates account successfully)
-- Post-signup redirection? **PASS** (Redirects to Login with success message)
-- Duplicate username handling? **PASS** (Displays validation error)
+## Testing Evidence
+General system authentication and registration flows are verified via the **Group Application Tests** section in [docs/test_plan.md](file:///c:/Study/Uni/Sem%202/Group%20project/CW_2/sky-team-registry/docs/test_plan.md). Manual test evidence to be recorded in CWK2 Word template.

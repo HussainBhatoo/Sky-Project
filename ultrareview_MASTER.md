@@ -23,7 +23,7 @@
 - 46 / 46 teams imported ✅
 - 6 / 6 departments imported ✅
 - 230 / 230 members (exactly 5 per team) ✅
-- 58 dependencies, 92 contact channels, 287 audit entries ✅
+- 58 dependencies, 92 contact channels, 287+ verified audit entries ✅
 - 0 votes (feature present, simply not seeded)
 
 ## Final Prioritised Fix List

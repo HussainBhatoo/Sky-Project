@@ -69,7 +69,7 @@
 | `core_contactchannel` | ✅ | ✅ | 92 | |
 | `core_message` | ✅ | ✅ | 9 | sender, team, subject, body, status, sent_at |
 | `core_meeting` | ✅ | ✅ | 3 | creator, team, platform, link, agenda |
-| `core_auditlog` | ✅ | ✅ | 287 | CREATE/UPDATE/DELETE via signals |
+| `core_auditlog` | ✅ | ✅ | 287+ | Hybrid logging (Signals + View-level) |
 | `core_vote` | ✅ | ✅ (unique_together) | 0 | Feature working, no seeded votes |
 | `core_departmentvote` | ✅ | ✅ (unique_together) | 0 | Same |
 | **`core_timetrack`** | ❌ | — | — | **Removed in migration 0007 — rubric requires this** |

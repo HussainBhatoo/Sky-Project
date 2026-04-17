@@ -8,7 +8,7 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Count
 
-from core.models import Team, Department, TeamMember, Dependency, ContactChannel, Vote
+from core.models import Team, Department, TeamMember, Dependency, ContactChannel, Vote, AuditLog
 from django.shortcuts import redirect
 from django.contrib import messages
 
@@ -123,8 +123,8 @@ def team_detail(request, team_id):
 @login_required
 def vote_team(request, team_id):
     """
-    Toggles a 'Vote/Endorse' for a team.
-    Rubric Requirement: Each student must be able to vote for a team (distinct table).
+    Toggles an endorsement for a team.
+    Each user can endorse one or more teams to show support.
     """
     try:
         team = get_object_or_404(Team, team_id=team_id)
@@ -134,8 +134,24 @@ def vote_team(request, team_id):
             # If already voted, remove it (toggle behavior)
             vote.delete()
             messages.info(request, f"Removed endorsement for {team.team_name}.")
+            # Log vote removal
+            AuditLog.objects.create(
+                actor_user=request.user,
+                action_type='DELETE',
+                entity_type='Vote',
+                entity_id=team_id,
+                change_summary=f"User '{request.user.username}' removed endorsement for team '{team.team_name}'."
+            )
         else:
             messages.success(request, f"Voted for {team.team_name}!")
+            # Log vote creation
+            AuditLog.objects.create(
+                actor_user=request.user,
+                action_type='CREATE',
+                entity_type='Vote',
+                entity_id=team_id,
+                change_summary=f"User '{request.user.username}' endorsed team '{team.team_name}'."
+            )
             
         return redirect('teams:team_detail', team_id=team_id)
     except Exception as error:

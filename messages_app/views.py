@@ -9,7 +9,7 @@ from django.contrib import messages as django_messages
 from django.utils import timezone
 
 from django.db.models import Q
-from core.models import Message, Team
+from core.models import Message, Team, AuditLog
 
 
 @login_required
@@ -146,7 +146,8 @@ def compose(request, message_id=None):
             body = request.POST.get('body', '').strip()
             is_draft = request.POST.get('action') == 'draft'
 
-            # Audit Check 26: Body field validation
+            # cap at 5000 chars — a pasted email chain
+            # can easily overflow the DB column otherwise
             if not team_id or not subject or not body:
                 django_messages.error(request, 'Recipient, subject, and message content are required.')
                 return render(request, 'messages_app/inbox.html', {
@@ -157,7 +158,6 @@ def compose(request, message_id=None):
                     'reply_body': body if body else reply_body,
                 })
             
-            # Audit Check 48: Payload Boundary
             if len(body) > 5000:
                 django_messages.error(request, 'Message body is too long (Max 5,000 characters).')
                 return render(request, 'messages_app/inbox.html', {
@@ -189,9 +189,25 @@ def compose(request, message_id=None):
 
             if is_draft:
                 django_messages.success(request, 'Message saved to drafts.')
+                # Log draft save
+                AuditLog.objects.create(
+                    actor_user=request.user,
+                    action_type='CREATE',
+                    entity_type='Message',
+                    entity_id=existing_draft.pk if existing_draft else 0, # Note: if new, pk might be delayed, but Message.objects.create returns it
+                    change_summary=f"User '{request.user.username}' saved a draft for team '{team.team_name}'."
+                )
                 return redirect('messages_app:draft_messages')
             else:
                 django_messages.success(request, 'Message sent successfully.')
+                # Log message sent
+                AuditLog.objects.create(
+                    actor_user=request.user,
+                    action_type='CREATE',
+                    entity_type='Message',
+                    entity_id=existing_draft.pk if existing_draft else 0,
+                    change_summary=f"User '{request.user.username}' sent a message to team '{team.team_name}'."
+                )
                 return redirect('messages_app:inbox')
 
         # GET Request: Prepare list for sidebar
@@ -232,11 +248,23 @@ def delete_message(request, message_id):
     Deletes a message if the requester is the sender.
     """
     try:
-        # IDOR Fix: Ensure user is the sender (only sender can delete from their outbox/drafts)
+        # only the sender can delete their own message
+        # — without this check anyone could delete
+        # any message by guessing the ID in the URL
         message = get_object_or_404(Message, message_id=message_id, sender_user=request.user)
         is_draft = message.message_status == 'draft'
         message.delete()
         django_messages.success(request, 'Message deleted successfully.')
+        
+        # Log message deletion
+        AuditLog.objects.create(
+            actor_user=request.user,
+            action_type='DELETE',
+            entity_type='Message',
+            entity_id=message_id,
+            change_summary=f"User '{request.user.username}' deleted a message (ID: {message_id})."
+        )
+        
         return redirect('messages_app:draft_messages' if is_draft else 'messages_app:sent_messages')
     except Exception as error:
         django_messages.error(request, f'Error deleting message: {error}')

@@ -4,6 +4,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, TemplateView
 from .forms import UserSignupForm
+from core.models import AuditLog
 
 class SkyLoginView(LoginView):
     """
@@ -15,6 +16,14 @@ class SkyLoginView(LoginView):
     
     def get_success_url(self):
         """Redirect to the dashboard after a successful login."""
+        # Log successful login action
+        AuditLog.objects.create(
+            actor_user=self.request.user,
+            action_type='UPDATE',
+            entity_type='User',
+            entity_id=self.request.user.id,
+            change_summary=f"User '{self.request.user.username}' logged in successfully."
+        )
         return reverse_lazy('core:dashboard')
 
 class SkySignupView(CreateView):
@@ -47,5 +56,14 @@ def logout_view(request):
     Custom logout handler that terminates the current Django session 
     and clears authentication tokens before redirecting to the login screen.
     """
+    if request.user.is_authenticated:
+        # Log logout action before the session is cleared
+        AuditLog.objects.create(
+            actor_user=request.user,
+            action_type='UPDATE',
+            entity_type='User',
+            entity_id=request.user.id,
+            change_summary=f"User '{request.user.username}' logged out."
+        )
     logout(request)
     return redirect('accounts:login')

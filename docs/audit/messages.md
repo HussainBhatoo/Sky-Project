@@ -35,5 +35,8 @@ The Messaging Module is **100% functional**. All core features (Inbox, Sent, Dra
   - [Reply Feature Pre-fill Success](file:///C:/Users/maury/.gemini/antigravity/brain/f2a1a2c4-1967-4097-827e-a6437a41ac12/final_messaging_verify_fixed_1776347441696.webp)
   - [Mandatory Validation PASS](file:///C:/Users/maury/.gemini/antigravity/brain/f2a1a2c4-1967-4097-827e-a6437a41ac12/compose_validation_empty_subject_1776348318089.png)
 
+## Testing Evidence
+Test cases documented in [docs/test_plan.md](file:///c:/Study/Uni/Sem%202/Group%20project/CW_2/sky-team-registry/docs/test_plan.md) — see section **Student 3 — Mohammed Suliman Roshid — Messages Module** for individual tests and **Group Application Tests** section for integration tests. Manual test evidence to be recorded in CWK2 Word template.
+
 ---
 **Status**: COMPLETED & PRODUCTION READY.
