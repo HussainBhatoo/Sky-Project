@@ -13,7 +13,7 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 from core.models import (
     Department, Team, TeamMember, Dependency,
-    ContactChannel, RepositoryLink, BoardLink, WikiLink, StandupInfo
+    ContactChannel
 )
 
 
@@ -24,10 +24,6 @@ class Command(BaseCommand):
         self.stdout.write(self.style.WARNING('\n Starting Sky Registry data population...\n'))
 
         with transaction.atomic():
-            StandupInfo.objects.all().delete()
-            WikiLink.objects.all().delete()
-            BoardLink.objects.all().delete()
-            RepositoryLink.objects.all().delete()
             ContactChannel.objects.all().delete()
             Dependency.objects.all().delete()
             TeamMember.objects.all().delete()
@@ -127,9 +123,6 @@ class Command(BaseCommand):
                     tech_tags=t['skills'],
                 )
                 teams[t['name']] = team
-                RepositoryLink.objects.create(team=team, repo_name=f"{t['name']} GitHub", repo_url=f"https://{t['repo']}")
-                if t['board']:
-                    BoardLink.objects.create(team=team, board_type='Jira', board_url=f"https://{t['board']}")
                 slug = t['name'].lower().replace(' ', '-')
                 ContactChannel.objects.create(team=team, channel_type='slack', channel_value=f'#{slug}')
                 ContactChannel.objects.create(team=team, channel_type='email', channel_value=team.lead_email)

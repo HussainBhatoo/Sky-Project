@@ -1,0 +1,158 @@
+{% extends "admin/base.html" %}
+{% load i18n static %}
+
+{% block content %}
+<div id="content-main">
+    <h1 style="color: var(--sky-header-blue); font-weight: 800; margin-bottom: 2rem;">Registry Management Hub</h1>
+    
+    <div class="grid-3 animate-slide-up" style="animation-delay: 0.1s;">
+        <!-- 1. Team Management -->
+        <div class="card spell-tilt spell-shine" style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem;">
+            <div style="width: 48px; height: 48px; background: rgba(0, 15, 245, 0.08); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--sky-primary); font-size: 1.5rem;">
+                <i class='bx bx-group'></i>
+            </div>
+            <div>
+                <h3 style="color: var(--sky-header-blue); font-size: 1.15rem; margin-bottom: 0.5rem; font-weight: 800;">Team Management</h3>
+                <p style="font-size: 0.85rem; color: var(--muted-foreground); line-height: 1.5; margin-bottom: 1rem;">Define new engineering teams, update missions, or transition team statuses.</p>
+            </div>
+            <div style="display: flex; gap: 0.75rem; margin-top: auto;">
+                <a href="/admin/core/team/" class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.5rem 1rem; flex: 1; justify-content: center;"><i class='bx bx-list-ul'></i> View All</a>
+                <a href="/admin/core/team/add/" class="btn btn-primary" style="font-size: 0.75rem; padding: 0.5rem 1rem; flex: 1; justify-content: center;"><i class='bx bx-plus-circle'></i> Add New</a>
+            </div>
+        </div>
+
+        <!-- 2. Department Directory -->
+        <div class="card spell-tilt spell-shine" style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem;">
+            <div style="width: 48px; height: 48px; background: rgba(159, 17, 231, 0.08); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #9f11e7; font-size: 1.5rem;">
+                <i class='bx bx-buildings'></i>
+            </div>
+            <div>
+                <h3 style="color: var(--sky-header-blue); font-size: 1.15rem; margin-bottom: 0.5rem; font-weight: 800;">Departments</h3>
+                <p style="font-size: 0.85rem; color: var(--muted-foreground); line-height: 1.5; margin-bottom: 1rem;">Manage organisational structures and parent department mappings.</p>
+            </div>
+            <div style="display: flex; gap: 0.75rem; margin-top: auto;">
+                <a href="/admin/core/department/" class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.5rem 1rem; flex: 1; justify-content: center;"><i class='bx bx-list-ul'></i> View All</a>
+                <a href="/admin/core/department/add/" class="btn btn-primary" style="font-size: 0.75rem; padding: 0.5rem 1rem; flex: 1; justify-content: center;"><i class='bx bx-plus-circle'></i> Add New</a>
+            </div>
+        </div>
+
+        <!-- 3. Workforce -->
+        <div class="card spell-tilt spell-shine" style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem;">
+            <div style="width: 48px; height: 48px; background: rgba(231, 2, 150, 0.08); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #e70296; font-size: 1.5rem;">
+                <i class='bx bx-user-pin'></i>
+            </div>
+            <div>
+                <h3 style="color: var(--sky-header-blue); font-size: 1.15rem; margin-bottom: 0.5rem; font-weight: 800;">Workforce</h3>
+                <p style="font-size: 0.85rem; color: var(--muted-foreground); line-height: 1.5; margin-bottom: 1rem;">Maintain the registry of individual engineers and their roles.</p>
+            </div>
+            <div style="display: flex; gap: 0.75rem; margin-top: auto;">
+                <a href="/admin/core/teammember/" class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.5rem 1rem; flex: 1; justify-content: center;"><i class='bx bx-list-ul'></i> View All</a>
+                <a href="/admin/core/teammember/add/" class="btn btn-primary" style="font-size: 0.75rem; padding: 0.5rem 1rem; flex: 1; justify-content: center;"><i class='bx bx-plus-circle'></i> Add New</a>
+            </div>
+        </div>
+
+        <!-- 4. Dependencies -->
+        <div class="card spell-tilt spell-shine" style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem;">
+            <div style="width: 48px; height: 48px; background: rgba(243, 75, 7, 0.08); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #f34b07; font-size: 1.5rem;">
+                <i class='bx bx-git-repo-forked'></i>
+            </div>
+            <div>
+                <h3 style="color: var(--sky-header-blue); font-size: 1.15rem; margin-bottom: 0.5rem; font-weight: 800;">Dependencies</h3>
+                <p style="font-size: 0.85rem; color: var(--muted-foreground); line-height: 1.5; margin-bottom: 1rem;">Link teams through upstream and downstream relationship mappings.</p>
+            </div>
+            <div style="display: flex; gap: 0.75rem; margin-top: auto;">
+                <a href="/admin/core/dependency/" class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.5rem 1rem; flex: 1; justify-content: center;"><i class='bx bx-list-ul'></i> View All</a>
+                <a href="/admin/core/dependency/add/" class="btn btn-primary" style="font-size: 0.75rem; padding: 0.5rem 1rem; flex: 1; justify-content: center;"><i class='bx bx-plus-circle'></i> Add New</a>
+            </div>
+        </div>
+
+        <!-- 5. Contact Channels -->
+        <div class="card spell-tilt spell-shine" style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem;">
+            <div style="width: 48px; height: 48px; background: rgba(0, 126, 204, 0.08); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--sky-focus); font-size: 1.5rem;">
+                <i class='bx bx-hash'></i>
+            </div>
+            <div>
+                <h3 style="color: var(--sky-header-blue); font-size: 1.15rem; margin-bottom: 0.5rem; font-weight: 800;">Contact Channels</h3>
+                <p style="font-size: 0.85rem; color: var(--muted-foreground); line-height: 1.5; margin-bottom: 1rem;">Manage Slack, Email, and internal communication access points.</p>
+            </div>
+            <div style="display: flex; gap: 0.75rem; margin-top: auto;">
+                <a href="/admin/core/contactchannel/" class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.5rem 1rem; flex: 1; justify-content: center;"><i class='bx bx-list-ul'></i> View All</a>
+                <a href="/admin/core/contactchannel/add/" class="btn btn-primary" style="font-size: 0.75rem; padding: 0.5rem 1rem; flex: 1; justify-content: center;"><i class='bx bx-plus-circle'></i> Add New</a>
+            </div>
+        </div>
+
+        <!-- 6. Messaging -->
+        <div class="card spell-tilt spell-shine" style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem;">
+            <div style="width: 48px; height: 48px; background: rgba(12, 27, 135, 0.08); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--sky-header-blue); font-size: 1.5rem;">
+                <i class='bx bx-envelope'></i>
+            </div>
+            <div>
+                <h3 style="color: var(--sky-header-blue); font-size: 1.15rem; margin-bottom: 0.5rem; font-weight: 800;">Messaging</h3>
+                <p style="font-size: 0.85rem; color: var(--muted-foreground); line-height: 1.5; margin-bottom: 1rem;">Oversee internal communications and drafted announcements.</p>
+            </div>
+            <div style="display: flex; gap: 0.75rem; margin-top: auto;">
+                <a href="/admin/core/message/" class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.5rem 1rem; width: 100%; justify-content: center;"><i class='bx bx-list-ul'></i> View All Announcements</a>
+            </div>
+        </div>
+
+        <!-- 7. Schedule -->
+        <div class="card spell-tilt spell-shine" style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem;">
+            <div style="width: 48px; height: 48px; background: rgba(0, 15, 245, 0.08); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--sky-primary); font-size: 1.5rem;">
+                <i class='bx bx-calendar-event'></i>
+            </div>
+            <div>
+                <h3 style="color: var(--sky-header-blue); font-size: 1.15rem; margin-bottom: 0.5rem; font-weight: 800;">Meeting Schedule</h3>
+                <p style="font-size: 0.85rem; color: var(--muted-foreground); line-height: 1.5; margin-bottom: 1rem;">Coordinate engineering syncs and scheduled team meetings.</p>
+            </div>
+            <div style="display: flex; gap: 0.75rem; margin-top: auto;">
+                <a href="/admin/core/meeting/" class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.5rem 1rem; flex: 1; justify-content: center;"><i class='bx bx-list-ul'></i> View All</a>
+                <a href="/admin/core/meeting/add/" class="btn btn-primary" style="font-size: 0.75rem; padding: 0.5rem 1rem; flex: 1; justify-content: center;"><i class='bx bx-plus-circle'></i> Add New</a>
+            </div>
+        </div>
+
+        <!-- 8. Peer Endorsements -->
+        <div class="card spell-tilt spell-shine" style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem;">
+            <div style="width: 48px; height: 48px; background: rgba(231, 2, 150, 0.08); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #e70296; font-size: 1.5rem;">
+                <i class='bx bx-heart'></i>
+            </div>
+            <div>
+                <h3 style="color: var(--sky-header-blue); font-size: 1.15rem; margin-bottom: 0.5rem; font-weight: 800;">Peer Endorsements</h3>
+                <p style="font-size: 0.85rem; color: var(--muted-foreground); line-height: 1.5; margin-bottom: 1rem;">Monitor team health and social recognition through employee voting.</p>
+            </div>
+            <div style="display: flex; gap: 0.75rem; margin-top: auto;">
+                <a href="/admin/core/vote/" class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.5rem 1rem; width: 100%; justify-content: center;"><i class='bx bx-list-ul'></i> View All Votes</a>
+            </div>
+        </div>
+
+        <!-- 9. Audit Log -->
+        <div class="card spell-tilt spell-shine" style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem;">
+            <div style="width: 48px; height: 48px; background: rgba(243, 75, 7, 0.08); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #f34b07; font-size: 1.5rem;">
+                <i class='bx bx-history'></i>
+            </div>
+            <div>
+                <h3 style="color: var(--sky-header-blue); font-size: 1.15rem; margin-bottom: 0.5rem; font-weight: 800;">System Audit Log</h3>
+                <p style="font-size: 0.85rem; color: var(--muted-foreground); line-height: 1.5; margin-bottom: 1rem;">Full traceability: review database mutations, logins, and administrative changes.</p>
+            </div>
+            <div style="display: flex; gap: 0.75rem; margin-top: auto;">
+                <a href="/admin/core/auditlog/" class="btn btn-primary" style="font-size: 0.75rem; padding: 0.5rem 1rem; width: 100%; justify-content: center;"><i class='bx bx-search'></i> Inspect Logs</a>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Sidebar Highlighting Fix -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const adminLinks = document.querySelectorAll('.nav-link');
+            adminLinks.forEach(link => {
+                if (link.getAttribute('href') === '/admin/') {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</div>
+{% endblock %}

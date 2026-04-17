@@ -1,0 +1,69 @@
+{% load static %}
+<nav class="sidebar">
+    <div class="sidebar-header">
+        <a href="{% url 'core:dashboard' %}" class="logo-link">
+            <!-- Sky Spectrum Branding -->
+            <img src="{% static 'images/Sky-spectrum-rgb.png' %}" alt="Sky Logo" class="sky-logo-img sidebar-logo">
+        </a>
+    </div>
+
+    <ul class="nav-links">
+        <li class="nav-item">
+            <a href="{% url 'core:dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'dashboard' or request.path == '/dashboard/' %}active{% endif %}">
+                <i class='bx bx-grid-alt'></i> <span class="nav-label">Dashboard</span>
+            </a>
+        </li>
+
+        <!-- App Modules (Students Implementation Areas) -->
+        <li class="nav-item">
+            <a href="{% url 'teams:team_list' %}" class="nav-link {% if 'teams' in request.path %}active{% endif %}">
+                <i class='bx bx-user'></i> <span class="nav-label">Teams</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="{% url 'organisation:org_chart' %}" class="nav-link {% if 'organisation' in request.path and 'dependencies' not in request.path %}active{% endif %}">
+                <i class='bx bx-buildings' ></i> <span class="nav-label">Departments</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="{% url 'organisation:dependencies' %}" class="nav-link {% if 'dependencies' in request.path %}active{% endif %}">
+                <i class='bx bx-git-repo-forked' ></i> <span class="nav-label">Dependencies</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="{% url 'messages_app:inbox' %}" class="nav-link {% if 'messages' in request.path %}active{% endif %}">
+                <i class='bx bx-envelope' ></i> <span class="nav-label">Messages</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="{% url 'schedule:calendar' %}" class="nav-link {% if 'schedule' in request.path %}active{% endif %}">
+                <i class='bx bx-calendar' ></i> <span class="nav-label">Schedule</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="{% url 'reports:reports_home' %}" class="nav-link {% if 'reports' in request.path %}active{% endif %}">
+                <i class='bx bx-file' ></i> <span class="nav-label">Reports</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="{% url 'core:audit_log' %}" class="nav-link {% if 'audit' in request.path %}active{% endif %}">
+                <i class='bx bx-clipboard' ></i> <span class="nav-label">Audit Log</span>
+            </a>
+        </li>
+
+        {% if user.is_superuser %}
+        <li class="nav-divider"></li>
+        <li class="nav-item">
+            <a href="/admin/" class="nav-link {% if '/admin/' in request.path %}active{% endif %}">
+                <i class='bx bx-cog' ></i> <span class="nav-label">Admin</span>
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>

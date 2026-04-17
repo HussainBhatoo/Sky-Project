@@ -36,56 +36,52 @@
     </div>
 </div>
 
-<!-- Summary Stats Grid (High-Fi Component Sync) -->
-<div class="{% if view_mode == 'list' %}list-dashboard{% else %}grid-dashboard{% endif %} mb-2" style="margin-top: 1.5rem;">
+<div class="grid-4 mb-2" style="margin-top: 1.5rem;">
     <!-- Stat 1: Organisation Scope -->
-    <div class="quick-card is-1 animate-slide-up spell-tilt spell-shine" style="animation-delay: 0.1s;">
-        <div class="icon-box">
+    <div class="card spell-tilt hover-lift animate-slide-up" style="animation-delay: 0.1s; padding: 1.5rem; display: flex; align-items: center; gap: 1.25rem;">
+        <div style="width: 54px; height: 54px; background: rgba(159, 17, 231, 0.08); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: #9333ea; font-size: 1.75rem; flex-shrink: 0;">
             <i class='bx bxs-institution'></i>
         </div>
         <div>
-            <div style="font-size: 0.75rem; font-weight: 800; opacity: 0.8; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.1em;">DEPARTMENTS</div>
-            <div style="font-size: 2.75rem; font-weight: 900; line-height: 1;">{{ total_depts }}</div>
+            <div style="font-size: 2rem; font-weight: 800; color: var(--sky-header-blue); line-height: 1;">{{ total_depts }}</div>
+            <div style="font-size: 0.75rem; font-weight: 800; opacity: 0.6; margin-top: 0.2rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted-foreground);">DEPARTMENTS</div>
         </div>
-        <div style="font-size: 0.8rem; font-weight: 600; opacity: 0.7; margin-top: auto;">Global Business Units</div>
     </div>
     
-    <!-- Stat 2: Workforce Velocity -->
-    <div class="quick-card is-2 animate-slide-up spell-tilt spell-shine" style="animation-delay: 0.2s;">
-        <div class="icon-box">
+    <!-- Stat 2: Active Teams -->
+    <div class="card spell-tilt hover-lift animate-slide-up" style="animation-delay: 0.2s; padding: 1.5rem; display: flex; align-items: center; gap: 1.25rem;">
+        <div style="width: 54px; height: 54px; background: rgba(0, 15, 245, 0.08); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: var(--sky-primary); font-size: 1.75rem; flex-shrink: 0;">
             <i class='bx bxs-group'></i>
         </div>
         <div>
-            <div style="font-size: 0.75rem; font-weight: 800; opacity: 0.8; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.1em;">ACTIVE TEAMS</div>
-            <div style="font-size: 2.75rem; font-weight: 900; line-height: 1;">{{ total_teams }}</div>
+            <div style="font-size: 2rem; font-weight: 800; color: var(--sky-header-blue); line-height: 1;">{{ total_teams }}</div>
+            <div style="font-size: 0.75rem; font-weight: 800; opacity: 0.6; margin-top: 0.2rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted-foreground);">ACTIVE TEAMS</div>
         </div>
-        <div style="font-size: 0.8rem; font-weight: 600; opacity: 0.7; margin-top: auto;">Agile Engineering Squads</div>
     </div>
-    
+
     <!-- Stat 3: Talent Headcount -->
-    <div class="quick-card is-3 animate-slide-up spell-tilt spell-shine" style="animation-delay: 0.3s;">
-        <div class="icon-box">
+    <div class="card spell-tilt hover-lift animate-slide-up" style="animation-delay: 0.3s; padding: 1.5rem; display: flex; align-items: center; gap: 1.25rem;">
+        <div style="width: 54px; height: 54px; background: rgba(231, 2, 150, 0.08); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: #db2777; font-size: 1.75rem; flex-shrink: 0;">
             <i class='bx bxs-user-detail'></i>
         </div>
         <div>
-            <div style="font-size: 0.75rem; font-weight: 800; opacity: 0.8; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.1em;">TOTAL ENGINEERS</div>
-            <div style="font-size: 2.75rem; font-weight: 900; line-height: 1;">{{ total_members }}</div>
+            <div style="font-size: 2rem; font-weight: 800; color: var(--sky-header-blue); line-height: 1;">{{ total_members }}</div>
+            <div style="font-size: 0.75rem; font-weight: 800; opacity: 0.6; margin-top: 0.2rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted-foreground);">TOTAL STAFF</div>
         </div>
-        <div style="font-size: 0.8rem; font-weight: 600; opacity: 0.7; margin-top: auto;">Sky Technology Network</div>
     </div>
-    
+
     <!-- Stat 4: Schedule Volume -->
-    <div class="quick-card is-4 animate-slide-up spell-tilt spell-shine" style="animation-delay: 0.4s;">
-        <div class="icon-box">
+    <div class="card spell-tilt hover-lift animate-slide-up" style="animation-delay: 0.4s; padding: 1.5rem; display: flex; align-items: center; gap: 1.25rem;">
+        <div style="width: 54px; height: 54px; background: rgba(249, 115, 22, 0.08); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: #ea580c; font-size: 1.75rem; flex-shrink: 0;">
             <i class='bx bx-calendar-event'></i>
         </div>
         <div>
-            <div style="font-size: 0.75rem; font-weight: 800; opacity: 0.8; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.1em;">ALL MEETINGS</div>
-            <div style="font-size: 2.75rem; font-weight: 900; line-height: 1;">{{ total_meetings }}</div>
+            <div style="font-size: 2rem; font-weight: 800; color: var(--sky-header-blue); line-height: 1;">{{ total_meetings }}</div>
+            <div style="font-size: 0.75rem; font-weight: 800; opacity: 0.6; margin-top: 0.2rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted-foreground);">MEETINGS</div>
         </div>
-        <div style="font-size: 0.8rem; font-weight: 600; opacity: 0.7; margin-top: auto;">Scheduled Engagements</div>
     </div>
 </div>
+
 
 <!-- Audit Trail & Intelligence Surface -->
 <div class="row animate-slide-up" style="animation-delay: 0.4s; margin-top: 2rem;">

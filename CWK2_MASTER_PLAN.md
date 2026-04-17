@@ -20,7 +20,7 @@
 3. [Deadlines & Submission Requirements](#3-deadlines--submission-requirements)
 4. [Marks Breakdown](#4-marks-breakdown)
 5. [What We Are Building — Full Feature List](#5-what-we-are-building--full-feature-list)
-6. [Database Models — All 13 Entities](#6-database-models--all-13-entities)
+6. [Database Models — All 10 Entities](#6-database-models--all-10-entities)
 7. [CWK1 Screens to Implement in CWK2](#7-cwk1-screens-to-implement-in-cwk2)
 8. [Tech Stack](#8-tech-stack)
 9. [Project Folder Structure](#9-project-folder-structure)
@@ -276,7 +276,7 @@ Implementation: Django signals tracking User, Action Type (LOGIN/LOGOUT/CREATE/U
 
 ---
 
-## 6. DATABASE MODELS — ALL 13 ENTITIES
+## 6. DATABASE MODELS — ALL 10 ENTITIES
 
 Based on final ERD from CWK1 (designed by Maurya, implemented by Abdul-lateef).
 
@@ -314,9 +314,7 @@ project_codebase (CharField)
 created_at (DateTimeField)
 updated_at (DateTimeField)
 ```
-→ Relationships: belongs to Department, has TeamMembers, has Dependencies (from + to),
-  has ContactChannels, has RepositoryLinks, has BoardLinks, has WikiLinks,
-  has StandupInfo, receives Messages, has Meetings
+  receives Messages, has Meetings
 
 ### Entity 4: TeamMember
 ```
@@ -345,39 +343,8 @@ channel_type (CharField: slack/teams/email)
 channel_value (CharField — the actual link/address)
 ```
 
-### Entity 7: RepositoryLink
-```
-repo_id (PK, auto)
-team_id (FK → Team)
-repo_name (CharField)
-repo_url (URLField)
-```
 
-### Entity 8: BoardLink
-```
-board_id (PK, auto)
-team_id (FK → Team)
-board_type (CharField — Jira, Trello, etc)
-board_url (URLField)
-```
-
-### Entity 9: WikiLink
-```
-wikki_id (PK, auto)
-team_id (FK → Team)
-wikki_description (CharField)
-wikki_link (URLField)
-```
-
-### Entity 10: StandupInfo
-```
-standup_id (PK, auto)
-team_id (FK → Team, OneToOne)
-standup_time (TimeField)
-standup_link (URLField)
-```
-
-### Entity 11: Message
+### Entity 7: Message
 ```
 message_id (PK, auto)
 sender_user_id (FK → User)
@@ -388,7 +355,7 @@ message_status (CharField: draft/sent)
 message_sent_at (DateTimeField)
 ```
 
-### Entity 12: Meeting
+### Entity 8: Meeting
 ```
 meeting_id (PK, auto)
 created_by_user_id (FK → User)
@@ -402,7 +369,7 @@ agenda_text (TextField)
 created_at (DateTimeField)
 ```
 
-### Entity 13: AuditLog
+### Entity 9: AuditLog (Consolidated Time Tracking)
 ```
 audit_id (PK, auto)
 actor_user_id (FK → User)
@@ -411,6 +378,15 @@ entity_type (CharField — Team/Department/User etc)
 entity_id (IntegerField)
 action_changed_at (DateTimeField)
 change_summary (TextField)
+```
+→ **Compliance**: This model now serves as the primary **Time Tracking** mechanism, automatically logging the exact timestamp of every database mutation and administrative action.
+
+### Entity 10: Vote (Peer Recognition)
+```
+vote_id (PK, auto)
+voter_id (FK → User)
+team_id (FK → Team)
+voted_at (DateTimeField)
 ```
 
 ---
@@ -555,6 +531,11 @@ sky-team-registry/              ← Root (cloned from GitHub)
      css/
         style.css           ← Sky blue design system from CWK1
         sky-layout.css      ← Centralized structural layout & Django admin parity classes
+        sky-admin.css       ← (DEPRECATED) Migrated to global layout
+    templates/
+        partials/           ← NEW: Shared navigation components
+            _sidebar.html    ← Unified Sidebar Partial
+            _top_navbar.html ← Unified Top Navbar Partial
      js/
         main.js
      images/

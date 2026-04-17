@@ -1,0 +1,53 @@
+<header class="top-navbar" style="display: flex; align-items: center; justify-content: space-between; height: 60px;">
+    <!-- LEFT ZONE: Burger Menu -->
+    <div class="navbar-left">
+        <button id="sidebar-toggle" class="sidebar-toggle-btn" aria-label="Toggle Sidebar">
+            <i class='bx bx-menu'></i>
+        </button>
+    </div>
+
+    <!-- MIDDLE ZONE: Centered Search Bar -->
+    <div class="navbar-middle">
+        <div class="search-bar-container" id="global-search">
+            <div class="search-bar">
+                <i class='bx bx-search'></i>
+                <input type="text" placeholder="Search teams, leads or projects..." id="search-input">
+            </div>
+            <!-- Dynamic Results Dropdown  -->
+            <div class="search-results-dropdown" id="search-results">
+                <!-- Populated via High-Fi JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- RIGHT ZONE: Badge, Profile -->
+    <div class="navbar-right" style="display: flex; align-items: center; gap: 12px;">
+        <span class="badge badge-blue" style="vertical-align: middle; display: inline-flex; align-items: center;">SKY EMPLOYEE</span>
+        
+        <div class="nav-divider-vertical"></div>
+        
+        <!-- User Profile Dropdown -->
+        <div class="nav-user-dropdown" id="user-dropdown-container" style="display: flex; align-items: center;">
+            <div class="nav-avatar-trigger" id="user-dropdown-btn" style="display: flex; align-items: center;">
+                <div class="avatar-circle small">
+                    {% if user.first_name %}{{ user.first_name|first|upper }}{% else %}{{ user.username|first|upper }}{% endif %}{% if user.last_name %}{{ user.last_name|first|upper }}{% endif %}
+                </div>
+                <span class="user-fullname">{{ user.get_full_name|default:user.username }}</span>
+                <i class='bx bx-chevron-down'></i>
+            </div>
+            
+            <div class="nav-dropdown-menu" id="user-dropdown-menu">
+                <a href="{% url 'core:profile' %}" class="dropdown-item">
+                    <i class='bx bx-user'></i> Profile
+                </a>
+                <div class="dropdown-divider"></div>
+                <form method="POST" action="{% url 'accounts:logout' %}" class="dropdown-form">
+                    {% csrf_token %}
+                    <button type="submit" class="dropdown-item text-danger">
+                        <i class='bx bx-log-out'></i> Sign Out
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</header>

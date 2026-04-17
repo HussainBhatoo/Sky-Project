@@ -4,7 +4,7 @@ from django.utils import timezone
 
 """
 SKY ENGINEERING TEAM REGISTRY - CORE DATA MODELS
-This file defines the 13 foundational entities required by the Sky project brief.
+This file defines the foundational entities required by the Sky project brief.
 All models are designed to be extensible while maintaining strict relational integrity.
 """
 
@@ -94,48 +94,6 @@ class ContactChannel(models.Model):
     def __str__(self):
         return f"{self.team.team_name} - {self.channel_type}"
 
-class RepositoryLink(models.Model):
-    # Entity 7: RepositoryLink
-    repo_id = models.AutoField(primary_key=True)
-    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='repo_links')
-    repo_name = models.CharField(max_length=100)
-    repo_url = models.URLField()
-
-    def __str__(self):
-        return self.repo_name
-
-class BoardLink(models.Model):
-    # Entity 8: BoardLink
-    board_id = models.AutoField(primary_key=True)
-    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='board_links')
-    board_type = models.CharField(max_length=50) # Jira, Trello, etc.
-    board_url = models.URLField()
-
-    def __str__(self):
-        return f"{self.team.team_name} - {self.board_type}"
-
-class WikiLink(models.Model):
-    # Entity 9: WikiLink
-    wikki_id = models.AutoField(primary_key=True)
-    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='wiki_links')
-    wikki_description = models.CharField(max_length=255)
-    wikki_link = models.URLField()
-
-    def __str__(self):
-        return self.wikki_description
-
-class StandupInfo(models.Model):
-    # Entity 10: StandupInfo
-    standup_id = models.AutoField(primary_key=True)
-    team = models.OneToOneField(Team, on_delete=models.CASCADE, related_name='standup_info')
-    standup_time = models.TimeField()
-    standup_link = models.URLField()
-
-    class Meta:
-        verbose_name_plural = "Standup Info"
-
-    def __str__(self):
-        return f"{self.team.team_name} Standup at {self.standup_time}"
 
 class Message(models.Model):
     # Entity 11: Message
@@ -221,15 +179,3 @@ class DepartmentVote(models.Model):
     def __str__(self):
         return f"{self.voter.username} endorsed {self.department.department_name}"
 
-class TimeTrack(models.Model):
-    # Entity 15: TimeTrack (Rubric Requirement 1.14 - Distinct Table)
-    track_id = models.AutoField(primary_key=True)
-    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='time_tracks')
-    milestone_name = models.CharField(max_length=255)
-    status = models.CharField(max_length=50, choices=[('planned', 'Planned'), ('in_progress', 'In Progress'), ('completed', 'Completed')], default='planned')
-    scheduled_date = models.DateField()
-    actual_date = models.DateField(null=True, blank=True)
-    notes = models.TextField(blank=True)
-
-    def __str__(self):
-        return f"{self.team.team_name} - {self.milestone_name}"

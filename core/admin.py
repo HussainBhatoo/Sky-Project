@@ -3,8 +3,7 @@ from django.contrib.admin import AdminSite
 from django.contrib.auth.models import Group
 from .models import (
     User, Department, Team, TeamMember, Dependency, 
-    ContactChannel, RepositoryLink, BoardLink, WikiLink, 
-    StandupInfo, Message, Meeting, AuditLog, Vote, TimeTrack
+    ContactChannel, Message, Meeting, AuditLog, Vote
 )
 
 """
@@ -35,12 +34,12 @@ class SkyAdminSite(AdminSite):
         # Custom structured sections required by the brief
         sections = [
             ("Add Team", ['Team']),
-            ("Team Management", ['TeamMember', 'ContactChannel', 'RepositoryLink', 'BoardLink', 'WikiLink', 'StandupInfo']),
+            ("Team Management", ['TeamMember', 'ContactChannel']),
             ("Department", ['Department']),
             ("Organisation", ['Dependency']),
             ("Messages", ['Message']),
             ("User Access (Permissions)", ['User', 'Group']),
-            ("Reports & Compliance", ['AuditLog', 'Vote', 'TimeTrack']),
+            ("Reports & Compliance", ['AuditLog', 'Vote']),
             ("Data Visualization", ['Meeting']),
         ]
         
@@ -90,19 +89,6 @@ class ContactChannelAdmin(admin.ModelAdmin):
     list_display = ['team', 'channel_type', 'channel_value']
     list_filter = ['channel_type']
 
-class RepositoryLinkAdmin(admin.ModelAdmin):
-    list_display = ['repo_name', 'team', 'repo_url']
-    search_fields = ['repo_name']
-
-class BoardLinkAdmin(admin.ModelAdmin):
-    list_display = ['team', 'board_type', 'board_url']
-    list_filter = ['board_type']
-
-class WikiLinkAdmin(admin.ModelAdmin):
-    list_display = ['wikki_description', 'team', 'wikki_link']
-
-class StandupInfoAdmin(admin.ModelAdmin):
-    list_display = ['team', 'standup_time', 'standup_link']
 
 class MessageAdmin(admin.ModelAdmin):
     list_display = ['message_subject', 'sender_user', 'team', 'message_status', 'message_sent_at']
@@ -119,10 +105,6 @@ class VoteAdmin(admin.ModelAdmin):
     list_filter = ['vote_type', 'team']
     search_fields = ['voter__username', 'team__team_name']
 
-class TimeTrackAdmin(admin.ModelAdmin):
-    list_display = ['team', 'milestone_name', 'status', 'scheduled_date', 'actual_date']
-    list_filter = ['status', 'team']
-    search_fields = ['milestone_name', 'team__team_name']
 
 class AuditLogAdmin(admin.ModelAdmin):
     list_display = ['actor_user', 'entity_type', 'action_type', 'action_changed_at']
@@ -137,12 +119,7 @@ sky_admin_site.register(Team, TeamAdmin)
 sky_admin_site.register(TeamMember, TeamMemberAdmin)
 sky_admin_site.register(Dependency, DependencyAdmin)
 sky_admin_site.register(ContactChannel, ContactChannelAdmin)
-sky_admin_site.register(RepositoryLink, RepositoryLinkAdmin)
-sky_admin_site.register(BoardLink, BoardLinkAdmin)
-sky_admin_site.register(WikiLink, WikiLinkAdmin)
-sky_admin_site.register(StandupInfo, StandupInfoAdmin)
 sky_admin_site.register(Message, MessageAdmin)
 sky_admin_site.register(Meeting, MeetingAdmin)
 sky_admin_site.register(AuditLog, AuditLogAdmin)
 sky_admin_site.register(Vote, VoteAdmin)
-sky_admin_site.register(TimeTrack, TimeTrackAdmin)

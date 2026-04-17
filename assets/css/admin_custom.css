@@ -1,0 +1,35 @@
+/* SKY SPECTRUM ADMIN CUSTOM OVERRIDES */
+:root {
+    --sky-primary: #000FF5;
+    --sky-primary-dark: #000CC4;
+    --sky-spectrum-gradient: linear-gradient(90deg, #9f11e7, #e70296, #f34b07, #ffcc00);
+    --card-shadow: 0 4px 15px rgba(0, 15, 245, 0.04);
+}
+
+/* Base Parity */
+body {
+    font-family: 'Inter', sans-serif !important;
+}
+
+/* Breadcrumbs Restoration */
+.breadcrumbs-custom {
+    background: white !important;
+    padding: 1.25rem 2rem !important;
+    border-radius: 12px !important;
+    box-shadow: var(--card-shadow) !important;
+    margin-bottom: 2rem !important;
+    border: 1px solid rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Django Table Form Hardening */
+.module h2 {
+    background: var(--sky-sidebar-bg) !important;
+    border-radius: 8px 8px 0 0 !important;
+}
+
+#changelist {
+    background: white !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    box-shadow: var(--card-shadow) !important;
+}

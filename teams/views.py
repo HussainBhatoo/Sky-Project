@@ -8,7 +8,7 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Count
 
-from core.models import Team, Department, TeamMember, Dependency, ContactChannel, RepositoryLink, BoardLink, Vote
+from core.models import Team, Department, TeamMember, Dependency, ContactChannel, Vote
 from django.shortcuts import redirect
 from django.contrib import messages
 
@@ -89,8 +89,6 @@ def team_detail(request, team_id):
 
         members = TeamMember.objects.filter(team=team).order_by('full_name')
         contacts = ContactChannel.objects.filter(team=team)
-        repos = RepositoryLink.objects.filter(team=team)
-        boards = BoardLink.objects.filter(team=team)
 
 
         upstream_deps = Dependency.objects.filter(
@@ -110,8 +108,6 @@ def team_detail(request, team_id):
             'team': team,
             'members': members,
             'contacts': contacts,
-            'repos': repos,
-            'boards': boards,
             'upstream_deps': upstream_deps,
             'downstream_deps': downstream_deps,
             'tech_tags': tech_tags,
