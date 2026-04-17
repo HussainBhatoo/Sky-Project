@@ -15,7 +15,7 @@ This index is the single entry point for project documentation.
 - [Dashboard](audit/dashboard.md)
 - [Messages](audit/messages.md)
 - [Schedule](audit/schedule.md)
-- [Reports](audit/reports.md)
+- [Reports (Audited)](audit/reports.md)
 - [Teams (Pending)](audit/teams_PENDING.md)
 - [Organisation (Pending)](audit/organisation_PENDING.md)
 - [Audit Log (Pending)](audit/auditlog_PENDING.md)
