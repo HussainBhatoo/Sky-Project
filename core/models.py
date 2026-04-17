@@ -179,3 +179,47 @@ class DepartmentVote(models.Model):
     def __str__(self):
         return f"{self.voter.username} endorsed {self.department.department_name}"
 
+
+class StandupInfo(models.Model):
+    # Entity 7: StandupInfo
+    standup_id = models.AutoField(primary_key=True)
+    team = models.OneToOneField(Team, on_delete=models.CASCADE, related_name='standup_info')
+    standup_time = models.TimeField()
+    standup_link = models.URLField()
+
+    class Meta:
+        verbose_name_plural = "Standup Info"
+
+    def __str__(self):
+        return f"Standup for {self.team.team_name}"
+
+class RepositoryLink(models.Model):
+    # Entity 8: RepositoryLink
+    repo_id = models.AutoField(primary_key=True)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='repo_links')
+    repo_name = models.CharField(max_length=100)
+    repo_url = models.URLField()
+
+    def __str__(self):
+        return f"{self.repo_name} ({self.team.team_name})"
+
+class WikiLink(models.Model):
+    # Entity 9: WikiLink
+    wikki_id = models.AutoField(primary_key=True)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='wiki_links')
+    wikki_description = models.CharField(max_length=255)
+    wikki_link = models.URLField()
+
+    def __str__(self):
+        return f"Wiki: {self.team.team_name}"
+
+class BoardLink(models.Model):
+    # Entity 10: BoardLink
+    board_id = models.AutoField(primary_key=True)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='board_links')
+    board_type = models.CharField(max_length=50) 
+    board_url = models.URLField()
+
+    def __str__(self):
+        return f"{self.board_type} - {self.team.team_name}"
+

@@ -78,7 +78,7 @@
 
 {% if view_mode == 'list' %}
 <!-- LIST VIEW  -->
-<div class="card animate-slide-up spell-tilt" style="animation-delay: 0.2s; padding: 0; overflow: hidden;">
+<div class="card animate-slide-up" style="animation-delay: 0.2s; padding: 0; overflow: hidden;">
     <table style="width: 100%; border-collapse: collapse; font-size: 0.875rem;">
         <thead>
             <tr style="background: var(--surface-strong); border-bottom: 2px solid var(--border);">
@@ -130,7 +130,7 @@
 <!-- GRID VIEW  -->
 <div class="grid-3 animate-slide-up" style="animation-delay: 0.2s;">
     {% for team in teams %}
-    <a href="{% url 'teams:team_detail' team.team_id %}" class="card spell-tilt spell-shine" style="text-decoration: none; color: inherit; cursor: pointer;">
+    <a href="{% url 'teams:team_detail' team.team_id %}" class="card" style="text-decoration: none; color: inherit; cursor: pointer;">
         <div class="flex-between mb-1">
             <h4 style="font-size: 1rem; color: var(--sky-header-blue); padding-right: 0.5rem;">{{ team.team_name }}</h4>
             <span class="chip {% if team.status == 'Active' %}chip-active{% elif team.status == 'Restructuring' %}chip-restructuring{% else %}chip-disbanded{% endif %}">

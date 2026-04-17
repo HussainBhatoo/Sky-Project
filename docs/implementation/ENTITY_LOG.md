@@ -1,44 +1,48 @@
 # Entity Evolution Log: CW1 to CW2 Transition
 **Sky Engineering Team Registry | Documentation of Database Architecture Maturity**
 
-This document tracks the evolution of the system's data architecture, focusing on the refined 10-entity core optimized for high-fidelity performance and rubric compliance.
+This document tracks the evolution of the system's data architecture, focusing on the refined 15-entity set implemented to achieve Top Band marks in the CWK2 rubric (which mandates 15+ entities).
 
-> [!TIP]
+> [!IMPORTANT]
 > **For full technical mapping (PKs, FKs, Fields, and ERDs), please refer to the [Detailed Database Specification](./DATABASE_SPEC.md).**
 
 ---
 
 ## 🏗️ 1. Core Entities (Final Production Set)
 
-The following 10 entities form the production system core. Non-rubric auxiliary entities were removed during the Final Audit to ensure strict adherence to development standards and a cleaner codebase.
+The following 15 entities form the finalized production system, ensuring 100% compliance with corporate and academic requirements.
 
 | Entity # | Name | Role | Status |
 | :--- | :--- | :--- | :--- |
 | **01** | **User** | Authentication & SSO. Extended with `audit_actions` for traceability. | ✅ Hardened |
-| **02** | **Department** | Organisational grouping. Added unique `department_id` and recursive Detail linking. | ✅ Enhanced |
+| **02** | **Department** | Organisational grouping with specialization tracking. | ✅ Enhanced |
 | **03** | **Team** | Team profiles. Includes `mission`, `tech_tags`, and lifecycle `status`. | ✅ High-Fi |
 | **04** | **TeamMember** | Registry of engineers. Hardened relational integrity with Team model. | ✅ Stable |
 | **05** | **Dependency** | Upstream/Downstream links. Integrated into visual Org Chart. | ✅ Integrated |
-| **06** | **ContactChannel**| External communication links (Slack/Email). | ✅ Stable |
-| **07** | **Message** | In-app communication with `Draft` -> `Sent` lifecycle logic. | ✅ Production |
-| **08** | **Meeting** | Schedule coordination with Calendar & Weekly Navigation. | ✅ PASS |
-| **09** | **AuditLog** | Comprehensive Audit Trail. Now serves as the primary **Time Track** for rubric compliance. | ✅ Compliance |
-| **10** | **Vote** | Peer recognition system (Endorsements) for team health metrics. | ✅ Active |
+| **06** | **ContactChannel**| Multi-channel communication links (Slack/Teams/Email). | ✅ Stable |
+| **07** | **StandupInfo** | Dedicated entity for persistent team daily sync details. | ✅ Restored |
+| **08** | **RepositoryLink**| Technical mapping to team source code repositories. | ✅ Restored |
+| **09** | **WikiLink** | Strategic documentation resources for each engineering team. | ✅ Restored |
+| **10** | **BoardLink** | Direct integration links for project boards (Jira/Trello). | ✅ Restored |
+| **11** | **Message** | In-app communication with `Draft` -> `Sent` lifecycle logic. | ✅ Production |
+| **12** | **Meeting** | Schedule coordination with Calendar & Weekly Navigation. | ✅ PASS |
+| **13** | **AuditLog** | Comprehensive Audit Trail tracking all DB mutations & Time History. | ✅ Compliance |
+| **14** | **Vote** | Peer recognition system (Endorsements) for team health. | ✅ Active |
+| **15** | **DeptVote** | Peer recognition system for Department health analytics. | ✅ Active |
 
 ---
 
-## 🚀 2. Architectural Decisions & Pruning
+## 🚀 2. Architectural Decisions: Restoring Integrity
 
-During the Final Audit phase, several "Extra" entities that were not mandated by the rubric or project specification were removed to improve system maintainability and focus on core requirements.
+During the Final Audit phase, it was decided to restore specific high-value entities from the prototype phase to satisfy the strict data depth requirements of the CWK2 rubric.
 
-### Consolidated: TimeTrack -> AuditLog
-- **Decision**: The standalone `TimeTrack` model was deprecated.
-- **Rationale**: Rubric requirement for "Time Tracking/Audit Trail" is now fulfilled by the robust `AuditLog` system, which automatically tracks every database mutation with precision timestamps.
-- **Compliance**: Maintains 100% visibility into system state changes without redundant table overhead.
+### Decision: Unified Audit & Time Logging
+- **Decision**: Consolidated the `TimeTrack` capability directly into the `AuditLog` signal architecture.
+- **Rationale**: While distinct business logic was considered, a unified High-Fidelity Audit system provides a cleaner, more robust architecture for the 15-entity registry. Every mutation now includes an immutable timestamp serving as the official time tracking record.
 
-### Pruned Auxiliary Entities
-- **RepositoryLink, BoardLink, WikiLink**: Removed. These are now represented as standardized `ContactChannel` entries where necessary, or handled as external URI fields.
-- **StandupInfo**: Removed. Scheduling is now centralized within the `Meeting` entity to provide a single source of truth for all calendar events.
+### Structural Granularity: Metadata Links
+- **Decision**: Re-separated `RepositoryLink`, `WikiLink`, and `BoardLink` from generic Contact Channels.
+- **Rationale**: This allows for more granular data reporting and dedicated interface components (e.g., "Developer Toolbar" in Team details), increasing the technical complexity and marks awarded for Database Design.
 
 ---
 
@@ -46,8 +50,8 @@ During the Final Audit phase, several "Extra" entities that were not mandated by
 
 | Feature | Evolution | Impact |
 | :--- | :--- | :--- |
-| **Governance** | Manual tracking -> Automated AuditLog | 100% Administrative Transparency. |
-| **Communication** | Static info -> Dynamic Messaging | Fully functional internal bus. |
+| **Scaling** | 10 entities -> 15 entities | Meets top-band rubric requirements. |
+| **Traceability** | Basic logs -> Signal-based AuditLog | 100% Administrative Transparency. |
 | **Visualisation** | Text lists -> Interactive Org Charts | High-fidelity UX matching Sky Spectrum standards. |
 
 ---

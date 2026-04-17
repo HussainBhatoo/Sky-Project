@@ -3,7 +3,9 @@ from django.contrib.admin import AdminSite
 from django.contrib.auth.models import Group
 from .models import (
     User, Department, Team, TeamMember, Dependency, 
-    ContactChannel, Message, Meeting, AuditLog, Vote
+    ContactChannel, Message, Meeting, AuditLog, Vote,
+    StandupInfo, RepositoryLink, WikiLink, BoardLink, 
+    DepartmentVote
 )
 
 """
@@ -34,12 +36,13 @@ class SkyAdminSite(AdminSite):
         # Custom structured sections required by the brief
         sections = [
             ("Add Team", ['Team']),
-            ("Team Management", ['TeamMember', 'ContactChannel']),
+            ("Team Management", ['TeamMember', 'ContactChannel', 'StandupInfo']),
+            ("Team Assets", ['RepositoryLink', 'WikiLink', 'BoardLink']),
             ("Department", ['Department']),
             ("Organisation", ['Dependency']),
             ("Messages", ['Message']),
             ("User Access (Permissions)", ['User', 'Group']),
-            ("Reports & Compliance", ['AuditLog', 'Vote']),
+            ("Reports & Compliance", ['AuditLog', 'Vote', 'DepartmentVote']),
             ("Data Visualization", ['Meeting']),
         ]
         
@@ -111,6 +114,24 @@ class AuditLogAdmin(admin.ModelAdmin):
     list_filter = ['action_type', 'entity_type']
     search_fields = ['change_summary', 'actor_user__username']
 
+# New registrations
+class StandupInfoAdmin(admin.ModelAdmin):
+    list_display = ['team', 'standup_time', 'standup_link']
+
+class RepositoryLinkAdmin(admin.ModelAdmin):
+    list_display = ['repo_name', 'team', 'repo_url']
+
+class WikiLinkAdmin(admin.ModelAdmin):
+    list_display = ['team', 'wikki_description', 'wikki_link']
+
+class BoardLinkAdmin(admin.ModelAdmin):
+    list_display = ['board_type', 'team', 'board_url']
+
+
+
+class DepartmentVoteAdmin(admin.ModelAdmin):
+    list_display = ['voter', 'department', 'voted_at']
+
 # Register models to custom admin site
 sky_admin_site.register(Group)
 sky_admin_site.register(User, UserAdmin)
@@ -123,3 +144,8 @@ sky_admin_site.register(Message, MessageAdmin)
 sky_admin_site.register(Meeting, MeetingAdmin)
 sky_admin_site.register(AuditLog, AuditLogAdmin)
 sky_admin_site.register(Vote, VoteAdmin)
+sky_admin_site.register(StandupInfo, StandupInfoAdmin)
+sky_admin_site.register(RepositoryLink, RepositoryLinkAdmin)
+sky_admin_site.register(WikiLink, WikiLinkAdmin)
+sky_admin_site.register(BoardLink, BoardLinkAdmin)
+sky_admin_site.register(DepartmentVote, DepartmentVoteAdmin)

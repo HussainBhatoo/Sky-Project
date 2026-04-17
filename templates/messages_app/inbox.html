@@ -27,7 +27,7 @@
 
 {% if active_tab == 'compose' %}
 <!-- Compose Form -->
-<div class="card animate-slide-up spell-tilt" style="animation-delay: 0.15s; max-width: 700px;">
+<div class="card animate-slide-up" style="animation-delay: 0.15s; max-width: 700px;">
     <h3 style="color: var(--sky-header-blue); margin-bottom: 1.5rem;">
         <i class='bx bx-edit' style="margin-right: 0.5rem;"></i> New Message
     </h3>
@@ -62,7 +62,7 @@
 <!-- Message Detail View -->
 <div class="grid-2-1 animate-slide-up" style="animation-delay: 0.15s;">
     <!-- Message List (shrunk) -->
-    <div class="card spell-tilt" style="padding: 0; max-height: 70vh; overflow-y: auto; border: 1px solid var(--sky-border-subtle); background: var(--sky-card-bg);">
+    <div class="card" style="padding: 0; max-height: 70vh; overflow-y: auto; border: 1px solid var(--sky-border-subtle); background: var(--sky-card-bg);">
         {% for msg in all_messages %}
         <a href="{% url 'messages_app:detail' msg.message_id %}" class="msg-item {% if msg.message_status == 'sent' and not selected_message.message_id == msg.message_id %}is-unread{% endif %}" style="text-decoration: none; color: inherit; transition: background 0.2s ease;">
             <div style="flex: 1; min-width: 0; padding: 0.75rem 1rem; border-bottom: 1px solid var(--sky-border-subtle);">
@@ -80,7 +80,7 @@
     </div>
 
     <!-- Full Message -->
-    <div class="card spell-tilt spell-shine">
+    <div class="card">
         <h3 style="color: var(--sky-header-blue); margin-bottom: 0.75rem; font-size: 1.1rem;">{{ selected_message.message_subject }}</h3>
         <div class="flex-center gap-2 mb-2" style="font-size: 0.8rem; color: var(--muted-foreground);">
             <span><strong>From:</strong> {{ selected_message.sender_user.username }}</span>
@@ -115,7 +115,7 @@
 
 {% else %}
 <!-- Inbox List -->
-<div class="card animate-slide-up spell-tilt" style="animation-delay: 0.15s; padding: 0;">
+<div class="card animate-slide-up" style="animation-delay: 0.15s; padding: 0;">
     {% if all_messages %}
     {% for msg in all_messages %}
     <a href="{% url 'messages_app:detail' msg.message_id %}" class="msg-item {% if msg.message_status == 'sent' %}is-unread{% endif %}" style="text-decoration: none; color: inherit; transition: all 0.2s ease;">

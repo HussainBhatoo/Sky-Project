@@ -34,7 +34,7 @@
 </div>
 
 <!-- New Meeting Form (Hidden by default) -->
-<div id="meeting-form" class="card animate-slide-up spell-tilt mb-3" style="display: {% if show_form %}block{% else %}none{% endif %}; max-width: 640px;">
+<div id="meeting-form" class="card animate-slide-up mb-3" style="display: {% if show_form %}block{% else %}none{% endif %}; max-width: 640px;">
     <h3 style="color: var(--sky-header-blue); margin-bottom: 1.5rem;">
         <i class='bx bx-calendar-plus' style="margin-right: 0.5rem;"></i> New Meeting
     </h3>
@@ -90,7 +90,7 @@
         {% if meetings %}
         <div style="display: flex; flex-direction: column; gap: 0.75rem;">
             {% for meeting in meetings %}
-            <div class="card spell-tilt shadow-sm" style="padding: 1.25rem;">
+            <div class="card shadow-sm" style="padding: 1.25rem;">
                 <div class="flex-between">
                     <div>
                         <h4 style="font-size: 1rem; color: var(--sky-header-blue);">{{ meeting.meeting_title }}</h4>
@@ -147,7 +147,7 @@
         <h3 style="color: var(--sky-header-blue); margin-bottom: 1rem;">
             <i class='bx bx-calendar' style="margin-right: 0.5rem;"></i> Calendar
         </h3>
-        <div class="card spell-tilt spell-shine">
+        <div class="card">
             <div style="text-align: center; font-size: 0.95rem; font-weight: 700; color: var(--sky-header-blue); margin-bottom: 1rem;">
                 {{ month_name }}
             </div>
@@ -175,7 +175,7 @@
         </div>
 
         <!-- Quick Filter by Team -->
-        <div class="card spell-tilt mt-2" style="padding: 1rem;">
+        <div class="card mt-2" style="padding: 1rem;">
             <h4 style="font-size: 0.85rem; color: var(--sky-header-blue); margin-bottom: 0.75rem;">Filter by Team</h4>
             <form method="get" action="{% if active_view == 'weekly' %}{% url 'schedule:weekly' %}{% else %}{% url 'schedule:calendar' %}{% endif %}">
                 {% if active_view == 'weekly' %}

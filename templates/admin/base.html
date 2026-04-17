@@ -48,7 +48,7 @@
 
                 <div id="content" class="{% block coltype %}colM{% endblock %}">
                     {% block pretitle %}{% endblock %}
-                    {% block content_title %}{% if title %}<h1 style="color: var(--sky-header-blue); font-weight: 800; margin-bottom: 0.8rem;">{{ title }}</h1>{% endif %}{% endblock %}
+                    {% block content_title %}{% if title %}<h1 class="spectrum-text" style="font-weight: 800; margin-bottom: 0.8rem; font-size: 1.8rem;">{{ title }}</h1>{% endif %}{% endblock %}
                     
                     {% block messages %}
                       {% if messages %}

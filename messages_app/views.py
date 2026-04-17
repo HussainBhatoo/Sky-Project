@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages as django_messages
 from django.utils import timezone
 
+from django.db.models import Q
 from core.models import Message, Team
 
 
@@ -34,7 +35,8 @@ def inbox(request):
         }
         return render(request, 'messages_app/inbox.html', context)
     except Exception as error:
-        django_messages.error(request, f'Error loading inbox: {error}')
+        # Generic error handling for unexpected issues; logging would be done here in prod.
+        django_messages.error(request, 'An unexpected error occurred while loading your inbox.')
         return render(request, 'messages_app/inbox.html', {'all_messages': []})
 
 @login_required
@@ -86,10 +88,7 @@ def message_detail(request, message_id):
     Displays a single message's full content.
     """
     try:
-        selected_message = get_object_or_404(
-            Message.objects.select_related('sender_user', 'team'),
-            message_id=message_id,
-        )
+        selected_message = get_object_or_404(Message, message_id=message_id)
 
         # Context awareness: maintain the current tab filter
         prev_url = request.META.get('HTTP_REFERER', '')
@@ -117,7 +116,6 @@ def message_detail(request, message_id):
         return redirect('messages_app:inbox')
 
 
-@login_required
 @login_required
 def compose(request, message_id=None):
     """
@@ -234,6 +232,7 @@ def delete_message(request, message_id):
     Deletes a message if the requester is the sender.
     """
     try:
+        # IDOR Fix: Ensure user is the sender (only sender can delete from their outbox/drafts)
         message = get_object_or_404(Message, message_id=message_id, sender_user=request.user)
         is_draft = message.message_status == 'draft'
         message.delete()

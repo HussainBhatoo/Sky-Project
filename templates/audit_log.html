@@ -5,8 +5,8 @@
 {% block content %}
 <div class="header mb-2" style="display: flex; justify-content: space-between; align-items: flex-end;">
     <div>
-        <h1 class="spectrum-text">System Audit Log</h1>
-        <p class="text-muted">Tracking all administrative changes and system mutations across the registry.</p>
+        <h1 class="spectrum-text">System Audit Log & Time Tracking</h1>
+        <p class="text-muted">Consolidated administrative changes and legal time tracking record for all registry mutations.</p>
     </div>
     {% if query or action_type or entity_type %}
     <a href="{% url 'core:audit_log' %}" class="btn btn-secondary btn-sm" style="padding: 0.5rem 1rem; font-size: 0.8rem;">

@@ -38,7 +38,7 @@
 <!-- TAB 1: Graph View (SVG) -->
 <div id="dep-panel-graph" class="animate-slide-up" style="animation-delay: 0.2s;">
     {% if focus_team %}
-    <div class="card spell-tilt" style="overflow-x: auto;">
+    <div class="card" style="overflow-x: auto;">
         <!-- Legend -->
         <div class="flex-center gap-3 mb-2" style="font-size: 0.75rem; color: var(--muted-foreground);">
             <span class="flex-center gap-1"><span style="width: 12px; height: 12px; border-radius: 4px; background: var(--sky-primary); display: inline-block;"></span> Focus Team</span>
@@ -66,7 +66,7 @@
     {% if focus_team %}
     <div class="grid-2">
         <!-- Upstream -->
-        <div class="card spell-tilt">
+        <div class="card">
             <h4 style="color: var(--sky-header-blue); margin-bottom: 1rem;">Upstream Dependencies ({{ upstream_deps|length }})</h4>
             {% if upstream_deps %}
             <div style="display: flex; flex-direction: column; gap: 0.5rem;">
@@ -88,7 +88,7 @@
         </div>
 
         <!-- Downstream -->
-        <div class="card spell-tilt">
+        <div class="card">
             <h4 style="color: var(--sky-header-blue); margin-bottom: 1rem;">Downstream Dependencies ({{ downstream_deps|length }})</h4>
             {% if downstream_deps %}
             <div style="display: flex; flex-direction: column; gap: 0.5rem;">

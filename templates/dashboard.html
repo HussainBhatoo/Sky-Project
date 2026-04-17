@@ -36,10 +36,47 @@
     </div>
 </div>
 
+<!-- System Notifications Surface -->
+<div class="row animate-slide-up" style="animation-delay: 0.15s; margin-top: 1rem;">
+    <div class="flex-center gap-2" style="width: 100%; flex-wrap: wrap;">
+        {% if unread_messages > 0 %}
+        <div class="card" style="flex: 1; min-width: 300px; padding: 1.25rem; border-left: 4px solid var(--sky-primary); background: rgba(0, 15, 245, 0.03);">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <div style="font-size: 1.5rem; color: var(--sky-primary);"><i class='bx bxs-bell-ring bx-tada'></i></div>
+                <div>
+                    <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--sky-header-blue);">Action Required</h4>
+                    <p style="font-size: 0.85rem; color: #666;">You have <strong>{{ unread_messages }}</strong> unread message{{ unread_messages|pluralize }} in your inbox.</p>
+                </div>
+                <a href="{% url 'messages_app:inbox' %}" class="btn btn-ghost" style="margin-left: auto; font-size: 0.75rem;">View Inbox</a>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if upcoming_meetings > 0 %}
+        <div class="card" style="flex: 1; min-width: 300px; padding: 1.25rem; border-left: 4px solid #10b981; background: rgba(16, 185, 129, 0.03);">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <div style="font-size: 1.5rem; color: #10b981;"><i class='bx bxs-calendar-check'></i></div>
+                <div>
+                    <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--sky-header-blue);">Upcoming Agenda</h4>
+                    <p style="font-size: 0.85rem; color: #666;"><strong>{{ upcoming_meetings }}</strong> meeting{{ upcoming_meetings|pluralize }} scheduled for the next 7 days.</p>
+                </div>
+                <a href="{% url 'schedule:calendar' %}" class="btn btn-ghost" style="margin-left: auto; font-size: 0.75rem;">See Schedule</a>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if unread_messages == 0 and upcoming_meetings == 0 %}
+        <div class="card" style="width: 100%; padding: 1rem; text-align: center; border: 1px dashed var(--border); background: transparent; box-shadow: none;">
+            <p style="font-size: 0.85rem; color: #888; font-weight: 500;"><i class='bx bx-check-circle' style="color: #10b981;"></i> All systems operational. No immediate actions required.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
 <div class="grid-4 mb-2" style="margin-top: 1.5rem;">
     <!-- Stat 1: Organisation Scope -->
-    <div class="card spell-tilt hover-lift animate-slide-up" style="animation-delay: 0.1s; padding: 1.5rem; display: flex; align-items: center; gap: 1.25rem;">
-        <div style="width: 54px; height: 54px; background: rgba(159, 17, 231, 0.08); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: #9333ea; font-size: 1.75rem; flex-shrink: 0;">
+    <div class="card hover-lift animate-slide-up" style="animation-delay: 0.1s; padding: 1.5rem; display: flex; align-items: center; gap: 1.25rem;">
+        <div style="width: 54px; height: 54px; background: rgba(0, 15, 245, 0.08); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: var(--sky-primary); font-size: 1.75rem; flex-shrink: 0;">
             <i class='bx bxs-institution'></i>
         </div>
         <div>
@@ -49,7 +86,7 @@
     </div>
     
     <!-- Stat 2: Active Teams -->
-    <div class="card spell-tilt hover-lift animate-slide-up" style="animation-delay: 0.2s; padding: 1.5rem; display: flex; align-items: center; gap: 1.25rem;">
+    <div class="card hover-lift animate-slide-up" style="animation-delay: 0.2s; padding: 1.5rem; display: flex; align-items: center; gap: 1.25rem;">
         <div style="width: 54px; height: 54px; background: rgba(0, 15, 245, 0.08); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: var(--sky-primary); font-size: 1.75rem; flex-shrink: 0;">
             <i class='bx bxs-group'></i>
         </div>
@@ -60,8 +97,8 @@
     </div>
 
     <!-- Stat 3: Talent Headcount -->
-    <div class="card spell-tilt hover-lift animate-slide-up" style="animation-delay: 0.3s; padding: 1.5rem; display: flex; align-items: center; gap: 1.25rem;">
-        <div style="width: 54px; height: 54px; background: rgba(231, 2, 150, 0.08); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: #db2777; font-size: 1.75rem; flex-shrink: 0;">
+    <div class="card hover-lift animate-slide-up" style="animation-delay: 0.3s; padding: 1.5rem; display: flex; align-items: center; gap: 1.25rem;">
+        <div style="width: 54px; height: 54px; background: rgba(0, 15, 245, 0.08); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: var(--sky-primary); font-size: 1.75rem; flex-shrink: 0;">
             <i class='bx bxs-user-detail'></i>
         </div>
         <div>
@@ -71,8 +108,8 @@
     </div>
 
     <!-- Stat 4: Schedule Volume -->
-    <div class="card spell-tilt hover-lift animate-slide-up" style="animation-delay: 0.4s; padding: 1.5rem; display: flex; align-items: center; gap: 1.25rem;">
-        <div style="width: 54px; height: 54px; background: rgba(249, 115, 22, 0.08); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: #ea580c; font-size: 1.75rem; flex-shrink: 0;">
+    <div class="card hover-lift animate-slide-up" style="animation-delay: 0.4s; padding: 1.5rem; display: flex; align-items: center; gap: 1.25rem;">
+        <div style="width: 54px; height: 54px; background: rgba(0, 15, 245, 0.08); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: var(--sky-primary); font-size: 1.75rem; flex-shrink: 0;">
             <i class='bx bx-calendar-event'></i>
         </div>
         <div>
@@ -85,7 +122,7 @@
 
 <!-- Audit Trail & Intelligence Surface -->
 <div class="row animate-slide-up" style="animation-delay: 0.4s; margin-top: 2rem;">
-    <div class="card spell-tilt" style="width: 100%;">
+    <div class="card" style="width: 100%;">
         <div class="card-header" style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 1.25rem;">
             <div>
                 <h2 style="font-size: 1.4rem; color: var(--sky-header-blue);">Recent Activity Trail</h2>

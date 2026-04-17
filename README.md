@@ -76,7 +76,7 @@ graph TD
     subgraph "Database Entities (15)"
         E1_13[Original 13 Baseline]
         E14[Vote / Endorsements]
-        E15[TimeTrack / Compliance]
+        E15[AuditLog / Time Tracking]
     end
     
     Logic --- Dashboard

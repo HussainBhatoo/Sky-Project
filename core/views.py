@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.urls import reverse
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
-from .models import Team, Department, TeamMember, AuditLog, Meeting
+from .models import Team, Department, TeamMember, AuditLog, Meeting, Message
 from datetime import datetime
 
 """
@@ -23,11 +23,20 @@ def dashboard(request):
     :return: Rendered dashboard.html template with statistics context
     """
     view_mode = request.GET.get('view', 'grid')
+    
+    # Calculate notifications for the logged-in user
+    # Note: We filter by 'sent' messages received by any team the user is part of (if applicable)
+    # or just all sent messages for simplicity in this registry view.
+    unread_messages = Message.objects.filter(message_status='sent').count()
+    upcoming_meetings = Meeting.objects.filter(start_datetime__gte=datetime.now()).count()
+
     context = {
         'total_teams': Team.objects.count(),
         'total_depts': Department.objects.count(),
         'total_members': TeamMember.objects.count(),
         'total_meetings': Meeting.objects.count(),
+        'unread_messages': unread_messages,
+        'upcoming_meetings': upcoming_meetings,
         'recent_updates': AuditLog.objects.all().order_by('-action_changed_at')[:10],
         'view_mode': view_mode,
     }

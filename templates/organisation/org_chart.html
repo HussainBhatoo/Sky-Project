@@ -28,7 +28,7 @@
 <!-- TAB 1: Departments List -->
 <div id="panel-list" class="animate-slide-up" style="animation-delay: 0.15s;">
     {% for item in dept_data %}
-    <div class="card mb-2 spell-tilt spell-shine">
+    <div class="card mb-2">
         <div class="flex-between mb-2">
             <div>
                 <a href="{% url 'organisation:department_detail' item.department.department_id %}" style="text-decoration: none;">
@@ -79,7 +79,7 @@
 <!-- TAB 2: Org Chart -->
 <div id="panel-org" style="display: none;" class="animate-slide-up">
     {% for item in dept_data %}
-    <div class="card mb-2 spell-tilt">
+    <div class="card mb-2">
         <div class="flex-center gap-3" style="flex-wrap: wrap;">
             <!-- Department Node -->
             <a href="{% url 'organisation:department_detail' item.department.department_id %}" class="org-node org-node-dept" style="min-width: 140px; text-decoration: none;">

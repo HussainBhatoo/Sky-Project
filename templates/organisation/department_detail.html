@@ -94,14 +94,14 @@ async function toggleEndorsement(deptId) {
 }
 </script>
 
-<div class="card mb-2 animate-slide-up spell-tilt" style="animation-delay: 0.1s;">
+<div class="card mb-2 animate-slide-up" style="animation-delay: 0.1s;">
     <h3 style="color: var(--sky-header-blue); margin-bottom: 1.5rem;">
         <i class='bx bx-sitemap' style="margin-right: 0.5rem;"></i> Teams in this Department
     </h3>
     
     <div class="grid-3">
         {% for team in teams %}
-        <a href="{% url 'teams:team_detail' team.team_id %}" class="card spell-tilt hover-lift" style="text-decoration: none; color: inherit; padding: 1.25rem;">
+        <a href="{% url 'teams:team_detail' team.team_id %}" class="card hover-lift" style="text-decoration: none; color: inherit; padding: 1.25rem;">
             <div class="flex-between mb-1">
                 <span style="font-size: 1.1rem; font-weight: 700;">{{ team.team_name }}</span>
                 <span class="chip {% if team.status == 'Active' %}chip-active{% elif team.status == 'Restructuring' %}chip-restructuring{% else %}chip-disbanded{% endif %}" style="font-size: 0.7rem;">

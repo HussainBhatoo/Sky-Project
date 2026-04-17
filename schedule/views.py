@@ -70,7 +70,15 @@ def schedule_calendar(request):
         # Always pass a form instance so the template renders the fields
         form = MeetingForm(initial={"team": prefill_team_id} if prefill_team_id else {})
 
-        # Filter out past meetings for the 'Upcoming' list
+        # All meetings for the calendar grid (past and future)
+        calendar_meetings = Meeting.objects.filter(
+            start_datetime__month=timezone.now().month,
+            start_datetime__year=timezone.now().year
+        )
+        if team_filter:
+            calendar_meetings = calendar_meetings.filter(team__team_id=team_filter)
+
+        # Filter out past meetings ONLY for the 'Upcoming' list
         meetings = Meeting.objects.select_related("team", "created_by_user").filter(
             start_datetime__gte=timezone.now()
         ).order_by("start_datetime")
@@ -78,7 +86,7 @@ def schedule_calendar(request):
             meetings = meetings.filter(team__team_id=team_filter)
 
         today = timezone.now()
-        calendar_ctx = _build_calendar_context(today.year, today.month, meetings)
+        calendar_ctx = _build_calendar_context(today.year, today.month, calendar_meetings)
         teams = Team.objects.all().order_by("team_name")
 
         context = {
