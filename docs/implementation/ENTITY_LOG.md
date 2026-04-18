@@ -1,16 +1,14 @@
 # Entity Evolution Log: CW1 to CW2 Transition
 **Sky Engineering Team Registry | Documentation of Database Architecture Maturity**
 
-This document tracks the evolution of the system's data architecture, focusing on the refined 15-entity set implemented to achieve Top Band marks in the CWK2 rubric (which mandates 15+ entities).
+This document tracks the evolution of the system's data architecture, focusing on the refined 14-entity set implemented for the CWK2 submission.
 
 > [!IMPORTANT]
 > **For full technical mapping (PKs, FKs, Fields, and ERDs), please refer to the [Detailed Database Specification](./DATABASE_SPEC.md).**
 
 ---
 
-## 🏗️ 1. Core Entities (Final Production Set)
-
-The following 15 entities form the finalized production system, ensuring 100% compliance with corporate and academic requirements.
+The following 14 entities form the finalized production system, ensuring compliance with corporate and academic requirements.
 
 | Entity # | Name | Role | Status |
 | :--- | :--- | :--- | :--- |
@@ -28,7 +26,6 @@ The following 15 entities form the finalized production system, ensuring 100% co
 | **12** | **Meeting** | Schedule coordination with Calendar & Weekly Navigation. | ✅ PASS |
 | **13** | **AuditLog** | Comprehensive Audit Trail tracking all DB mutations & Time History. | ✅ Compliance |
 | **14** | **Vote** | Peer recognition system (Endorsements) for team health. | ✅ Active |
-| **15** | **DeptVote** | Peer recognition system for Department health analytics. | ✅ Active |
 
 ---
 # Coursework 2 — Database Schema Evolution Log
@@ -38,11 +35,11 @@ The following 15 entities form the finalized production system, ensuring 100% co
 2. Team
 3. TeamMember
 
-## CW2 Production State (15 entities)
+## CW2 Production State (14 entities)
 
-The database schema has been expanded to 15 entities to meet the full Coursework 2 rubric requirements for system depth and relational complexity.
+The database schema has been expanded to 14 entities to meet the Coursework 2 rubric requirements.
 
-### FINAL Entity List (15 Models):
+### FINAL Entity List (14 Models):
 1. **User** (Custom Auth model)
 2. **Department** (Organisation container)
 3. **Team** (Core engineering unit)
@@ -57,7 +54,6 @@ The database schema has been expanded to 15 entities to meet the full Coursework
 12. **Meeting** (Schedule entity)
 13. **AuditLog** (System compliance entity)
 14. **Vote** (Team endorsement system)
-15. **DepartmentVote** (Departmental support system)
 
 ## Evolution Tracking
 
@@ -65,14 +61,14 @@ The database schema has been expanded to 15 entities to meet the full Coursework
 |---|---|---|
 | April 1 (Kickoff) | 3 | Baseline |
 | April 10 (Mid-Audit) | 10 | Scaling |
-| April 15 (Final Commit) | 15 | PRODUCTION |
+| April 15 (Final Commit) | 14 | PRODUCTION |
 
 ## Scaling History:
 - **Phase 1 (User/Auth):** Expanded to include custom `User` and `AuditLog`.
 - **Phase 2 (Resources):** Added `Dependency` and `ContactChannel`.
 - **Phase 3 (Assets):** Added `BoardLink`, `WikiLink`, `RepositoryLink`, and `StandupInfo` to formalise team assets.
-- **Phase 4 (Social/Events):** Added `Message`, `Meeting`, `Vote`, and `DepartmentVote`.
-- **FINAL (15):** Stabilised schema for submission.
+- Phase 4 (Social/Events): Added Message, Meeting, and Vote.
+- **FINAL (14):** Stabilised schema for submission.
 
 ---
 
@@ -80,7 +76,7 @@ The database schema has been expanded to 15 entities to meet the full Coursework
 
 | Feature | Evolution | Impact |
 | :--- | :--- | :--- |
-| **Scaling** | 3 entities -> 15 entities | Meets top-band rubric requirements. |
+| **Scaling** | 3 entities -> 14 entities | Meets rubric requirements. |
 | **Traceability** | View-level & Signal-based AuditLog | 100% Administrative Transparency. |
 | **Visualisation** | Text lists -> Interactive Org Charts | Main UX matching Sky Spectrum standards. |
 

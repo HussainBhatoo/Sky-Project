@@ -27,21 +27,6 @@
         </p>
     </div>
     <div class="flex gap-1">
-        <form action="{% url 'organisation:toggle_endorsement' department.department_id %}" method="POST">
-            {% csrf_token %}
-            <button 
-                type="submit"
-                id="endorse-btn" 
-                class="btn {% if has_voted %}btn-primary{% else %}btn-outline{% endif %}"
-                style="display: flex; align-items: center; gap: 0.5rem; transition: all 0.3s;"
-            >
-                <i class='bx {% if has_voted %}bxs-heart{% else %}bx-heart{% endif %}'></i>
-                <span>{% if has_voted %}Endorsed{% else %}Endorse{% endif %}</span>
-                <span id="vote-count" style="background: rgba(255,255,255,0.2); padding: 0.1rem 0.5rem; border-radius: 10px; font-size: 0.8rem;">
-                    {{ vote_count }}
-                </span>
-            </button>
-        </form>
         <span class="chip chip-department" style="font-size: 0.9rem; padding: 0.5rem 1rem;">
             <i class='bx bx-group'></i> {{ total_teams }} Teams
         </span>

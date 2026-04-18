@@ -166,18 +166,6 @@ class Vote(models.Model):
     def __str__(self):
         return f"{self.voter.username} voted for {self.team.team_name}"
 
-class DepartmentVote(models.Model):
-    # Entity 16: DepartmentVote
-    vote_id = models.AutoField(primary_key=True)
-    voter = models.ForeignKey(User, on_delete=models.CASCADE, related_name='dept_votes')
-    department = models.ForeignKey(Department, on_delete=models.CASCADE, related_name='votes')
-    voted_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        unique_together = ('voter', 'department')
-
-    def __str__(self):
-        return f"{self.voter.username} endorsed {self.department.department_name}"
 
 
 class StandupInfo(models.Model):

@@ -24,7 +24,6 @@
 | `Meeting` model | [E] | Choices list, URLField, multiple FKs — findable |
 | `AuditLog` model | [A] | AuditLog as a separate tracking model was explicitly listed as NOT TAUGHT |
 | `Vote` model | [E] | `unique_together` in Meta — not in lecture slides but clearly documented |
-| `DepartmentVote` model | [E] | Same pattern as Vote |
 | `StandupInfo` model | [E] | OneToOneField (taught), TimeField is findable in docs |
 | `RepositoryLink` model | [L] | ForeignKey + CharField + URLField — basic |
 | `WikiLink` model | [L] | Basic model — note the authentic `wikki_id` typo preserved |

@@ -27,32 +27,29 @@
 
 <!-- TAB 1: Departments List -->
 <div id="panel-list" class="animate-slide-up" style="animation-delay: 0.15s;">
-    {% for item in dept_data %}
+    {% for dept in departments %}
     <div class="card mb-2">
         <div class="flex-between mb-2">
             <div>
-                <a href="{% url 'organisation:department_detail' item.department.department_id %}" style="text-decoration: none;">
-                    <h3 style="color: var(--sky-header-blue);">{{ item.department.department_name }}</h3>
+                <a href="{% url 'organisation:department_detail' dept.department_id %}" style="text-decoration: none;">
+                    <h3 style="color: var(--sky-header-blue);">{{ dept.department_name }}</h3>
                 </a>
                 <p style="font-size: 0.8rem; color: var(--muted-foreground); display: flex; align-items: center; gap: 0.5rem;">
-                    <span>Head: {{ item.department.department_lead_name }}</span>
-                    {% if item.department.specialization %}
+                    <span>Head: {{ dept.department_lead_name }}</span>
+                    {% if dept.specialization %}
                     <span style="opacity: 0.4;">|</span>
-                    <span style="color: var(--sky-primary); font-weight: 500;">{{ item.department.specialization }}</span>
+                    <span style="color: var(--sky-primary); font-weight: 500;">{{ dept.specialization }}</span>
                     {% endif %}
                 </p>
             </div>
             <div class="flex gap-1">
-                <span class="chip" style="background: rgba(3, 2, 19, 0.03); color: var(--sky-header-blue); border: 1px solid var(--border); font-size: 0.75rem;">
-                    <i class='bx {% if item.has_voted %}bxs-heart{% else %}bx-heart{% endif %}' style="color: var(--sky-primary); margin-right: 0.2rem;"></i> {{ item.department.vote_count }}
-                </span>
                 <span class="chip chip-department">
-                    <i class='bx bx-group' style="font-size: 0.8rem;"></i> {{ item.teams|length }} teams
+                    <i class='bx bx-group' style="font-size: 0.8rem;"></i> {{ dept.teams.all|length }} teams
                 </span>
             </div>
         </div>
         <div class="grid-3">
-            {% for team in item.teams %}
+            {% for team in dept.teams.all %}
             <a href="{% url 'teams:team_detail' team.team_id %}" class="spell-tilt" style="text-decoration: none; color: inherit; border: 1px solid var(--border); border-radius: 12px; padding: 0.85rem 1rem; transition: all 0.2s ease; display: block;" onmouseover="this.style.background='var(--sky-tint-5)'" onmouseout="this.style.background='transparent'">
                 <div class="flex-between mb-1">
                     <span style="font-size: 0.9rem; font-weight: 600;">{{ team.team_name }}</span>
@@ -78,13 +75,13 @@
 
 <!-- TAB 2: Org Chart -->
 <div id="panel-org" style="display: none;" class="animate-slide-up">
-    {% for item in dept_data %}
+    {% for dept in departments %}
     <div class="card mb-2">
         <div class="flex-center gap-3" style="flex-wrap: wrap;">
             <!-- Department Node -->
-            <a href="{% url 'organisation:department_detail' item.department.department_id %}" class="org-node org-node-dept" style="min-width: 140px; text-decoration: none;">
-                <strong>{{ item.department.department_name }}</strong>
-                <span class="org-node-sub">{{ item.department.department_lead_name }}</span>
+            <a href="{% url 'organisation:department_detail' dept.department_id %}" class="org-node org-node-dept" style="min-width: 140px; text-decoration: none;">
+                <strong>{{ dept.department_name }}</strong>
+                <span class="org-node-sub">{{ dept.department_lead_name }}</span>
             </a>
 
             <!-- Arrow -->
@@ -92,7 +89,7 @@
 
             <!-- Team Nodes -->
             <div class="flex flex-wrap gap-1">
-                {% for team in item.teams %}
+                {% for team in dept.teams.all %}
                 <a href="{% url 'teams:team_detail' team.team_id %}" class="org-node org-node-team" style="text-decoration: none; color: inherit;">
                     <span>{{ team.team_name }}</span>
                     <span class="org-node-sub">{{ team.team_leader_name|default:"—" }}</span>

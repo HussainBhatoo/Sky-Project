@@ -19,7 +19,6 @@ The following models and configurations have been preserved from the legacy cust
 - RepositoryLink: list_display=['repo_name', 'team', 'repo_url']
 - WikiLink: list_display=['team', 'wikki_description', 'wikki_link']
 - BoardLink: list_display=['board_type', 'team', 'board_url']
-- DepartmentVote: list_display=['voter', 'department', 'voted_at']
 - Group: Standard registration
 """
 
@@ -28,8 +27,7 @@ from django.contrib.auth.models import Group
 from .models import (
     User, Department, Team, TeamMember, Dependency, 
     ContactChannel, Message, Meeting, AuditLog, Vote,
-    StandupInfo, RepositoryLink, WikiLink, BoardLink, 
-    DepartmentVote
+    StandupInfo, RepositoryLink, WikiLink, BoardLink
 )
 
 # Unregister Group first if it's already registered by default, 
@@ -110,9 +108,6 @@ class WikiLinkAdmin(admin.ModelAdmin):
 class BoardLinkAdmin(admin.ModelAdmin):
     list_display = ['board_type', 'team', 'board_url']
 
-@admin.register(DepartmentVote)
-class DepartmentVoteAdmin(admin.ModelAdmin):
-    list_display = ['voter', 'department', 'voted_at']
 
 # Re-registering standard Group model to default admin site
 # admin.site.register(Group) # Already registered by default in many setups, but explicit is fine if needed.

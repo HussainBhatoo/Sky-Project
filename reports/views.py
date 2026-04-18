@@ -43,9 +43,9 @@ def reports_home(request):
         chart_dept_labels = [d.department_name for d in department_stats]
         chart_dept_counts = [d.team_count for d in department_stats]
 
-        # 2. Top Endorsed Teams (specifically 'endorse' votes)
+        # 2. Top Endorsed Teams
         endorsed_teams = Team.objects.annotate(
-            endorse_count=Count('votes', filter=Q(votes__vote_type='endorse'))
+            endorse_count=Count('votes')
         ).filter(endorse_count__gt=0).order_by('-endorse_count')[:5]
         
         chart_vote_labels = [t.team_name for t in endorsed_teams]

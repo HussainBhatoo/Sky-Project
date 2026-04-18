@@ -1,6 +1,6 @@
 # Sky Engineering Registry: Comprehensive Database Specification
 
-This document provides the full technical mapping of the 15 relational entities implemented in the Sky Engineering Team Registry, ensuring 100% compliance with the CWK2 rubric (which requires 15+ entities for the top band).
+This document provides the full technical mapping of the 14 relational entities implemented in the Sky Engineering Team Registry, ensuring compliance with the CWK2 rubric.
 
 ## Entity Manifest
 
@@ -20,7 +20,6 @@ This document provides the full technical mapping of the 15 relational entities 
 | 12 | **Meeting** | schedule | Calendar events and corporate meetings. |
 | 13 | **AuditLog & Time Log** | core / dashboard | Hybrid traceability for mutations (Signals + View-level) and legal time history record. |
 | 14 | **Vote** | core / teams | User engagement through team endorsements. |
-| 15 | **DepartmentVote** | core / org | User engagement through department endorsements. |
 
 ## Relationship Architecture
 - **Hierarchical:** Department (1) → Team (N) → TeamMember (N)

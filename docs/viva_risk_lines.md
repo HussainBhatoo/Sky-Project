@@ -38,14 +38,14 @@ department_stats = Department.objects.annotate(
 ).order_by('-team_count')
 
 endorsed_teams = Team.objects.annotate(
-    endorse_count=Count('votes', filter=Q(votes__vote_type='endorse'))
+    endorse_count=Count('votes')
 ).filter(endorse_count__gt=0).order_by('-endorse_count')[:5]
 ```
 **Student:** Hussain Bhatoo
 **Risk:** HIGH
 **Why a marker would ask:** `annotate()` + `Count()` are not in the lecture curriculum. Marker will ask what annotate does and why you didn't just use a Python loop.
 
-**What to say:** "I needed to show how many teams each department has without running a separate database query for each department — that would be very slow with 46 teams. `annotate` adds a computed field to each row in the queryset. `Count('teams')` tells it to count the related teams. The `filter=Q(...)` on the endorsed teams count only counts votes of type 'endorse', not all votes. I found it in the Django aggregation docs."
+**What to say:** "I needed to show how many teams each department has without running a separate database query for each department - that would be very slow. `annotate` adds a computed field to each row in the queryset. `Count('teams')` tells it to count the related teams. I found it in the Django aggregation docs."
 
 ---
 
@@ -202,9 +202,8 @@ Overriding built-in Django admin methods is not taught.
 `csv` module and `Content-Disposition` are not in the curriculum.
 "I return an `HttpResponse` with `content_type='text/csv'` instead of an HTML page. The `Content-Disposition: attachment` header tells the browser this is a file download, not a page to render. The filename in quotes is what appears in the Save dialog. Then `csv.writer` handles writing each team as a row — I just call `writerow()` with a list of values."
 
-**3. reports/views.py — `annotate(endorse_count=Count('votes', filter=Q(votes__vote_type='endorse')))`**
-Filter inside annotate is advanced.
-"This one counts only endorsement votes, not all votes. The `filter=Q(...)` argument inside `Count` is a way to count only rows that match a condition. Without the filter it would count every vote type. I needed just the 'endorse' votes for the chart because there's also a 'support' vote type. I found this in the Django aggregation docs."
+**3. reports/views.py — `annotate(endorse_count=Count('votes'))`**
+"This counts the endorsement votes for each team. The `annotate` function adds this count directly to the queryset so I can order by popularity and take the top 5. I found this in the Django aggregation docs."
 
 ---
 
@@ -232,7 +231,7 @@ Three annotations at once with filter arguments — not taught.
 
 **2. teams/views.py — `get_or_create()` in `vote_team()`**
 `get_or_create()` is not explicitly taught.
-"`get_or_create(voter=request.user, team=team)` either finds an existing vote row for this user+team combination, or creates one. It returns a tuple: the object and a boolean `created` — True if it was just made, False if it already existed. I use `created` to decide whether to delete the vote (toggle off) or keep it (toggle on). This stops the same user voting twice."
+"vote, created = Vote.objects.get_or_create(voter=request.user, team=team, defaults={'vote_type': 'endorse'}) either finds an existing vote row for this user+team combination, or creates one. It returns a tuple: the object and a boolean `created` — True if it was just made, False if it already existed. I use `created` to decide whether to delete the vote (toggle off) or keep it (toggle on). This stops the same user voting twice."
 
 **3. teams/views.py — `team_detail()` checking `has_voted` with `.exists()`**
 Not taught explicitly — marker may ask why `.exists()` instead of `.count()`.

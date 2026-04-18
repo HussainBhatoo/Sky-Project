@@ -421,13 +421,6 @@ team_id (FK → Team)
 voted_at (DateTimeField)
 ```
 
-### Entity 15: DepartmentVote (Departmental Health)
-```
-vote_id (PK, auto)
-voter_id (FK → User)
-department_id (FK → Department)
-voted_at (DateTimeField)
-```
 
 ---
 

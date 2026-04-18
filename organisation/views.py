@@ -3,54 +3,42 @@ Organisation Application — Module Student 2: Lucas Garcia Korotkov
 Handles departmental hierarchy (org chart) and dependency graph visualization.
 Lead Developer: Maurya Patel
 """
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Q
-from django.http import JsonResponse
 
-from core.models import Department, Team, Dependency, DepartmentVote, AuditLog
+from core.models import Department, Team, Dependency
 
 
 @login_required
 def org_chart(request):
     """
-    Displays the departmental hierarchy with departments and
-    their associated teams. Supports both list and org chart views.
-
-    :param request: Standard Django HttpRequest object
-    :return: Rendered organisation/org_chart.html template
+    Renders the interactive Engineering Org Chart.
+    Final production version (CW2).
     """
     try:
-        departments = Department.objects.prefetch_related('teams').annotate(
-            team_count=Count('teams'),
-            vote_count=Count('votes')
-        ).order_by('department_name')
-
-        # Check which depts user has voted for
-        user_votes = []
-        if request.user.is_authenticated:
-            user_votes = DepartmentVote.objects.filter(voter=request.user).values_list('department_id', flat=True)
-
-        dept_data = []
-        for dept in departments:
-            teams = dept.teams.all().order_by('team_name')
-            dept_data.append({
-                'department': dept,
-                'teams': teams,
-                'has_voted': dept.department_id in user_votes,
-            })
+        # Search functionality
+        query = request.GET.get('q', '').strip()
+        
+        # Base queryset for departments
+        departments = Department.objects.prefetch_related('teams').all()
+        
+        if query:
+            # Filter departments that match name OR have teams matching name
+            departments = departments.filter(
+                Q(department_name__icontains=query) |
+                Q(teams__team_name__icontains=query)
+            ).distinct()
 
         context = {
-            'dept_data': dept_data,
+            'departments': departments,
+            'query': query,
             'total_departments': departments.count(),
-            'total_teams': Team.objects.count(),
         }
         return render(request, 'organisation/org_chart.html', context)
-    except Exception as error:
-        return render(request, 'organisation/org_chart.html', {
-            'dept_data': [],
-            'error': str(error),
-        })
+    except Exception as e:
+        print(f"Error rendering org chart: {e}")
+        return render(request, 'organisation/org_chart.html', {'error': True})
 
 
 @login_required
@@ -117,53 +105,12 @@ def department_detail(request, dept_id):
             member_count=Count('members')
         ).order_by('team_name')
         
-        vote_count = department.votes.count()
-        has_voted = False
-        if request.user.is_authenticated:
-            has_voted = DepartmentVote.objects.filter(voter=request.user, department=department).exists()
-
         context = {
             'department': department,
             'teams': teams,
             'total_teams': teams.count(),
-            'vote_count': vote_count,
-            'has_voted': has_voted,
         }
         return render(request, 'organisation/department_detail.html', context)
-    except Exception as error:
-        return render(request, 'organisation/org_chart.html', {'error': str(error)})
-
-
-@login_required
-def toggle_department_endorsement(request, dept_id):
-    """
-    Toggles a user's endorsement for a department. Creates or deletes a
-    DepartmentVote row, then redirects back to the department detail page.
-    """
-    department = get_object_or_404(Department, department_id=dept_id)
-    vote_queryset = DepartmentVote.objects.filter(voter=request.user, department=department)
-    
-    if vote_queryset.exists():
-        vote_queryset.delete()
-        voted = False
-        # Log endorsement removal
-        AuditLog.objects.create(
-            actor_user=request.user,
-            action_type='DELETE',
-            entity_type='DepartmentVote',
-            entity_id=dept_id,
-            change_summary=f"User '{request.user.username}' removed endorsement for department '{department.department_name}'."
-        )
-    else:
-        DepartmentVote.objects.create(voter=request.user, department=department)
-        voted = True
-        # Log endorsement creation
-        AuditLog.objects.create(
-            actor_user=request.user,
-            action_type='CREATE',
-            entity_type='DepartmentVote',
-            entity_id=dept_id,
-            change_summary=f"User '{request.user.username}' endorsed department '{department.department_name}'."
-        )
-        
-    return redirect('organisation:department_detail', dept_id=dept_id)
+    except Exception as e:
+        print(f"Error in department_detail: {e}")
+        return render(request, 'organisation/org_chart.html', {'error': True})

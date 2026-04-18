@@ -146,7 +146,11 @@ def vote_team(request, team_id):
     """
     try:
         team = get_object_or_404(Team, team_id=team_id)
-        vote, created = Vote.objects.get_or_create(voter=request.user, team=team)
+        vote, created = Vote.objects.get_or_create(
+            voter=request.user, 
+            team=team,
+            defaults={'vote_type': 'endorse'}
+        )
         
         if not created:
             # If already voted, remove it (toggle behavior)
