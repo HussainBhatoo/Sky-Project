@@ -26,5 +26,5 @@ Build and manage the central Teams Registry. This module covers team listing, de
 
 ## Progress
 - [x] Search/filter views implemented.
-- [x] High-fidelity templates integrated.
+- [x] Main templates integrated.
 - [x] Team detail actions linked to other modules.

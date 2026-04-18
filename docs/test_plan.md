@@ -31,6 +31,8 @@ This file is internal documentation only. The actual test evidence goes in the W
 | T-13 | Schedule Meeting button | Logged in | Click Schedule Meeting on team detail | Redirects to /schedule/ create meeting page | | |
 | T-14 | Disband team as superuser | Logged in as superuser | Click Disband on team detail, confirm | Team removed from database and list | | |
 | T-15 | Disband team as regular user | Logged in as regular user | Disband button should not be visible | Disband option not shown to regular users | | |
+| T-16 | External Resource Links | Logged in | View team detail with GitHub/Wiki/Board links | "Check Repository", "Digital Wiki", and "Board" links lead to correct URLs | | |
+| T-17 | Team History Timeline | Logged in | View team detail page | Vertical timeline shows historical milestones (creation, updates, events) | | |
 
 ---
 
@@ -41,7 +43,7 @@ This file is internal documentation only. The actual test evidence goes in the W
 | O-01 | View departments list | Logged in | Navigate to /organisation/ | All departments listed with team count | | |
 | O-02 | View department detail | Logged in | Click on any department | Detail page shows: leader, teams, specialisation | | |
 | O-03 | Department with no teams | Logged in | View a department with zero teams | Page loads gracefully, empty state shown | | |
-| O-04 | Endorse a department | Logged in, not yet endorsed | Click endorse on department detail | Endorsement count increases, AJAX updates without page reload | | |
+| O-04 | Endorse a department | Logged in, not yet endorsed | Click endorse on department detail | Endorsement count increases, page reloads to show updated state | | |
 | O-05 | Endorse department twice | Logged in, already endorsed | Click endorse again | Not counted twice, appropriate message | | |
 | O-06 | View org chart | Logged in | Navigate to org chart page | Visual chart renders showing teams and departments | | |
 | O-07 | Switch org chart tabs | Logged in | Click different tab on org chart | Chart updates to show selected view | | |
@@ -142,3 +144,5 @@ This file is internal documentation only. The actual test evidence goes in the W
 | G-25 | Audit log records endorsement | Logged in | Toggle team endorsement on list | Vote 'CREATE' or 'DELETE' log appears | | |
 | G-26 | All nav links work | Logged in | Click every sidebar nav link | All pages load without 404 or 500 error | | |
 | G-27 | Consistent UI across pages | Logged in | Visit teams, org, messages, schedule, reports | Same navbar, sidebar, colour scheme on all pages | | |
+| G-28 | System-Generated Audit Events | Logged in | View dashboard Activity Trail | Events with no specific user (e.g. system seeded data) display as "System Account" | | |
+| G-29 | Global Search Debounce | Logged in | Type slowly in global search | Results update after pause, not on every single keystroke | | |

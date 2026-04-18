@@ -20,10 +20,10 @@ Successfully aggregating statistics from multiple related tables (Teams and Depa
 Collaborated closely with Lucas (Organisation) and Riagul (Teams) to ensure the reporting data correctly captured their module-specific fields like team leaders and department specialisations.
 
 ### 2.3 What would you do differently if you started again?
-I would integrate a library like `Chart.js` earlier in the project to provide more visual analytics alongside the data tables.
+I initially thought we could manage with just data tables, but I ended up integrating the `Chart.js` library during the final compliance phase. It makes the 'Top Endorsed Teams' data much more intuitive to read at a glance than a long table.
 
 ### 2.4 How did you handle scope creep?
-Limited the report types to four core areas (Health, Department Stats, Management Gaps, and CSV Exports) to ensure they were all high-fidelity.
+Limited the report types to four core areas (Health, Department Stats, Management Gaps, and CSV Exports) to ensure they were all Main.
 
 ### 2.5 What was your most valuable contribution?
 The 'Management Gap Analysis' feature, which identifies teams without a named leader—a key requirement for the Sky Engineering registry business logic.

@@ -31,7 +31,7 @@
 - Department registry and detail pages showing leaders and specialisations.
 - Org chart visualisation showing the relationship between departments.
 - Upstream and downstream dependency graph for teams (hand-rolled SVG implementation).
-- Department endorsement toggle with AJAX state persistence.
+- Department endorsement toggle.
 
 ### Mohammed Suliman Roshid — Student 3 — Messages
 **Primary files:**
@@ -60,7 +60,7 @@
 - Datetime validation for meeting ranges and platform-aware meeting fields.
 
 **Implemented (Project-wide Lead):**
-- Centralised high-fidelity design system (1,366 lines of CSS).
+- Centralised Main design system (1,366 lines of CSS).
 - Global audit logging system using Django signals.
 - Database schema architecture and seed data population script.
 - Shared base layouts and registration/login frameworks.
@@ -79,6 +79,6 @@
 
 ## Group Work
 While modules were owned individually, we worked collaboratively on:
-- **Core Models:** Developing the shared 15-entity schema in `core/models.py`.
+- **Core Models:** Developing the shared 10-entity schema in `core/models.py`.
 - **Seed Data:** Populating `db.sqlite3` with 46 teams from the module registry brief.
 -  **Documentation Audit:** Reviewing all reports and reflections to ensure 100% rubric compliance.

@@ -16,7 +16,7 @@ The Messaging Module is **100% functional**. All core features (Inbox, Sent, Dra
 | **Sent** | 28-31 | Sent Items | **PASS** | Sent messages are tracked and listed correctly. |
 | **Drafts** | 32-39 | Draft Lifecycle | **PASS** | Save, Resume, and Delete functionality verified. |
 | **Database** | 40-42 | Model Integrity | **PASS** | Schema correct; `message_status` and `message_sent_at` present. |
-| **UI/UX** | 43-46 | Design Consistency | **PASS** | 100% Glassmorphism compliance; high-fidelity styling. |
+| **UI/UX** | 43-46 | Design Consistency | **PASS** | 100% Glassmorphism compliance; Main styling. |
 | **Security** | 47 | Audit Logging | **PASS** | **RESOLVED**: `post_save` and `post_delete` signals added to `signals.py`. |
 | **Errors** | 48-49 | Payload Boundaries | **PASS** | **RESOLVED**: 5,000 char limit validation implemented with user feedback. |
 
@@ -26,7 +26,7 @@ The Messaging Module is **100% functional**. All core features (Inbox, Sent, Dra
 > **Functional Fixes Implemented & Verified**
 > 1. **Validation**: The `message_body` field is now mandatory.
 > 2. **Audit Logging**: All message creations and deletions are logged in the `AuditLog`.
-> 3. **Reply Feature**: A robust Reply system with subject pre-filling and message quoting is live.
+> 3. **Reply Feature**: A working Reply system with subject pre-filling and message quoting is live.
 > 4. **Boundary Checks**: Payload limits (5,000 chars) are enforced via the backend.
 
 ## Evidence & Logs

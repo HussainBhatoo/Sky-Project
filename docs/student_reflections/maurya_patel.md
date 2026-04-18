@@ -5,7 +5,7 @@
 | Date | From | Feedback Received | Action Taken |
 |------|------|-------------------|--------------|
 | 2026-03-10 | Riagul | Dashboard layout feels a bit crowded. | Simplified metrics cards and used CSS Grid. |
-| 2026-03-15 | Lucas | Search needs to be faster. | Implemented debounced AJAX search. |
+| 2026-03-15 | Lucas | Search needs to be faster. | Implemented dynamic standard search. |
 | 2026-03-22 | Suliman | Logic for audit logs needs to be automated. | Refactored using Django Signals. |
 | 2026-04-01 | Hussain | Login screen looks generic. | Applied CSS 'Design Spells' and micro-interactions. |
 | 2026-04-05 | Riagul | We need a way to track entity changes. | Consolidated AuditLog and TimeTrack entities. |
@@ -23,12 +23,13 @@ Used a combination of Discord for real-time chat and GitHub Projects/Issues for 
 I would have standardized the CSS architecture (BEM/Utility-first) earlier to avoid the mid-project refactor.
 
 ### 2.4 How did you handle scope creep?
-I strictly enforced the 15-entity limit by consolidating redundant features (like merging TimeTrack into AuditLog).
+I strictly enforced the 15-entity limit by consolidating redundant features. I also implemented a systematic timestamp strategy using `created_at` and `updated_at` across all core models to satisfy the rubric's 'Time Track' requirement without over-complicating the schema.
 
 ### 2.5 What was your most valuable contribution?
-Designing the core high-fidelity UI framework that empowered all other team members to build consistent modules.
+Designing the core Main UI framework that empowered all other team members to build consistent modules.
 
 ## 3. Module Ownership
 - **Dashboard**: Core metrics, Recent Activity, and System Notifications.
+- **Schedule**: Calendar logic, Monthly/Weekly views, and Meeting CRUD.
 - **Security**: IDOR mitigation, Authentication, and Permissions.
-- **Organisation**: Global Search integration.
+- **Organisation**: Global Search integration and core architecture lead.

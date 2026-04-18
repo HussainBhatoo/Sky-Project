@@ -14,7 +14,7 @@
 
 ## 2. Mentor Reflection
 ### 2.1 What was the most significant technical challenge?
-Designing the 'Compose' view to handle four distinct states—new message, draft edit, reply, and forwarding—within a single robust Django function.
+Designing the 'Compose' view to handle four distinct states—new message, draft edit, reply, and forwarding—within a single working Django function.
 
 ### 2.2 How did you manage team communication?
 Utilized our Team Discord for real-time logic syncs, especially when integrating the Messaging system with Maurya's core User models.

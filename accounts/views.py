@@ -26,23 +26,21 @@ class SkyLoginView(LoginView):
         )
         return reverse_lazy('core:dashboard')
 
-class SkySignupView(CreateView):
+def signup_view(request):
     """
-    SkySignupView handles the creation of new official Sky Registry accounts.
-    It implements the mandatory corporate email requirement from the 
+    signup_view handles the creation of new official Sky Registry accounts.
+    It implements the mandatory email requirement from the 
     coursework implementation plan and ensures data integrity.
     """
-    form_class = UserSignupForm
-    template_name = 'registration/signup.html'
-    success_url = reverse_lazy('accounts:login')
-
-    def form_valid(self, form):
-        """
-        Processes a valid form submission by saving the new user object 
-        and redirecting them to the login portal.
-        """
-        response = super().form_valid(form)
-        return response
+    if request.method == 'POST':
+        form = UserSignupForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('accounts:login')
+    else:
+        form = UserSignupForm()
+        
+    return render(request, 'registration/signup.html', {'form': form})
 
 class SkyForgotPasswordView(TemplateView):
     """

@@ -46,34 +46,12 @@ class DepartmentAdmin(admin.ModelAdmin):
     list_display = ['department_name', 'department_lead_name']
     search_fields = ['department_name', 'department_lead_name']
 
-    def save_model(self, request, obj, form, change):
-        """Log department creation or updates manually in Admin."""
-        super().save_model(request, obj, form, change)
-        action = 'UPDATE' if change else 'CREATE'
-        AuditLog.objects.create(
-            actor_user=request.user,
-            action_type=action,
-            entity_type='Department',
-            entity_id=obj.pk,
-            change_summary=f"Department '{obj.department_name}' was {action.lower()}d via admin."
-        )
-
-    def delete_model(self, request, obj):
-        """Log department deletion manually in Admin."""
-        AuditLog.objects.create(
-            actor_user=request.user,
-            action_type='DELETE',
-            entity_type='Department',
-            entity_id=obj.pk,
-            change_summary=f"Department '{obj.department_name}' was deleted via admin."
-        )
-        super().delete_model(request, obj)
-
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
     list_display = ['team_name', 'department', 'team_leader_name', 'project_name']
     list_filter = ['department']
     search_fields = ['team_name', 'team_leader_name', 'project_name']
+    readonly_fields = ('created_at',)
 
 @admin.register(TeamMember)
 class TeamMemberAdmin(admin.ModelAdmin):
@@ -102,6 +80,7 @@ class MeetingAdmin(admin.ModelAdmin):
     list_display = ['meeting_title', 'team', 'start_datetime', 'platform_type']
     list_filter = ['platform_type', 'team']
     search_fields = ['meeting_title', 'agenda_text']
+    readonly_fields = ('created_at',)
 
 @admin.register(Vote)
 class VoteAdmin(admin.ModelAdmin):

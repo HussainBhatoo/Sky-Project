@@ -26,7 +26,7 @@ I would have used Django's built-in `auth.Group` system for team management inst
 Focused purely on CRUD and the Disband logic, leaving advanced analytics to the Reports module.
 
 ### 2.5 What was your most valuable contribution?
-The robust 'Disband Team' feature which ensures data persistence for historical audits while cleaning up active views.
+The working 'Disband Team' feature which ensures data persistence for historical audits while cleaning up active views.
 
 ## 3. Module Ownership
 - **Teams**: Creation, Management, and Disbanding.

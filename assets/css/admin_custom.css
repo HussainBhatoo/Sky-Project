@@ -112,3 +112,13 @@ body {
     font-weight: 700 !important;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
 }
+
+/* Global suppression of the spectrum border line */
+html body .sidebar::before,
+html body .sidebar::after {
+    content: none !important;
+    display: none !important;
+    height: 0 !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+}

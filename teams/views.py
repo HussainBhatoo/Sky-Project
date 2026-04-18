@@ -8,7 +8,11 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Count
 
-from core.models import Team, Department, TeamMember, Dependency, ContactChannel, Vote, AuditLog
+from core.models import (
+    Team, Department, TeamMember, Dependency, 
+    ContactChannel, Vote, AuditLog, StandupInfo,
+    RepositoryLink, WikiLink, BoardLink
+)
 from django.shortcuts import redirect
 from django.contrib import messages
 
@@ -104,6 +108,16 @@ def team_detail(request, team_id):
         vote_count = Vote.objects.filter(team=team).count()
         has_voted = Vote.objects.filter(team=team, voter=request.user).exists()
 
+        standup = StandupInfo.objects.filter(team=team).first()
+        repos = RepositoryLink.objects.filter(team=team)
+        wikis = WikiLink.objects.filter(team=team)
+        boards = BoardLink.objects.filter(team=team)
+
+        milestones = AuditLog.objects.filter(
+            entity_type='Team Milestone', 
+            entity_id=team.team_id
+        ).order_by('-action_changed_at')
+
         context = {
             'team': team,
             'members': members,
@@ -113,7 +127,11 @@ def team_detail(request, team_id):
             'tech_tags': tech_tags,
             'vote_count': vote_count,
             'has_voted': has_voted,
-            'has_voted': has_voted,
+            'standup': standup,
+            'repos': repos,
+            'wikis': wikis,
+            'boards': boards,
+            'milestones': milestones,
         }
         return render(request, 'teams/team_detail.html', context)
     except Exception as error:

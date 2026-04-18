@@ -137,8 +137,8 @@ def department_detail(request, dept_id):
 @login_required
 def toggle_department_endorsement(request, dept_id):
     """
-    Toggles a user's endorsement (vote) for a specific department.
-    Used for AJAX endorsement updates.
+    Toggles a user's endorsement for a department. Creates or deletes a
+    DepartmentVote row, then redirects back to the department detail page.
     """
     department = get_object_or_404(Department, department_id=dept_id)
     vote_queryset = DepartmentVote.objects.filter(voter=request.user, department=department)
@@ -165,11 +165,5 @@ def toggle_department_endorsement(request, dept_id):
             entity_id=dept_id,
             change_summary=f"User '{request.user.username}' endorsed department '{department.department_name}'."
         )
-        
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        return JsonResponse({
-            'voted': voted,
-            'vote_count': department.votes.count()
-        })
         
     return redirect('organisation:department_detail', dept_id=dept_id)

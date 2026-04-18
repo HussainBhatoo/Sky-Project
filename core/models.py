@@ -37,8 +37,8 @@ class Team(models.Model):
     team_id = models.AutoField(primary_key=True)
     department = models.ForeignKey(Department, on_delete=models.CASCADE, related_name='teams')
     team_name = models.CharField(max_length=100)
-    mission = models.TextField(blank=True) # High-Fi Requirement
-    lead_email = models.EmailField(blank=True) # High-Fi Requirement
+    mission = models.TextField(blank=True) # Main Requirement
+    lead_email = models.EmailField(blank=True) # Main Requirement
     team_leader_name = models.CharField(max_length=100, blank=True)
     work_stream = models.CharField(max_length=100)
     project_name = models.CharField(max_length=100)

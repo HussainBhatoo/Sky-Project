@@ -11,18 +11,28 @@ across 6 departments. Built by 5 Year 2
 Computer Science students over roughly 6 weeks.
 
 ## The Team
-- Riagul Hossain — Teams module
-- Lucas Garcia Korotkov — Organisation & 
-  dependency views
-- Mohammed Suliman Roshid — Messages module
-- Maurya Patel — Schedule module, project lead
-- Hussain Bhatoo — Reports module
+- **Riagul Hossain**: Teams & Registry Logic
+- **Lucas Garcia Korotkov**: Organisation & Dependency Visualisation
+- **Mohammed Suliman Roshid**: Messaging Suite
+- **Maurya Patel**: Scheduling & Project Management (Lead)
+- **Hussain Bhatoo**: Reporting & Data Analysis
 
-## Development Quickstart
-1.  **Environment Setup:** `python -m venv venv` and `source venv/bin/activate`
-2.  **Dependencies:** `pip install -r requirements.txt`
-3.  **Bootstrap:** `python manage.py migrate` and `python manage.py populate_data`
-4.  **Launch:** `python manage.py runserver`
+## Core Features
+- **Dynamic Registry**: Live tracking of 46 engineering teams, 6 departments, and 230 members.
+- **Resource Management**: Registry of verified GitHub Repos, Digital Wikis, and Agile Boards.
+- **Professional Reporting**: Interactive `Chart.js` visual analytics for departmental breakdown and 'Top Endorsed' teams.
+- **Data Portability**: Automated management gap analysis and CSV exports for external audits.
+- **Historical Compliance**: Systematic time-tracking across all core entities via `AuditLog` and automated timestamps.
+
+## Installation & Setup
+1. **Prepare Environment**: 
+   ```powershell
+   python -m venv .venv
+   .venv\Scripts\activate
+   ```
+2. **Setup**: `pip install -r requirements.txt`
+3. **Database**: `python manage.py migrate` followed by `python manage.py populate_data`
+4. **Run**: `python manage.py runserver`
 
 ---
 © 2026 Sky UK Limited. Developed as part of Academic Coursework. INTERNAL USE ONLY.

@@ -38,6 +38,19 @@ def reports_home(request):
             member_count=Count('members')
         ).order_by('-member_count')[:10]  # Top 10 largest teams
 
+        # --- Data for Charts ---
+        # 1. Teams per Department
+        chart_dept_labels = [d.department_name for d in department_stats]
+        chart_dept_counts = [d.team_count for d in department_stats]
+
+        # 2. Top Endorsed Teams (specifically 'endorse' votes)
+        endorsed_teams = Team.objects.annotate(
+            endorse_count=Count('votes', filter=Q(votes__vote_type='endorse'))
+        ).filter(endorse_count__gt=0).order_by('-endorse_count')[:5]
+        
+        chart_vote_labels = [t.team_name for t in endorsed_teams]
+        chart_vote_counts = [t.endorse_count for t in endorsed_teams]
+
         # Find teams that don't have a manager assigned yet
         manager_less_teams = Team.objects.filter(
             Q(team_leader_name='') | Q(team_leader_name__isnull=True)
@@ -52,6 +65,10 @@ def reports_home(request):
             'department_stats': department_stats,
             'team_stats': team_stats,
             'manager_less_teams': manager_less_teams,
+            'chart_dept_labels': chart_dept_labels,
+            'chart_dept_counts': chart_dept_counts,
+            'chart_vote_labels': chart_vote_labels,
+            'chart_vote_counts': chart_vote_counts,
         }
         return render(request, 'reports/reports_home.html', context)
     except Exception as error:

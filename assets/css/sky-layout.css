@@ -152,15 +152,16 @@ html body .sidebar {
   border-right: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-html body .sidebar::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 8px;
-  background: var(--sky-spectrum);
+/* Global suppression of the spectrum border line */
+html body .sidebar::before,
+html body .sidebar::after {
+  content: none !important;
+  display: none !important;
+  height: 0 !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
 }
+
 
 html body .sidebar-header {
   margin-bottom: 2.5rem;

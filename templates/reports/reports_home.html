@@ -4,9 +4,8 @@
 
 {% block content %}
 <!--
-  REPORTS DASHBOARD — HIGH-FIDELITY VIEW
-  Mirrors ReportsPage.tsx from the User Inquiry prototype.
-  Components: Stat cards, tables, export buttons.
+  REPORTS DASHBOARD — COMPLIANCE VIEW
+  Components: Stat cards, tables, charts, export buttons.
   Student 5: Hussain Bhatoo | Lead: Maurya Patel
 -->
 
@@ -42,6 +41,26 @@
     <div class="stat-card">
         <div class="stat-value">{{ total_dependencies }}</div>
         <div class="stat-label">Dependencies</div>
+    </div>
+</div>
+
+<!-- Data Visualization Section -->
+<div class="grid-2 mb-3 animate-slide-up" style="animation-delay: 0.15s;">
+    <div class="card">
+        <h4 style="color: var(--sky-header-blue); margin-bottom: 1.5rem;">
+            <i class='bx bx-pie-chart-alt-2' style="margin-right: 0.4rem;"></i> Teams per Department
+        </h4>
+        <div style="height: 300px; display: flex; align-items: center; justify-content: center;">
+            <canvas id="deptChart"></canvas>
+        </div>
+    </div>
+    <div class="card">
+        <h4 style="color: var(--sky-header-blue); margin-bottom: 1.5rem;">
+            <i class='bx bx-medal' style="margin-right: 0.4rem;"></i> Top Endorsed Teams
+        </h4>
+        <div style="height: 300px; display: flex; align-items: center; justify-content: center;">
+            <canvas id="voteChart"></canvas>
+        </div>
     </div>
 </div>
 
@@ -155,7 +174,91 @@
     </div>
 </div>
 
-<!-- Print Styles -->
+<!-- Pass data to JS safely -->
+{{ chart_dept_labels|json_script:"chart-dept-labels" }}
+{{ chart_dept_counts|json_script:"chart-dept-counts" }}
+{{ chart_vote_labels|json_script:"chart-vote-labels" }}
+{{ chart_vote_counts|json_script:"chart-vote-counts" }}
+
+<!-- Print Styles & Chart JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const ctxDept = document.getElementById('deptChart');
+        const ctxVote = document.getElementById('voteChart');
+
+        // Extract data passed from Django via json_script
+        const deptLabels = JSON.parse(document.getElementById('chart-dept-labels').textContent);
+        const deptCounts = JSON.parse(document.getElementById('chart-dept-counts').textContent);
+        const voteLabels = JSON.parse(document.getElementById('chart-vote-labels').textContent);
+        const voteCounts = JSON.parse(document.getElementById('chart-vote-counts').textContent);
+
+        // Department Chart
+        new Chart(ctxDept, {
+            type: 'bar',
+            data: {
+                labels: deptLabels,
+                datasets: [{
+                    label: 'Teams',
+                    data: deptCounts,
+                    backgroundColor: [
+                        '#4f46e5', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#3b82f6'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { stepSize: 1 }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+
+        // Voting Bar Chart
+        new Chart(ctxVote, {
+            type: 'bar',
+            data: {
+                labels: voteLabels,
+                datasets: [{
+                    label: 'Endorsements',
+                    data: voteCounts,
+                    backgroundColor: 'rgba(79, 70, 229, 0.8)',
+                    borderColor: '#4f46e5',
+                    borderWidth: 1,
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { stepSize: 1 }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+    });
+</script>
+
 <style>
     @media print {
         body { background: white; }

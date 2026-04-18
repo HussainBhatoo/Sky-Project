@@ -59,7 +59,7 @@ The registry is designed as a "Hub and Spoke" model. The **Core Dashboard** is t
 ## Global Architectural Rules
 
 > [!IMPORTANT]
-> To maintain the **High-Fidelity** standard, these 3 rules are non-negotiable for all students:
+> To maintain the **Main** standard, these 3 rules are non-negotiable for all students:
 
 1.  **Template Inheritance**: 
     Every template MUST start with `{% extends 'base.html' %}` and place content inside `{% block content %}`.
@@ -73,7 +73,7 @@ The registry is designed as a "Hub and Spoke" model. The **Core Dashboard** is t
 ## Final Checklist
 - [x] Global Sidebar Wiring (`base.html`)
 - [x] Shared Model Definitions (`core/models.py`)
-- [x] High-Fi Branding Tokens (`sky-layout.css`)
+- [x] Main Branding Tokens (`sky-layout.css`)
 - [x] Cross-App URL Name Finalization
 - [x] Sample Data Seeding
 - [x] **Registry-Wide Governance (Reports) [OK]**

@@ -20,7 +20,7 @@
 3. [Deadlines & Submission Requirements](#3-deadlines--submission-requirements)
 4. [Marks Breakdown](#4-marks-breakdown)
 5. [What We Are Building — Full Feature List](#5-what-we-are-building--full-feature-list)
-6. [Database Models — All 10 Entities](#6-database-models--all-10-entities)
+6. [Database Models — All 15 Entities](#6-database-models--all-15-entities)
 7. [CWK1 Screens to Implement in CWK2](#7-cwk1-screens-to-implement-in-cwk2)
 8. [Tech Stack](#8-tech-stack)
 9. [Project Folder Structure](#9-project-folder-structure)
@@ -94,7 +94,7 @@ https://trello.com/invite/b/696e18dddc44e139524ec21f/ATTI20f3cc8f34b260cf8cf6781
 ### CWK1 Contributions (for context)
 | Member | CWK1 Role |
 |--------|-----------|
-| Maurya | ERD Leader, High-fidelity UI Leader, Group Lead |
+| Maurya | ERD Leader, Main UI Leader, Group Lead |
 | Lucas | Written ERD documentation leader, Storyboard leader |
 | Abdul-lateef | SQLite database draft/implementation, Feedback |
 | Mohammed | UML use case diagram, Test plans (positive) |
@@ -181,10 +181,10 @@ The viva is marked separately inside Code Functionality and Version Control:
 | Logout | Clear session, redirect to login |
 | User Profile | View + edit: First Name, Last Name, Username, Email, Change Password |
 | Dashboard | Stat cards (total teams, departments, workforce), recent updates list, grid/list layout toggle |
-| Global Search | Real-time debounced AJAX search with high-fidelity results dropdown |
+| Global Search | Real-time dynamic standard search with Main results dropdown |
 | Design Spells | Professional micro-interactions (tilt, shine, pulse) applied globally |
 | Team Voting | Distinct `Vote` table (Rubric 1.14) for team endorsements (toggle) |
-| Audit Log | Searchable activity feed with high-fidelity signal tracking | ✅ COMPLETED |
+| Audit Log | Searchable activity feed with Main signal tracking | ✅ COMPLETED |
 
 #### B. Django Admin Panel (Customised)
 The brief says: "There is a Django Admin so that will be the Administrator"
@@ -209,15 +209,15 @@ All admin management happens through Django's built-in /admin/ — we just custo
 - Departments from Sky data: xTV_Web, Native_TVs, Mobile, Reliability_Tool, Arch, Programme
 
 Auto-log ALL create/update/delete operations, login events, and voting activities across the system.
-Display page: Searchable table of who did what and when with high-fidelity formatting.
+Display page: Searchable table of who did what and when with Main formatting.
 Implementation: Django signals tracking User, Action Type (LOGIN/LOGOUT/CREATE/UPDATE/DELETE), Entity, and Changes.
 #### D. Management Logic
 - **Disband Team**: Administrative capability to mark a team as "Disbanded" via the UI, preserving record history while halting active registry operations.
 
-#### E. Professionalization Layer (High-Fi)
+#### E. Professionalization Layer (Main)
 - **Design Spells**: Global CSS utility library for premium micro-interactions.
-- **Dynamic Lookup**: Debounced AJAX global search across all entities.
-- **Enterprise Docs**: ADRs and architecture diagrams for technical transparency.
+- **Dynamic Lookup**: Dynamic standard global search across all entities.
+- **system Docs**: ADRs and architecture diagrams for technical transparency.
 - **Emoji-Free Styling**: Strictly professional corporate aesthetic.
 
 ---
@@ -276,7 +276,7 @@ Implementation: Django signals tracking User, Action Type (LOGIN/LOGOUT/CREATE/U
 
 ---
 
-## 6. DATABASE MODELS — ALL 10 ENTITIES
+## 6. DATABASE MODELS — ALL 15 ENTITIES
 
 Based on final ERD from CWK1 (designed by Maurya, implemented by Abdul-lateef).
 
@@ -344,7 +344,39 @@ channel_value (CharField — the actual link/address)
 ```
 
 
-### Entity 7: Message
+### Entity 7: StandupInfo
+```
+standup_id (PK, auto)
+team_id (OneToOneFK → Team)
+standup_time (TimeField)
+standup_link (URLField)
+```
+
+### Entity 8: RepositoryLink
+```
+repo_id (PK, auto)
+team_id (FK → Team)
+repo_name (CharField)
+repo_url (URLField)
+```
+
+### Entity 9: WikiLink
+```
+wikki_id (PK, auto)
+team_id (FK → Team)
+wikki_description (CharField)
+wikki_link (URLField)
+```
+
+### Entity 10: BoardLink
+```
+board_id (PK, auto)
+team_id (FK → Team)
+board_type (CharField)
+board_url (URLField)
+```
+
+### Entity 11: Message
 ```
 message_id (PK, auto)
 sender_user_id (FK → User)
@@ -355,7 +387,7 @@ message_status (CharField: draft/sent)
 message_sent_at (DateTimeField)
 ```
 
-### Entity 8: Meeting
+### Entity 12: Meeting
 ```
 meeting_id (PK, auto)
 created_by_user_id (FK → User)
@@ -369,7 +401,7 @@ agenda_text (TextField)
 created_at (DateTimeField)
 ```
 
-### Entity 9: AuditLog (Consolidated Time Tracking)
+### Entity 13: AuditLog (Consolidated Time Tracking)
 ```
 audit_id (PK, auto)
 actor_user_id (FK → User)
@@ -379,9 +411,9 @@ entity_id (IntegerField)
 action_changed_at (DateTimeField)
 change_summary (TextField)
 ```
-→ **Compliance**: This model now serves as the primary **Time Tracking** mechanism, automatically logging the exact timestamp of every database mutation and administrative action.
+→ **Compliance**: This model serves as the primary **Time Tracking** mechanism, automatically logging the exact timestamp of every database mutation and administrative action.
 
-### Entity 10: Vote (Peer Recognition)
+### Entity 14: Vote (Peer Recognition)
 ```
 vote_id (PK, auto)
 voter_id (FK → User)
@@ -389,11 +421,19 @@ team_id (FK → Team)
 voted_at (DateTimeField)
 ```
 
+### Entity 15: DepartmentVote (Departmental Health)
+```
+vote_id (PK, auto)
+voter_id (FK → User)
+department_id (FK → Department)
+voted_at (DateTimeField)
+```
+
 ---
 
 ## 7. CWK1 SCREENS TO IMPLEMENT IN CWK2
 
-Every screen designed in CWK1 high-fidelity wireframes (Figma) must be built in CWK2.
+Every screen designed in CWK1 Main wireframes (Figma) must be built in CWK2.
 
 | Screen | Owner | Notes |
 |--------|-------|-------|
@@ -439,9 +479,9 @@ Font: 16px base, headings weight 600
 | Backend | Python + Django 4.2 | Required by brief |
 | Database | SQLite (db.sqlite3) | Required by brief |
 | Frontend | HTML + CSS + Bootstrap + JavaScript | Recommended by brief |
-| PDF Generation | ReportLab | For Student 5 reports |
+| PDF Generation | window.print() CSS | For Student 5 reports |
 | Excel Generation | OpenPyXL | For Student 5 reports |
-| UI Design Reference | Figma (CWK1) | Match the high-fi screens |
+| UI Design Reference | Figma (CWK1) | Match the Main screens |
 | Version Control | Git + GitHub | Private repo |
 | Project Management | Trello | Must be updated regularly |
 | Device Target | **Laptop/Desktop ONLY** | Brief says NOT mobile |
@@ -465,7 +505,7 @@ sky-team-registry/              ← Root (cloned from GitHub)
     urls.py                 ← Master URL routing
     wsgi.py
 
- core/                       ← Shared models (ALL 13 entities live here)
+ core/                       ← Shared models (ALL 15 entities live here)
     models.py               ← User, Team, Department, Meeting, etc.
     admin.py                ← Django admin customisation (8 menu items)
     migrations/
@@ -601,7 +641,7 @@ python manage.py runserver
 ```bash
 python -m venv venv
 venv\Scripts\activate
-pip install django pillow reportlab openpyxl
+pip install django pillow openpyxl
 pip freeze > requirements.txt
 django-admin startproject sky_registry .
 python manage.py startapp accounts
@@ -640,7 +680,7 @@ LOGOUT_REDIRECT_URL = 'accounts:login'
 ```
 
 #### Step 1.3 — All Models in core/models.py
-(See Section 6 above for all 13 models)
+(See Section 6 above for all 15 models)
 ```bash
 python manage.py makemigrations
 python manage.py migrate
@@ -719,7 +759,7 @@ class TeamAdmin(admin.ModelAdmin):
     search_fields = ['team_name', 'team_leader_name']
     list_filter = ['department']
 
-# Register all 13 models similarly
+# Register all 15 models similarly
 # Customise admin site header
 admin.site.site_header = "Sky Engineering Registry Admin"
 admin.site.site_title = "Sky Admin"
@@ -744,7 +784,7 @@ Each team needs min 5 team members.
 
 #### Step 2.5 — Audit Log System (Maurya sets up) [COMPLETED]
 Use Django signals in `core/signals.py`:
-- implemented high-fi actor detection via `RequestUserMiddleware`.
+- implemented Main actor detection via `RequestUserMiddleware`.
 - 100% signal coverage for all 15 database entities.
 - Searchable UI with Q-filtering for Action, Entity, and Keywords.
 
@@ -1146,7 +1186,7 @@ Create a management command `populate_data.py` that:
 }
 ```
 
-### Sidebar (from CWK1 high-fidelity design)
+### Sidebar (from CWK1 Main design)
 - Background: gradient from header-blue → primary-dark → primary
 - Width: ~250px
 - Items: icon + label, active state highlighted
@@ -1217,10 +1257,10 @@ DATABASES = {
 The final production review revealed opportunities to expand the data architecture and visualization capabilities to achieve 100% compliance with all project goals.
 
 ### 1. Database Evolution (CW1 -> CW2)
-The registry was expanded from the original 13 entities to a total of 15, integrating social signals and compliance tracking.
+The registry was expanded from the original design to a total of 15 entities, integrating social signals and compliance tracking.
 - **Vote Model**: Implemented for team endorsements (Rubric 1.14).
 - **TimeTrack Model**: Implemented for milestone compliance (Rubric 1.14).
-- **Team Model Enhancements**: Integrated High-Fi descriptive fields (`mission`, `tech_tags`, `status`).
+- **Team Model Enhancements**: Integrated Main descriptive fields (`mission`, `tech_tags`, `status`).
 
 ### 2. UI Polish & Interactivity
 - **Organisation Detail pages**: Individual profiles for Departments with linked Org Chart nodes.
@@ -1228,13 +1268,13 @@ The registry was expanded from the original 13 entities to a total of 15, integr
 - **Messaging Sent/Drafts logic**: Fully operational tabbed inbox with state persistence.
 
 ### 3. Registry Admin Setup
-- Registered all compliance models (`AuditLog`, `Vote`, `TimeTrack`) in the custom `SkyAdminSite`.
+- Registered all compliance models (`AuditLog`, `Vote`, `TimeTrack`) in the standard admin site.
 - Corrected field mappings to ensure 100% audit logging accuracy.
 
 ---
 
 ## 🛠️ Verification Checklist (Post-Audit)
-- [x] All 15 database entities are fully integrated and accessible via Admin.
+- [x] All 15 database entities implemented with valid relations and accessible via Admin.
 - [x] Dashboards show real-time metrics for all new metrics (Votes/Milestones).
 - [x] Global Search includes deep indexing for tech tags and missions.
 - [x] Audit Log records every Team/Dept mutation.
@@ -1327,152 +1367,7 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from core.models import Team, Department, TeamMember, Meeting, Message, AuditLog
 
-# ReportLab for PDF
-from reportlab.lib.pagesizes import letter, A4
-from reportlab.lib import colors
-from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
-
-# OpenPyXL for Excel
-import openpyxl
-from openpyxl.styles import Font, PatternFill, Alignment
-
-import io
-from datetime import datetime
-
-
-@login_required
-def reports_dashboard(request):
-    """Main reports page showing all available reports"""
-    # Query stats for report cards
-    context = {
-        'total_teams': Team.objects.count(),
-        'total_departments': Department.objects.count(),
-        'total_members': TeamMember.objects.count(),
-        'teams_without_managers': Team.objects.filter(team_leader_name='').count(),
-        'total_meetings': Meeting.objects.count(),
-        'total_messages': Message.objects.count(),
-    }
-    return render(request, 'reports/reports.html', context)
-
-
-@login_required
-def generate_pdf_report(request):
-    """Generate a PDF report with all team data — downloaded by browser"""
-
-    # 1. Create a BytesIO buffer (file in memory, not on disk)
-    buffer = io.BytesIO()
-
-    # 2. Create PDF document
-    doc = SimpleDocTemplate(
-        buffer,
-        pagesize=A4,
-        rightMargin=30, leftMargin=30,
-        topMargin=30, bottomMargin=30
-    )
-
-    # 3. Build content
-    styles = getSampleStyleSheet()
-    elements = []
-
-    # Title
-    title = Paragraph("Sky Engineering Team Registry Report", styles['Title'])
-    generated = Paragraph(
-        f"Generated: {datetime.now().strftime('%d/%m/%Y %H:%M')} | "
-        f"Generated by: {request.user.get_full_name() or request.user.username}",
-        styles['Normal']
-    )
-    elements.append(title)
-    elements.append(generated)
-    elements.append(Spacer(1, 20))
-
-    # Summary Stats Section
-    summary_title = Paragraph("Summary Statistics", styles['Heading1'])
-    elements.append(summary_title)
-
-    summary_data = [
-        ['Metric', 'Count'],
-        ['Total Departments', str(Department.objects.count())],
-        ['Total Teams', str(Team.objects.count())],
-        ['Total Team Members', str(TeamMember.objects.count())],
-        ['Teams Without Managers', str(Team.objects.filter(team_leader_name='').count())],
-        ['Total Meetings Scheduled', str(Meeting.objects.count())],
-        ['Total Messages Sent', str(Message.objects.count())],
-    ]
-
-    summary_table = Table(summary_data, colWidths=[300, 100])
-    summary_table.setStyle(TableStyle([
-        ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#000FF5')),  # Sky blue header
-        ('TEXTCOLOR', (0,0), (-1,0), colors.white),
-        ('FONTNAME', (0,0), (-1,0), 'Helvetica-Bold'),
-        ('FONTSIZE', (0,0), (-1,0), 12),
-        ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.white, colors.HexColor('#F3F5FF')]),
-        ('GRID', (0,0), (-1,-1), 0.5, colors.grey),
-        ('ALIGN', (1,0), (1,-1), 'CENTER'),
-    ]))
-    elements.append(summary_table)
-    elements.append(Spacer(1, 20))
-
-    # Teams Per Department Section
-    dept_title = Paragraph("Teams by Department", styles['Heading1'])
-    elements.append(dept_title)
-
-    team_data = [['Department', 'Team Name', 'Team Leader', 'Members']]
-    departments = Department.objects.all().order_by('department_name')
-
-    for dept in departments:
-        teams = Team.objects.filter(department=dept)
-        for team in teams:
-            member_count = TeamMember.objects.filter(team=team).count()
-            team_data.append([
-                dept.department_name,
-                team.team_name,
-                team.team_leader_name or 'No Manager',
-                str(member_count)
-            ])
-
-    teams_table = Table(team_data, colWidths=[130, 150, 130, 70])
-    teams_table.setStyle(TableStyle([
-        ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#000FF5')),
-        ('TEXTCOLOR', (0,0), (-1,0), colors.white),
-        ('FONTNAME', (0,0), (-1,0), 'Helvetica-Bold'),
-        ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.white, colors.HexColor('#F3F5FF')]),
-        ('GRID', (0,0), (-1,-1), 0.5, colors.grey),
-        ('FONTSIZE', (0,0), (-1,-1), 9),
-    ]))
-    elements.append(teams_table)
-    elements.append(Spacer(1, 20))
-
-    # Teams Without Managers Section
-    no_manager_title = Paragraph("Teams Without Managers", styles['Heading1'])
-    elements.append(no_manager_title)
-
-    teams_no_manager = Team.objects.filter(team_leader_name='')
-    if teams_no_manager.exists():
-        no_mgr_data = [['Team Name', 'Department']]
-        for team in teams_no_manager:
-            no_mgr_data.append([team.team_name, team.department.department_name])
-        no_mgr_table = Table(no_mgr_data, colWidths=[250, 230])
-        no_mgr_table.setStyle(TableStyle([
-            ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#DD1717')),
-            ('TEXTCOLOR', (0,0), (-1,0), colors.white),
-            ('FONTNAME', (0,0), (-1,0), 'Helvetica-Bold'),
-            ('GRID', (0,0), (-1,-1), 0.5, colors.grey),
-        ]))
-        elements.append(no_mgr_table)
-    else:
-        elements.append(Paragraph(" All teams have managers assigned.", styles['Normal']))
-
-    # 4. Build the PDF
-    doc.build(elements)
-
-    # 5. Send as download response
-    buffer.seek(0)
-    response = HttpResponse(buffer, content_type='application/pdf')
-    response['Content-Disposition'] = (
-        f'attachment; filename="sky_registry_report_{datetime.now().strftime("%Y%m%d")}.pdf"'
-    )
-    return response
+# PDF generation is handled client-side via JavaScript window.print()
 
 
 @login_required
@@ -1590,7 +1485,6 @@ from . import views
 
 urlpatterns = [
     path('', views.reports_dashboard, name='reports_dashboard'),
-    path('pdf/', views.generate_pdf_report, name='generate_pdf'),
     path('excel/', views.generate_excel_report, name='generate_excel'),
 ]
 ```

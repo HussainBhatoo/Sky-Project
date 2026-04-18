@@ -25,16 +25,16 @@
 ## 3. GRID / LIST VIEW TOGGLE
 | Check | Status | Evidence |
 | :--- | :--- | :--- |
-| Toggle UI present? | **PASS** | New high-fidelity toggle buttons added to the header. |
+| Toggle UI present? | **PASS** | New Main toggle buttons added to the header. |
 | Stateless switching? | **PASS** | Uses `?view=grid` and `?view=list` parameters. |
 | Grid Mode visual correct? | **PASS** | 3/4 column responsive grid applied via `.grid-dashboard`. |
-| List Mode visual correct? | **PASS** | Vertical high-fidelity stack applied via `.list-dashboard`. |
+| List Mode visual correct? | **PASS** | Vertical Main stack applied via `.list-dashboard`. |
 
 ## 4. RECENT ACTIVITY TRAIL
 | Check | Status | Evidence |
 | :--- | :--- | :--- |
 | Pulling real AuditLog data? | **PASS** | Displays last 10 entries from `AuditLog` table. |
-| High-Fi badge styling? | **PASS** | CREATE (Green), DELETE (Red), UPDATE (Blue) badges working. |
+| Main badge styling? | **PASS** | CREATE (Green), DELETE (Red), UPDATE (Blue) badges working. |
 | Actor attribution? | **PASS** | Shows username and profile initial correctly. |
 | Navigation Link? | **PASS** | "Full History" button links correctly to `/audit-log/`. |
 
@@ -48,4 +48,4 @@
 General system dashboard metrics and view toggles are verified via the **Group Application Tests** section in [docs/test_plan.md](file:///c:/Study/Uni%20Sem%202/Group%20project/CW_2/sky-team-registry/docs/test_plan.md). Manual test evidence to be recorded in CWK2 Word template.
 
 ---
-**Audit Result: 100% COMPLIANT**
+**Audit Result: PASS**

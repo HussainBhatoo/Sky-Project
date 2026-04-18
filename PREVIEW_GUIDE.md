@@ -7,7 +7,7 @@ This document provides accurate instructions for deploying and previewing the Sk
 Ensure the following software is installed on your workstation:
 - **Python 3.11+**
 - **Git**
-- **Modern Web Browser** (Chrome, Edge, or Firefox recommended for high-fidelity effects)
+- **Modern Web Browser** (Chrome, Edge, or Firefox recommended for Main effects)
 
 ---
 
@@ -80,8 +80,8 @@ To create a custom administrative account for the Admin Hub:
 ---
 
 ## Technical Specifications
-The application utilizes an advanced frontend stack for an enterprise experience:
-- **Global Search**: Debounced AJAX-powered dynamic lookup in the navbar.
+The application utilizes an advanced frontend stack for an system experience:
+- **Global Search**: Dynamic lookup in the navbar.
 - **Design Spells**: CSS micro-interactions including card tilts and glassmorphism shine effects.
 - **Sky Spectrum**: A unified design language using consistent vibrant linear gradients and WCAG AA contrast standards.
 

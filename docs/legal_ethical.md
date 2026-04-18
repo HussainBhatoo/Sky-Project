@@ -1,44 +1,27 @@
-# Legal, Ethical, and Professional Constraints
-**Project:** Sky Engineering Team Registry (5COSC021W CWK2)
-**Date:** 2026-04-17
+# Legal and Ethical Considerations: Sky Engineering Team Registry
 
-## 1. Legal Frameworks
+## 1. Data Protection and Privacy (GDPR/DPA 2018)
+The Sky Engineering Team Registry processes personal data, including staff names, professional email addresses, and team compositions. Under the **UK General Data Protection Regulation (GDPR)** and the **Data Protection Act 2018**, this system adheres to the following principles:
+- **Purpose Limitation:** Data is collected strictly for internal resource management and team discovery within the Sky Engineering organization.
+- **Data Minimization:** Only professional identifying information (Work Email, Name, Role) is stored. No sensitive personal data (e.g., home address, health records) is processed.
+- **Security:** Access to the registry is gated by Django's authentication system, ensuring that team data is not exposed to the public internet.
 
-### General Data Protection Regulation (GDPR) & Data Protection Act (DPA) 2018
-The Sky Team Registry manages Personal Identifiable Information (PII) including employee names, corporate emails, and roles. We adhere to the six core principles:
-1. **Lawfulness, Fairness, and Transparency:** Users provide explicit consent via the signup process.
-2. **Purpose Limitation:** Data is collected strictly for internal corporate team registry and dependency tracking.
-3. **Data Minimisation:** We only collect fields essential to the Registry's function (AbstractUser defaults + Department specific roles).
-4. **Accuracy:** Users have the capability to update their profiles and team data to ensure registry integrity.
-5. **Storage Limitation:** Data is maintained only for the duration of the project lifecycle.
-6. **Integrity and Confidentiality:** Implementation of Django's default hashing (PBKDF2) and CSRF protection ensures data security.
+## 2. Ethical Engineering Practices (BCS Code of Conduct)
+Following the **BCS Code of Conduct** (BCS, 2022), we tried to build this registry ethically:
+- **Professional Competence:** We used Django and Python because they were required by the spec and we were already familiar with them from previous modules.
+- **Duty to Relevant Authority:** We wanted to make sure things like creating or deleting teams are tracked properly. This gives admins a clear view of what’s happening on the platform.
+- **Avoidance of Bias:** The team endorsement and voting system is designed to be inclusive, allowing all staff to contribute to the professional recognition of different departments without algorithmic preference.
+- **Data Integrity:** We added a basic audit log with timestamps to ensure accurate and complete records of all team changes are maintained.
 
-- **Computer Misuse Act 1990:**
-The application logic is designed to prevent unauthorised access to data (Section 1) and unauthorised modification of records (Section 3).
-- **Access Control:** All views are gated behind the `@login_required` decorator.
-- **Staff Gates:** Only users with `is_staff=True` can access the administrative "Sky Admin" portal.
+## 3. Intellectual Property and Licensing
+- **Corporate Assets:** All logos, team registries, and project names are the property of Sky UK. This registry is intended for internal simulation or designated organizational use only.
+- **Open Source Compliance:** The system utilizes open-source libraries (Django, OpenPyXL, SQLite). All dependencies are used in accordance with their respective MIT or BSD licenses.
 
----
-
-## 2. Ethical Considerations
-
-Our team followed the BCS Code of Conduct principles throughout the development of the Sky Engineering Team Registry, specifically focusing on the public interest and professional competence (BCS, 2021). We ensured that no real personal data was used in the system; all 46 teams, their leaders, and the 100+ members are fictional test data based on the registry brief provided by the University of Westminster (Westminster, 2026). Ethical considerations also extended to our transparency regarding security; we have openly documented that `DEBUG=True` was left on during this development phase to assist with marker review, despite it being a known risk that exposes local server paths (OWASP, 2021). All data is stored locally in a SQLite database and is never shared with third-party services, adhering to the principle of duty to our relevant authority (BCS, 2021).
+## 4. Operational Transparency (Audit Logging)
+To prevent unauthorized or unethical manipulation of the team registry, the system implements a mandatory audit logging system. Every time a team is created, edited, or deleted, a row is added to the audit log showing who made the change and when.
 
 ---
-
-## 3. Professional Practice (HCI & UX)
-
-- **Accessibility (WCAG 2.1):** The UI uses high-contrast "Sky Spectrum" tokens (Deep Navy #001937 and Bright Blue #0073C5) to ensure contrast ratios meet AA standards for readability.
-- **Data Integrity:** The application implements a robust Audit Logging system using a combination of Django Signals (for core registries like Teams) and explicit view-level logging for user actions (like messaging and endorsements). This ensures 100% accountability and transparency for all system mutations.
-- **Security-First Design:** Sensitive operations and administrative views are protected using Django's session-based authentication framework, specifically preventing Broken Access Control (OWASP, 2021).
-- **Data Protection:** The app stores basic PII such as corporate emails and names, which are protected by Django’s built-in authentication system and hashed password storage as required by the UK Data Protection Act (DPA, 2018). Users also have the 'Right to erasure' as an admin can manually delete their accounts upon request (UK GDPR, 2021).
-
-
----
-
-## 4. References & Citations
-- **GDPR Regulation (EU) 2016/679**
-- **UK Data Protection Act 2018**
-- **Computer Misuse Act 1990, c. 18**
-- **BCS Code of Conduct (2021)**
-- **OWASP Top 10:2021 — A01:2021-Broken Access Control**
+**Standard References Cited:**
+* Information Commissioner's Office (ICO) (2018) Guide to the General Data Protection Regulation (GDPR). Available at: https://ico.org.uk/for-organisations/guide-to-data-protection/guide-to-the-general-data-protection-regulation-gdpr/ (Accessed: 18 April 2026)
+* BCS, The Chartered Institute for IT. (2022). *Code of Conduct.* Available at: https://www.bcs.org/membership-and-registrations/become-a-member/bcs-code-of-conduct/ (Accessed: 18 April 2026)
+* UK Government. (2018). *Data Protection Act 2018.*

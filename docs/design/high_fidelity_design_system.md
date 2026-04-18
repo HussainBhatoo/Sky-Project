@@ -9,12 +9,12 @@ The Sky Team Registry initially utilized a baseline design system that met core 
 ## Decision
 We have decided to implement an enhancement layer, consisting of:
 1. **Interactive Elements:** A library of CSS-driven micro-interactions (hover effects, pulses) applied to various UI components.
-2. **Global Search:** A real-time, debounced AJAX search engine replacing the previous static/mock input.
+2. **Global Search:** A dynamic standard search engine replacing the previous static/mock input.
 3. **Documentation Cleanup:** Improving project READMEs and technical specs to better describe the system architecture.
 
 ## Rationale
 - **User Experience:** Micro-interactions provide subtle feedback that makes the interface feel more responsive and premium.
-- **Efficiency:** As the directory grows, a mock search becomes a blocker. A real AJAX search allows engineers to find connections across departments in milliseconds.
+- **Efficiency:** As the directory grows, a mock search becomes a blocker. A real dynamic search allows engineers to find connections across departments in milliseconds.
 - **Branding:** Aligning closer to the Sky "Spectrum" visual identity increases internal trust and adoption of the tool.
 
 ## Consequences

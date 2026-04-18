@@ -4,7 +4,7 @@
 
 {% block content %}
 <!--
-  TEAM DETAIL — HIGH-FIDELITY VIEW
+  TEAM DETAIL — Main VIEW
   Mirrors TeamDetailsPage.tsx from the User Inquiry prototype.
   Components: Header, mission card, contacts, links, tech tags, members table, dependencies.
   Student 1: Riagul Hossain
@@ -71,25 +71,61 @@
 </div>
 {% endif %}
 
-<!-- Contacts & Links -->
+<!-- Contacts & Resources -->
 <div class="grid-2 mb-2 animate-slide-up" style="animation-delay: 0.15s;">
-    <div class="card" style="grid-column: span 2;">
+    <!-- Contacts -->
+    <div class="card">
         <h4 style="color: var(--sky-header-blue); margin-bottom: 1rem;">Contacts</h4>
-        <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 1.5rem; font-size: 0.9rem;">
+        <div style="display: flex; flex-direction: column; gap: 0.8rem; font-size: 0.9rem;">
             {% if team.lead_email %}
             <div class="flex-center gap-1">
-                <i class='bx bx-envelope' style="color: var(--muted-foreground);"></i>
+                <i class='bx bx-envelope' style="color: var(--muted-foreground); font-size: 1.1rem;"></i>
                 <span style="color: var(--sky-primary);">{{ team.lead_email }}</span>
             </div>
             {% endif %}
             {% for channel in contacts %}
             <div class="flex-center gap-1">
-                <i class='bx {% if channel.channel_type == "slack" %}bxl-slack{% elif channel.channel_type == "email" %}bx-envelope{% else %}bx-message-square{% endif %}' style="color: var(--muted-foreground);"></i>
+                <i class='bx {% if channel.channel_type == "slack" %}bxl-slack{% elif channel.channel_type == "email" %}bx-envelope{% else %}bx-message-square{% endif %}' style="color: var(--muted-foreground); font-size: 1.1rem;"></i>
                 <span>{{ channel.get_channel_type_display }}: <span style="color: var(--sky-primary);">{{ channel.channel_value }}</span></span>
             </div>
             {% endfor %}
-            {% if not team.lead_email and not contacts %}
-            <p style="color: #ccc; font-size: 0.85rem;">No contact channels registered.</p>
+            {% if standup %}
+            <div class="flex-center gap-1" title="Daily Standup">
+                <i class='bx bx-stopwatch' style="color: var(--muted-foreground); font-size: 1.1rem;"></i>
+                <span>Standup: <strong style="color: var(--sky-primary);">{{ standup.standup_time|time:"H:i" }}</strong> 
+                (<a href="{{ standup.standup_link }}" target="_blank" class="link">Join Call</a>)</span>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Infrastructure & Links -->
+    <div class="card">
+        <h4 style="color: var(--sky-header-blue); margin-bottom: 1rem;">Resources & Links</h4>
+        <div style="display: flex; flex-direction: column; gap: 0.8rem; font-size: 0.9rem;">
+            {% for repo in repos %}
+            <div class="flex-center gap-1">
+                <i class='bx bxl-github' style="color: var(--muted-foreground); font-size: 1.1rem;"></i>
+                <a href="{{ repo.repo_url }}" target="_blank" class="link-professional">{{ repo.repo_name }}</a>
+            </div>
+            {% endfor %}
+            
+            {% for wiki in wikis %}
+            <div class="flex-center gap-1">
+                <i class='bx bx-book-open' style="color: var(--muted-foreground); font-size: 1.1rem;"></i>
+                <a href="{{ wiki.wikki_link }}" target="_blank" class="link-professional">{{ wiki.wikki_description }}</a>
+            </div>
+            {% endfor %}
+
+            {% for board in boards %}
+            <div class="flex-center gap-1">
+                <i class='bx bx-columns' style="color: var(--muted-foreground); font-size: 1.1rem;"></i>
+                <a href="{{ board.board_url }}" target="_blank" class="link-professional">{{ board.board_type }}</a>
+            </div>
+            {% endfor %}
+
+            {% if not repos and not wikis and not boards %}
+            <p style="color: var(--muted-foreground); font-style: italic;">No resource links registered.</p>
             {% endif %}
         </div>
     </div>
@@ -175,8 +211,39 @@
     </div>
 </div>
 
+<!-- History & Milestones -->
+<div class="card mb-2 animate-slide-up" style="animation-delay: 0.35s;">
+    <h4 style="color: var(--sky-header-blue); margin-bottom: 1.25rem;">
+        <i class='bx bx-history' style="vertical-align: middle; margin-right: 0.5rem; color: var(--sky-primary);"></i> Team History & Milestones
+    </h4>
+    
+    <div style="position: relative; padding-left: 2.5rem; border-left: 2px solid var(--border); margin-left: 1rem;">
+        {% for log in milestones %}
+        <div style="position: relative; margin-bottom: 2rem;">
+            <!-- Icon Marker -->
+            <div style="position: absolute; left: -3.2rem; top: 0rem; width: 22px; height: 22px; background: #fff; border-radius: 50%; border: 2px solid var(--sky-primary); display: flex; align-items: center; justify-content: center; z-index: 1; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                <i class='bx bx-flag' style="color: var(--sky-primary); font-size: 0.75rem;"></i>
+            </div>
+            
+            <div style="font-weight: 700; color: var(--sky-header-blue); font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem;">
+                {{ log.action_type }}
+            </div>
+            <div style="font-size: 0.75rem; color: #888; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.25rem;">
+                <i class='bx bx-calendar' style="opacity: 0.5;"></i>
+                {{ log.action_changed_at|date:"d M Y" }}
+            </div>
+            <div style="font-size: 0.85rem; color: #444; background: var(--sky-surface-strong); padding: 0.75rem 1rem; border-radius: 10px; border-left: 4px solid var(--sky-primary); box-shadow: var(--shadow-sm);">
+                {{ log.change_summary }}
+            </div>
+        </div>
+        {% empty %}
+        <div style="color: #999; font-size: 0.85rem; font-style: italic;">No historical milestones recorded.</div>
+        {% endfor %}
+    </div>
+</div>
+
 <!-- Audit Footer -->
-<div class="card animate-slide-up" style="animation-delay: 0.35s; background: var(--sky-surface-strong);">
+<div class="card animate-slide-up" style="animation-delay: 0.4s; background: var(--sky-surface-strong);">
     <div class="flex-between" style="font-size: 0.8rem;">
         <span style="color: var(--muted-foreground);">
             <i class='bx bx-time' style="margin-right: 0.25rem;"></i>

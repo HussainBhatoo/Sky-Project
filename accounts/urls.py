@@ -1,13 +1,13 @@
 from django.urls import path, reverse_lazy
 from django.contrib.auth import views as auth_views
-from .views import SkyLoginView, SkySignupView, logout_view, SkyForgotPasswordView
+from .views import SkyLoginView, signup_view, logout_view, SkyForgotPasswordView
 
 app_name = 'accounts'
 
 urlpatterns = [
     # Auth Routes
     path('login/', SkyLoginView.as_view(), name='login'),
-    path('signup/', SkySignupView.as_view(), name='signup'),
+    path('signup/', signup_view, name='signup'),
     path('logout/', logout_view, name='logout'),
 
     # Simplified Forgot Password (Anonymous)
