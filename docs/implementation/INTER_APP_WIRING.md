@@ -24,10 +24,11 @@ The registry is designed as a "Hub and Spoke" model. The **Core Dashboard** is t
 ## Implementation Specs (Per Student)
 
 ### Student 1 (Riagul) integration
-*   **To Schedule**: In `team_detail.html`, your "Schedule Meeting" button **must** link to:
+*   **To Schedule**: In `team_detail.html`, your "Schedule Meeting" button links to:
     ```html
-    <a href="{% url 'schedule:request_form' %}?team_id={{ team.id }}">
+    <a href="{% url 'schedule:create' %}?team_id={{ team.team_id }}">
     ```
+    This GET request hits `schedule_create` (`schedule/views.py:153`), which redirects to `/schedule/?new=true&team_id=N`. The calendar view then opens the `MeetingForm` pre-filled with the team.
 *   **Verification**: Tested and functional. [OK]
 
 ### Student 2 (Lucas) integration
@@ -43,10 +44,14 @@ The registry is designed as a "Hub and Spoke" model. The **Core Dashboard** is t
 *   **Verification**: Context processor is active. [OK]
 
 ### Student 4 (Maurya) integration
-*   **From Teams**: Your `request_form` view must detect the `team_id` to auto-select the team in the dropdown.
+*   **From Teams**: `schedule_calendar` detects the `team_id` query param to pre-fill the dropdown.
     ```python
-    team_id = request.GET.get('team_id') # Handle this in views.py
+    # schedule/views.py:66-71
+    prefill_team_id = request.GET.get('team_id')
+    show_form = request.GET.get('new') == 'true'
+    form = MeetingForm(initial={"team": prefill_team_id})
     ```
+*   Actual URL names in use: `schedule:calendar`, `schedule:weekly`, `schedule:create`, `schedule:delete`. There is no `schedule:request_form`.
 *   **Verification**: Auto-selection logic verified. [OK]
 
 ### Student 5 (Hussain) integration

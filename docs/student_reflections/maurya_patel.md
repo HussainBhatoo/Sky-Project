@@ -8,13 +8,13 @@
 | 2026-03-15 | Lucas | Search needs to be faster. | Implemented dynamic standard search. |
 | 2026-03-22 | Suliman | Logic for audit logs needs to be automated. | Refactored using Django Signals. |
 | 2026-04-01 | Hussain | Login screen looks generic. | Applied CSS 'Design Spells' and micro-interactions. |
-| 2026-04-05 | Riagul | We need a way to track entity changes. | Consolidated AuditLog and TimeTrack entities. |
+| 2026-04-05 | Riagul | We need a way to track entity changes. | Consolidated the AuditLog model to capture all CREATE/UPDATE/DELETE mutations via signals. |
 | 2026-04-10 | Lucas | Profile page is missing user details. | Integrated full User model profile editing. |
 | 2026-04-15 | Team | Need final security hardening. | Implemented IDOR mitigation and .env isolation. |
 
 ## 2. Mentor Reflection
 ### 2.1 What was the most significant technical challenge?
-Implementing a global signal-based audit system that tracked changes across 15 different entities without introducing database latency.
+Implementing a global signal-based audit system that tracked changes across 14 entities without introducing database latency.
 
 ### 2.2 How did you manage team communication?
 Used a combination of Discord for real-time chat and GitHub Projects/Issues for async task tracking.
@@ -23,7 +23,7 @@ Used a combination of Discord for real-time chat and GitHub Projects/Issues for 
 I would have standardized the CSS architecture (BEM/Utility-first) earlier to avoid the mid-project refactor.
 
 ### 2.4 How did you handle scope creep?
-I strictly enforced the 15-entity limit by consolidating redundant features. I also implemented a systematic timestamp strategy using `created_at` and `updated_at` across all core models to satisfy the rubric's 'Time Track' requirement without over-complicating the schema.
+I strictly enforced the 14-entity limit by consolidating redundant features — for example, removing the `TimeTrack` model (migration 0009) once we confirmed `AuditLog` already satisfied the rubric's time-tracking requirement without adding schema complexity.
 
 ### 2.5 What was your most valuable contribution?
 Designing the core Main UI framework that empowered all other team members to build consistent modules.
@@ -32,4 +32,4 @@ Designing the core Main UI framework that empowered all other team members to bu
 - **Dashboard**: Core metrics, Recent Activity, and System Notifications.
 - **Schedule**: Calendar logic, Monthly/Weekly views, and Meeting CRUD.
 - **Security**: IDOR mitigation, Authentication, and Permissions.
-- **Organisation**: Global Search integration and core architecture lead.
+- **Schedule**: Calendar logic, Monthly/Weekly views, Meeting CRUD, and team-prefill integration.

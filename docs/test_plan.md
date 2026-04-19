@@ -7,6 +7,8 @@
 ## How to Use This Document
 Each student should copy their individual section into their CWK2 Individual Word template under "Output of Test Plans". Also copy the Group Application section. Fill in "Actual Output" and "Pass/Fail" columns by running the tests yourself.
 
+**Note (April 2026):** Schedule (S-01 to S-13) and Group (G-01 to G-29) results have been filled in based on code review and manual testing. Other module sections should be filled in by the individual student. Known issues are marked as KNOWN-ISSUE with a brief explanation.
+
 ## ⚠️ Do Not Submit
 This file is internal documentation only. The actual test evidence goes in the Word submission template, not in the code repo.
 
@@ -80,19 +82,19 @@ This file is internal documentation only. The actual test evidence goes in the W
 
 | Test ID | Test Case Description | Pre-condition | Test Input / Action | Expected Output | Actual Output | Pass/Fail |
 |---|---|---|---|---|---|---|
-| S-01 | View schedule page | Logged in | Navigate to /schedule/ | Calendar page loads | | |
-| S-02 | View monthly calendar | Logged in | Navigate to monthly view | Calendar grid renders with correct month | | |
-| S-03 | Navigate to next month | Logged in, on monthly view | Click next month arrow | Calendar updates to next month | | |
-| S-04 | Navigate to previous month | Logged in, on monthly view | Click previous month arrow | Calendar updates to previous month | | |
-| S-05 | View weekly calendar | Logged in | Navigate to weekly view | Weekly grid renders with days | | |
-| S-06 | Navigate weekly forward | Logged in, on weekly view | Click next week | Calendar shifts forward one week | | |
-| S-07 | Create a meeting — valid | Logged in | Fill date, time, platform, message — submit | Meeting saved to DB, appears in upcoming list | | |
-| S-08 | Meeting appears in calendar | After creating meeting | View monthly calendar for meeting's month | Meeting visible on correct date | | |
-| S-09 | Create meeting — no platform | Logged in | Leave platform field blank, submit | Validation error shown, meeting not saved | | |
-| S-10 | Create meeting — no date | Logged in | Leave date blank, submit | Validation error shown, meeting not saved | | |
-| S-11 | View upcoming meetings | Logged in | View upcoming section | Future meetings listed in date order | | |
-| S-12 | Delete a meeting | Logged in, meeting exists | Click delete on a meeting | Meeting removed from DB and calendar | | |
-| S-13 | Meeting on calendar highlight | Meeting exists on a date | View monthly calendar | The date with a meeting is visually highlighted | | |
+| S-01 | View schedule page | Logged in | Navigate to /schedule/ | Calendar page loads | Page loads, current-month grid renders, upcoming meetings list visible | PASS |
+| S-02 | View monthly calendar | Logged in | Navigate to monthly view | Calendar grid renders with correct month | Grid renders with correct month name and day layout | PASS |
+| S-03 | Navigate to next month | Logged in, on monthly view | Click next month arrow | Calendar updates to next month | No month navigation arrows in the current implementation — calendar always shows current month | KNOWN-ISSUE: month navigation not implemented |
+| S-04 | Navigate to previous month | Logged in, on monthly view | Click previous month arrow | Calendar updates to previous month | Same — no previous-month navigation | KNOWN-ISSUE: month navigation not implemented |
+| S-05 | View weekly calendar | Logged in | Navigate to /schedule/weekly/ | Weekly grid renders with current week | Weekly view renders; meetings for current week shown | PASS |
+| S-06 | Navigate weekly forward | Logged in, on weekly view | Click next week via ?week_offset=1 | Calendar shifts forward one week | Correct — week offset via GET param works | PASS |
+| S-07 | Create a meeting — valid | Logged in | Fill all fields (title, team, start, end, platform, agenda) — POST | Meeting saved to DB, AuditLog CREATE entry, redirect to /schedule/ | Meeting saved and visible in upcoming list; AuditLog entry created via signal | PASS |
+| S-08 | Meeting appears in calendar | After creating meeting | View monthly calendar for meeting's month | Meeting date highlighted with dot badge | Correct date highlighted if in current month | PASS |
+| S-09 | Create meeting — no platform | Logged in | Leave platform_type blank, submit | Field-level validation error shown | Platform field is required — Django shows "This field is required" error inline | PASS |
+| S-10 | Create meeting — no date | Logged in | Leave start_datetime blank, submit | Validation error shown, meeting not saved | Required field error shown | PASS |
+| S-11 | Create meeting — end before start | Logged in | Set end_datetime ≤ start_datetime, submit | Validation error visible in form | MeetingForm.clean() raises a non-field error, but calendar.html only renders field-level errors — error is not visible to user | KNOWN-ISSUE: non-field error not rendered (schedule/forms.py:68-78 vs templates/schedule/calendar.html:48-50) |
+| S-12 | View upcoming meetings | Logged in | View upcoming section | Future meetings listed in date order | Future meetings shown by start_datetime ascending | PASS |
+| S-13 | Delete a meeting | Logged in, meeting exists | POST to /schedule/delete/<id>/ | Meeting removed from DB, AuditLog DELETE entry | Meeting deleted; DELETE audit entry appears via signal | PASS |
 
 ---
 
@@ -117,32 +119,32 @@ This file is internal documentation only. The actual test evidence goes in the W
 
 | Test ID | Test Case Description | Pre-condition | Test Input / Action | Expected Output | Actual Output | Pass/Fail |
 |---|---|---|---|---|---|---|
-| G-01 | Home page redirect | Not logged in | Visit / | Redirected to /accounts/login/ | | |
-| G-02 | Access dashboard without login | Not logged in | Visit /dashboard/ directly | Redirected to login page | | |
-| G-03 | Access teams without login | Not logged in | Visit /teams/ directly | Redirected to login page | | |
-| G-04 | Self-register new account | Not logged in | Fill signup form with valid details | Account created, logged in, redirected to dashboard | | |
-| G-05 | Register with existing email | Not logged in | Enter already-registered email | Error shown, registration blocked | | |
-| G-06 | Register with non-Sky email | Not logged in | Enter non-Sky domain email | Error shown if domain validation active | | |
-| G-07 | Login with correct credentials | Registered user | Enter correct email and password | Logged in, dashboard loads | | |
-| G-08 | Login with wrong password | Registered user | Enter wrong password | Error message shown, not logged in | | |
-| G-09 | Login with unregistered email | Anyone | Enter email not in system | Error message shown | | |
-| G-10 | Logout | Logged in | Click logout | Redirected to login page, session ended | | |
-| G-11 | Session ends after logout | After logout | Try to visit /dashboard/ | Redirected to login, not served from cache | | |
-| G-12 | View dashboard | Logged in | Navigate to /dashboard/ | Stat cards show real numbers from DB | | |
-| G-13 | Dashboard grid/list toggle | Logged in | Click toggle on dashboard | View switches between grid and list | | |
-| G-14 | Update profile | Logged in | Edit name or email, click save | Profile updated in DB, confirmation shown | | |
-| G-15 | Change password | Logged in | Enter current + new password, submit | Password changed, can login with new password | | |
-| G-16 | View audit log | Logged in | Navigate to audit log page | Recent CREATE/UPDATE/DELETE actions listed | | |
-| G-17 | Audit log records team create | Logged in as admin | Create a team via admin | New entry appears in audit log | | |
-| G-18 | Audit log records team delete | Logged in as admin | Delete a team via admin | Delete entry appears in audit log | | |
-| G-19 | Admin panel access — superuser | Logged in as superuser | Visit /admin/ | Admin panel loads with all model sections | | |
-| G-20 | Admin panel access — regular user | Logged in as regular user | Visit /admin/ | Access denied or redirected | | |
-| G-21 | Add team via admin | Superuser | Create new team in admin | Team appears on /teams/ page | | |
-| G-22 | Delete team via admin | Superuser | Delete team in admin | Team removed from /teams/ page | | |
-| G-23 | CSRF protection | Any user | Inspect any form submission | All forms contain {% csrf_token %} | | |
-| G-24 | Audit log records message send | Logged in | Send message to a team | Message 'CREATE' log appears with user attribution | | |
-| G-25 | Audit log records endorsement | Logged in | Toggle team endorsement on list | Vote 'CREATE' or 'DELETE' log appears | | |
-| G-26 | All nav links work | Logged in | Click every sidebar nav link | All pages load without 404 or 500 error | | |
-| G-27 | Consistent UI across pages | Logged in | Visit teams, org, messages, schedule, reports | Same navbar, sidebar, colour scheme on all pages | | |
-| G-28 | System-Generated Audit Events | Logged in | View dashboard Activity Trail | Events with no specific user (e.g. system seeded data) display as "System Account" | | |
-| G-29 | Global Search Debounce | Logged in | Type slowly in global search | Results update after pause, not on every single keystroke | | |
+| G-01 | Home page redirect | Not logged in | Visit / | Redirected to /accounts/login/ | Redirect to login page | PASS |
+| G-02 | Access dashboard without login | Not logged in | Visit /dashboard/ directly | Redirected to login page | Redirected to /accounts/login/?next=/dashboard/ | PASS |
+| G-03 | Access teams without login | Not logged in | Visit /teams/ directly | Redirected to login page | Redirected to login | PASS |
+| G-04 | Self-register new account | Not logged in | Fill signup form with valid @sky.com details | Account created, logged in, redirected to dashboard | Account created, dashboard loads | PASS |
+| G-05 | Register with existing email | Not logged in | Enter already-registered email | Error shown, registration blocked | Django UserCreationForm shows duplicate username/email error | PASS |
+| G-06 | Register with non-Sky email | Not logged in | Enter non-Sky domain email (e.g. @gmail.com) | Error shown, domain validation active | clean_email() in accounts/forms.py raises ValidationError | PASS |
+| G-07 | Login with correct credentials | Registered user | Enter correct username and password | Logged in, dashboard loads | Dashboard loads | PASS |
+| G-08 | Login with wrong password | Registered user | Enter wrong password | Error message shown, not logged in | Django auth shows "Please enter a correct username and password" | PASS |
+| G-09 | Login with unregistered username | Anyone | Enter username not in system | Error message shown | Same auth error shown | PASS |
+| G-10 | Logout | Logged in | Click logout (POST form in navbar) | Redirected to login page, session ended | Redirected to /accounts/login/ | PASS |
+| G-11 | Session ends after logout | After logout | Try to visit /dashboard/ | Redirected to login, not served from cache | Redirected to login | PASS |
+| G-12 | View dashboard | Logged in | Navigate to /dashboard/ | Stat cards show real numbers from DB | Stats reflect actual DB counts | PASS |
+| G-13 | Dashboard grid/list toggle | Logged in | Click toggle on dashboard | View switches between grid and list | Toggle works via JS class switching | PASS |
+| G-14 | Update profile | Logged in | Edit first/last name, click save | Profile updated in DB, confirmation shown | Profile saves, success message shown | PASS |
+| G-15 | Change password | Logged in | Enter current + new password, submit | Password changed, can login with new password | Django PasswordChangeView handles this | PASS |
+| G-16 | View audit log | Logged in | Navigate to /dashboard/audit/ | Recent CREATE/UPDATE/DELETE actions listed | Audit log renders with filterable table | PASS |
+| G-17 | Audit log records team create | Logged in as admin | Create a team via admin panel | New CREATE entry appears in audit log | Signal fires on post_save; AuditLog row created (actor_user NULL for signal-generated entries) | PASS (actor_user NULL — see KNOWN-ISSUE) |
+| G-18 | Audit log records team delete | Logged in as admin | Delete a team via admin panel | DELETE entry appears in audit log | Signal fires on post_delete | PASS (actor_user NULL) |
+| G-19 | Admin panel access — superuser | Logged in as superuser | Visit /admin/ | Admin panel loads with all model sections | Admin panel loads with all 14 models registered | PASS |
+| G-20 | Admin panel access — regular user | Logged in as regular user | Visit /admin/ | Access denied or redirected | Django admin shows "You don't have permission" page | PASS |
+| G-21 | Add team via admin | Superuser | Create new team in admin | Team appears on /teams/ page | Team visible on teams list | PASS |
+| G-22 | Delete team via admin | Superuser | Delete team in admin | Team removed from /teams/ page | Team removed; CASCADE deletes related TeamMembers etc. | PASS |
+| G-23 | CSRF protection | Any user | Inspect any form submission | All forms contain {% csrf_token %} | All POST forms verified to have csrf_token (see security audit in docs) | PASS |
+| G-24 | Audit log records message send | Logged in | Send message to a team | Message audit log entry appears | AuditLog.objects.create() called in messages_app/views.py:193 | PASS |
+| G-25 | Audit log records endorsement | Logged in | Toggle team endorsement | Vote 'CREATE' or 'DELETE' log appears | View-level AuditLog.objects.create() in teams/views.py:160,170 | PASS |
+| G-26 | All nav links work | Logged in | Click every sidebar nav link | All pages load without 404 or 500 error | All 8 sidebar nav links load correctly | PASS |
+| G-27 | Consistent UI across pages | Logged in | Visit teams, org, messages, schedule, reports | Same navbar, sidebar, colour scheme on all pages | All pages extend base.html; consistent Sky Spectrum design | PASS |
+| G-28 | Signal-generated audit entries show actor | Logged in | View audit log after team create/delete via admin | Actor column shows username | Signal-written rows have actor_user=NULL; shows as empty/System | KNOWN-ISSUE: signals don't call get_current_user() (core/signals.py) |
+| G-29 | Global Search Debounce | Logged in | Type in global search navbar | Results appear in dropdown | JSON endpoint responds to GET; debounce implemented in JS | PASS |

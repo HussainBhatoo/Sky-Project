@@ -10,7 +10,7 @@
 | 2026-04-04 | Hussain | Messages should be deleteable by the sender. | Implemented secure delete with owner-check validation. |
 | 2026-04-10 | Maurya | The compose view logic is getting a bit complex. | Unified New Message, Reply, and Draft Edit into one clean function. |
 | 2026-04-14 | Team | Secure the delete button against IDOR. | Added server-side validation to ensure request.user == sender. |
-| 2026-04-16 | Team | Unused Q import detected in views.py. | Decided to leave it as an 'authenticity signal' showing planned search. |
+| 2026-04-16 | Team | Unused Q import detected in views.py. | Kept as-is; was originally imported for a planned inbox search feature that was descoped to focus on security. Acknowledged as technical debt. |
 
 ## 2. Mentor Reflection
 ### 2.1 What was the most significant technical challenge?

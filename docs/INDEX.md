@@ -4,7 +4,7 @@ This index is the single entry point for project documentation.
 
 ## Submission-facing docs
 1. [README](../README.md)
-2. [Credentials](../CREDENTIALS.md)
+2. [Credentials](coursework/credentials.md)
 3. [Preview Guide](../PREVIEW_GUIDE.md)
 4. [Pre-Submission Checklist](../PRE_SUBMISSION_CHECKLIST.md)
 5. [CWK2 Master Plan](../CWK2_MASTER_PLAN.md)
@@ -16,9 +16,9 @@ This index is the single entry point for project documentation.
 - [Messages](audit/messages.md)
 - [Schedule](audit/schedule.md)
 - [Reports (Audited)](audit/reports.md)
-- [Teams (Pending)](audit/teams_PENDING.md)
-- [Organisation (Pending)](audit/organisation_PENDING.md)
-- [Audit Log (Pending)](audit/auditlog_PENDING.md)
+- [Teams (PASS)](audit/teams_PASS.md)
+- [Organisation (PASS)](audit/organisation_PASS.md)
+- [Audit Log (PASS)](audit/auditlog_PASS.md)
 
 ## Implementation docs
 - [Foundation](implementation/FOUNDATION.md)

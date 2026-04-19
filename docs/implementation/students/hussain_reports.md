@@ -10,7 +10,7 @@ Provide analytics and export capability for governance and management visibility
 - Reporting links into audit and team detail context.
 
 ## Database contribution
-- Primary custodian of **AuditLog** reporting perspective and **TimeTrack** usage context.
+- Primary custodian of **AuditLog** reporting perspective. Note: `TimeTrack` was removed in migration 0009 — audit/compliance is handled exclusively via the `AuditLog` model.
 - Reference: [Entity Evolution](../ENTITY_LOG.md)
 
 ## Build map

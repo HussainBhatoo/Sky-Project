@@ -15,17 +15,17 @@ This includes: basic ORM calls (`.filter()`, `.all()`, `.count()`, `.save()`, `.
 ### 2. What percentage is [E]?
 **Approximately 42%**
 
-This includes: `select_related()`, `prefetch_related()`, `Q` object filtering (taught in one slide, extended use is [E]), `unique_together` in Meta, `auto_now_add`/`auto_now`, choices lists, `get_or_create()`, `get_object_or_404()`, `.exists()`, `.first()`, `timedelta` date arithmetic, `request.META.get('HTTP_REFERER')`, `LoginView` CBV (which is taught), `clean_<field>()` custom form validation, `@admin.register()`, `list_display`/`search_fields`/`list_filter`, `readonly_fields`.
+This includes: `select_related()`, `prefetch_related()`, `Q` object filtering (taught in one slide, extended use is [E]), `unique_together` in Meta, `auto_now_add`/`auto_now`, choices lists, `get_or_create()`, `get_object_or_404()`, `.exists()`, `.first()`, `timedelta` date arithmetic, `request.META.get('HTTP_REFERER')`, `LoginView` CBV (which is taught), `clean_<field>()` custom form validation, `@admin.register()`, `list_display`/`search_fields`/`list_filter`, `readonly_fields`, `autocomplete_fields`.
 
 ### 3. What percentage is [A]?
 **Approximately 30%**
 
-This includes all items in the KEEP/SIMPLIFY/REMOVE tables below: signal receivers beyond Profile, populate_data BaseCommand, all `annotate()+Count()` calls, CSV export, Python calendar module, IDOR protection, `AbstractUser` replacement, `AuditLog` model, custom middleware in settings.
+This includes all items in the KEEP/SIMPLIFY/REMOVE tables below: signal receivers beyond Profile, populate_data BaseCommand, all `annotate()+Count()` calls, CSV export, Python calendar module, IDOR protection, `AbstractUser` replacement, `AuditLog` model, custom middleware in settings, and `has_add_permission`/`has_delete_permission` overrides in Admin.
 
 ### 4. Which student has the most [A] items?
 **Maurya Patel — by a large margin.**
 
-Maurya owns or is credited as lead on: `core/signals.py` (4 receivers = [A]), `core/management/commands/populate_data.py` (entire file = [A]), `schedule/views.py` (`_build_calendar_context` = [A]), `core/models.py` (AbstractUser + AuditLog = [A]), `sky_registry/settings.py` (AUTH_USER_MODEL + custom middleware = [A]).
+Maurya owns or is credited as lead on: `core/signals.py` (4 receivers = [A]), `core/management/commands/populate_data.py` (entire file = [A]), `schedule/views.py` (`_build_calendar_context` = [A]), `core/models.py` (AbstractUser + AuditLog = [A]), `sky_registry/settings.py` (AUTH_USER_MODEL + custom middleware = [A]), and `core/admin.py` (Security hardening & Autocomplete = [A]).
 
 Roughly 16 distinct [A] items versus 4 for the next-highest student (Hussain).
 
@@ -58,6 +58,7 @@ These items should stay in the code but the owning student must be able to expla
 |---|---|---|---|
 | `User(AbstractUser)` | core/models.py | Maurya | "We needed a custom user model so we could use `AUTH_USER_MODEL` and potentially add Sky-specific fields. Django strongly recommends setting this at the start of a project — swapping it later requires wiping migrations. AbstractUser gives us all the default fields (username, password, email) and we just subclass it. We haven't added custom fields yet, but having it set up correctly means we could." |
 | `AuditLog` model | core/models.py | Maurya | "The rubric says we need to track changes to core entities over time. We made a dedicated AuditLog model with fields for who did the action, what type (CREATE/UPDATE/DELETE), which entity, and a short description. Every time something changes in the system, a row gets added here. The admin panel shows the full log." |
+| `AuditLog` Security | core/admin.py | Maurya | "I overrode `has_add_permission` and `has_delete_permission` to return False. This means that while staff can read the logs, they cannot edit or delete them. It ensures an immutable audit trail which is a production security standard. It's technically an [A] item because we go beyond the standard admin setup." |
 | All 4 signal receivers | core/signals.py | Maurya | "I used signals so the audit logging happens automatically. `post_save` fires after any save, `post_delete` fires after any delete. The `created` flag inside `post_save` tells me if it's a new row or an update. The alternative was copying AuditLog.objects.create() into every view that touches Teams or Meetings — signals mean I only write the logic once." |
 | `_build_calendar_context()` calendar module | schedule/views.py | Maurya | "`calendar.monthrange(year, month)` returns two numbers: which weekday the 1st falls on (Monday=0) and how many days are in the month. I use the weekday number to add blank padding cells at the start of the grid so day 1 lands in the right column. The `(first_weekday + 1) % 7` converts from Monday=0 to Sunday=0 because our grid header starts on Sunday." |
 | CSV export — `HttpResponse` + Content-Disposition | reports/views.py | Hussain | "I return an `HttpResponse` with `content_type='text/csv'` instead of rendering a template. `Content-Disposition: attachment` tells the browser it's a file download. `csv.writer` formats each team as a comma-separated row. I found this exact pattern in the Django docs under 'Outputting CSV with Django'." |
@@ -78,8 +79,8 @@ These items are needed for the spec/rubric but the current implementation is mor
 | Triple `annotate()` with filter in `team_list()` | teams/views.py | Riagul | Replace with separate `.count()` calls after fetching the team: `member_count = team.members.count()`. Or simply don't show dependency counts in the list view — they are shown in the detail view already. |
 | `annotate(team_count=..., vote_count=...)` in `org_chart()` | organisation/views.py | Lucas | Replace with: for each department, use `dept.teams.count()` and `dept.votes.count()` in the template via Django's template `count` filter, or compute in the view loop. |
 | `annotate(member_count=Count('members'))` in `department_detail()` | organisation/views.py | Lucas | Replace with: `teams = Team.objects.filter(department=department)` and then for each team in the template, use `{{ team.members.count }}`. Django will do an extra query per team but with small numbers it is fine. |
-| `SkySignupView` | accounts/views.py | Maurya (lead) | Has been converted to a plain function-based view: `signup_view`. This is exactly the pattern taught in lectures and removes a major risk. |
-| Search | core/views.py | Maurya | Real-time global search is removed. The functionality was simplified. |
+| `SkySignupView` | accounts/views.py | Maurya (lead) | Has been converted to a plain function-based view: `signup_view` (`accounts/views.py:29`). This is exactly the pattern taught in lectures and removes a major risk. |
+| Search (`global_search`) | core/views.py | Maurya | **Retained** as a `JsonResponse`-based FBV at `core/views.py:94-127`. It still uses `JsonResponse` for async dropdown results — this was not removed. Mark it [E] rather than [A] for classification purposes: `request.GET.get` and `JsonResponse` are both findable in Django docs. |
 
 ---
 
@@ -89,9 +90,9 @@ These items are NOT required by the rubric or spec. Removing them reduces viva r
 
 | Item | File | Student | Why it is safe to remove |
 |---|---|---|---|
-| `DepartmentAdmin.save_model()` override | core/admin.py | Maurya | Removed. Plain `DepartmentAdmin` with just `list_display` and `search_fields` is used. |
-| `DepartmentAdmin.delete_model()` override | core/admin.py | Maurya | Removed. Plain Django admin deletion works fine without this hook. |
-| `SkyForgotPasswordView(TemplateView)` | accounts/views.py | Maurya (lead) | Removed. |
+| `DepartmentAdmin.save_model()` override | core/admin.py | Maurya | ✅ Removed. Plain `DepartmentAdmin` with just `list_display` and `search_fields` is used in the current code. |
+| `DepartmentAdmin.delete_model()` override | core/admin.py | Maurya | ✅ Removed. Plain Django admin deletion works fine without this hook. |
+| `SkyForgotPasswordView(TemplateView)` | accounts/views.py | Maurya (lead) | ⚠️ **Not removed** — still present at `accounts/views.py:45-50` and routed at `accounts/urls.py:14`. It renders a placeholder template only; no real password-reset email is sent. This is an honest gap — marker may ask why forgot password is unimplemented. |
 | Endorsement format | organisation/views.py | Lucas | The AJAX format was removed. The endorsement toggle does a full page reload — acceptable for a Y2 project. |
 
 ---

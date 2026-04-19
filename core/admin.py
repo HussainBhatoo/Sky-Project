@@ -55,17 +55,22 @@ class TeamAdmin(admin.ModelAdmin):
 class TeamMemberAdmin(admin.ModelAdmin):
     list_display = ['full_name', 'role_title', 'team', 'email']
     list_filter = ['team']
-    search_fields = ['full_name', 'email']
+    search_fields = ['full_name', 'email', 'team__team_name']
+    autocomplete_fields = ['team']
 
 @admin.register(Dependency)
 class DependencyAdmin(admin.ModelAdmin):
     list_display = ['from_team', 'to_team', 'dependency_type']
     list_filter = ['dependency_type']
+    search_fields = ['from_team__team_name', 'to_team__team_name']
+    autocomplete_fields = ['from_team', 'to_team']
 
 @admin.register(ContactChannel)
 class ContactChannelAdmin(admin.ModelAdmin):
     list_display = ['team', 'channel_type', 'channel_value']
     list_filter = ['channel_type']
+    search_fields = ['team__team_name', 'channel_type']
+    autocomplete_fields = ['team']
 
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
@@ -77,14 +82,16 @@ class MessageAdmin(admin.ModelAdmin):
 class MeetingAdmin(admin.ModelAdmin):
     list_display = ['meeting_title', 'team', 'start_datetime', 'platform_type']
     list_filter = ['platform_type', 'team']
-    search_fields = ['meeting_title', 'agenda_text']
+    search_fields = ['meeting_title', 'agenda_text', 'team__team_name']
     readonly_fields = ('created_at',)
+    autocomplete_fields = ['team']
 
 @admin.register(Vote)
 class VoteAdmin(admin.ModelAdmin):
     list_display = ['voter', 'team', 'vote_type', 'voted_at']
     list_filter = ['vote_type', 'team']
     search_fields = ['voter__username', 'team__team_name']
+    autocomplete_fields = ['voter', 'team']
 
 @admin.register(AuditLog)
 class AuditLogAdmin(admin.ModelAdmin):
@@ -92,21 +99,35 @@ class AuditLogAdmin(admin.ModelAdmin):
     list_filter = ['action_type', 'entity_type']
     search_fields = ['change_summary', 'actor_user__username']
 
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
 @admin.register(StandupInfo)
 class StandupInfoAdmin(admin.ModelAdmin):
     list_display = ['team', 'standup_time', 'standup_link']
+    search_fields = ['team__team_name']
+    autocomplete_fields = ['team']
 
 @admin.register(RepositoryLink)
 class RepositoryLinkAdmin(admin.ModelAdmin):
     list_display = ['repo_name', 'team', 'repo_url']
+    search_fields = ['repo_name', 'team__team_name']
+    autocomplete_fields = ['team']
 
 @admin.register(WikiLink)
 class WikiLinkAdmin(admin.ModelAdmin):
     list_display = ['team', 'wikki_description', 'wikki_link']
+    search_fields = ['wikki_description', 'team__team_name']
+    autocomplete_fields = ['team']
 
 @admin.register(BoardLink)
 class BoardLinkAdmin(admin.ModelAdmin):
     list_display = ['board_type', 'team', 'board_url']
+    search_fields = ['board_type', 'team__team_name']
+    autocomplete_fields = ['team']
 
 
 # Re-registering standard Group model to default admin site

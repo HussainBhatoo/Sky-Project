@@ -10,7 +10,7 @@ Build scheduling logistics for teams with calendar views, weekly navigation, and
 - Integration links across Teams/Messages/Audit.
 
 ## Database contribution
-- Primary custodian of **Meeting** and **StandupInfo** usage.
+- Primary custodian of **Meeting** model usage. Note: `StandupInfo` is defined in `core/models.py` and rendered by the Teams app (`teams/views.py:111`) — it is not referenced in the Schedule app.
 - Lead support for integration and audit hardening.
 - Reference: [Entity Evolution](../ENTITY_LOG.md)
 

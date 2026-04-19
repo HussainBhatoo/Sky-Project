@@ -30,5 +30,5 @@ The centralized Organization view that serves as the 'hub' for understanding the
 
 ## 3. Module Ownership
 - **Organisation**: Department Management and Hierarchical Views.
-- **Search**: Global async search engine.
+- **Dependencies**: Upstream/downstream dependency graph and SVG visualisation.
 - **Logic**: Shared utility functions and filtering.

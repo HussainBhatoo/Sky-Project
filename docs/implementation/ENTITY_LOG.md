@@ -24,7 +24,7 @@ The following 14 entities form the finalized production system, ensuring complia
 | **10** | **BoardLink** | Direct integration links for project boards (Jira/Trello). | ✅ Restored |
 | **11** | **Message** | In-app communication with `Draft` -> `Sent` lifecycle logic. | ✅ Production |
 | **12** | **Meeting** | Schedule coordination with Calendar & Weekly Navigation. | ✅ PASS |
-| **13** | **AuditLog** | Comprehensive Audit Trail tracking all DB mutations & Time History. | ✅ Compliance |
+| **13** | **AuditLog** | Comprehensive Audit Trail tracking all DB mutations & Time History. | ✅ Hardened |
 | **14** | **Vote** | Peer recognition system (Endorsements) for team health. | ✅ Active |
 
 ---
@@ -72,12 +72,36 @@ The database schema has been expanded to 14 entities to meet the Coursework 2 ru
 
 ---
 
+## Field-Level Delta: CW1 ERD → CW2 Production
+
+| Entity | CW1 Fields | New Fields Added in CW2 | Notes |
+|---|---|---|---|
+| Department | name, lead_name, description | `specialization` | Added for richer search/filter |
+| Team | name, dept_FK, leader, work_stream, project | `mission`, `lead_email`, `status`, `tech_tags`, `created_at`, `updated_at` | Rich profile fields for Sky registry |
+| TeamMember | team_FK, name, role | `email` | Required for inbox team-membership filter |
+| Dependency | — | Entire model new | Upstream/downstream team relationships |
+| ContactChannel | — | Entire model new | Multi-channel communication metadata |
+| StandupInfo | — | Entire model new | OneToOne team sync schedule |
+| RepositoryLink | — | Entire model new | GitHub/Bitbucket asset registry |
+| WikiLink | — | Entire model new | Documentation asset registry |
+| BoardLink | — | Entire model new | Jira/Trello project board registry |
+| Message | — | Entire model new | Internal team messaging |
+| Meeting | — | Entire model new | Schedule coordination |
+| AuditLog | — | Entire model new | GDPR/compliance time-tracking |
+| Vote | — | Entire model new | Peer endorsement system |
+| User | Django default | No custom fields added | AbstractUser replacement only |
+
+CW1 had 3 entities. CW2 adds 11 new entities (10 brand new + User as AbstractUser subclass).
+
+---
+
 ## 📊 3. Summary of Mutations
 
 | Feature | Evolution | Impact |
 | :--- | :--- | :--- |
 | **Scaling** | 3 entities -> 14 entities | Meets rubric requirements. |
-| **Traceability** | View-level & Signal-based AuditLog | 100% Administrative Transparency. |
+| **Traceability** | View-level & Signal-based AuditLog | 100% Administrative Transparency. Immutable Audit Trail implemented. |
+| **UX/Admin** | Autocomplete & Search Optimization | Admin panel hardened for high-scale data entry (500+ records). |
 | **Visualisation** | Text lists -> Interactive Org Charts | Main UX matching Sky Spectrum standards. |
 
 ---

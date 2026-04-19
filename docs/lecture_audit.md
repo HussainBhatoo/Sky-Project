@@ -45,18 +45,18 @@
 | `dashboard()` | [E] | `@login_required` and `render()` are taught; `.count()`, `.order_by()`, slicing `[:10]` are findable |
 | `audit_log()` | [E] | Q objects taught in one slide; chaining multiple `.filter()` is findable |
 | `profile_view()` | [L] | `request.POST.get()`, `.save()`, `render()` — all directly taught |
-| `global_search()` | [E] | Uses standard `request.GET.get` and `render` — both covered in lectures. |
+| `global_search()` | [E] | Uses `request.GET.get` (taught) and returns `JsonResponse` (findable in docs) — classifiable as [E]. |
 
 **Specific flags:**
 - `annotate()` or `Count()` → NOT present in this file ✅
 - `transaction.atomic()` → NOT present ✅
 - `json.dumps()` → NOT present ✅
-- `JsonResponse` in `global_search()` → **Removed**
+- `JsonResponse` in `global_search()` → **Retained** (`core/views.py:95-127`)
 - Class-based views → NOT present (only FBVs here) ✅
 - `itertools` → NOT present ✅
 
 **[A] items:**
-- `global_search()` has been simplified and uses standard form submissions.
+- None in `core/views.py`. `global_search()` uses `JsonResponse` which is [E] (findable in Django docs). It was not removed or simplified to form-only — it still returns JSON for the async dropdown.
 
 ---
 
@@ -183,7 +183,7 @@ File does not exist. The `User` model is defined in `core/models.py` and referen
 | Basic `.count()` calls (total_departments, total_teams etc.) | [L] | ORM `.count()` is taught |
 | `Department.objects.annotate(team_count=Count('teams'))` | [A] | `annotate()` + `Count()` explicitly NOT TAUGHT |
 | `Team.objects.annotate(member_count=Count('members'))` | [A] | Same — annotate + Count |
-| `Team.objects.annotate(endorse_count=Count('votes', filter=Q(...)))` | [A] | Annotate with a `filter=` argument is particularly advanced — not in docs at beginner level |
+| `Team.objects.annotate(endorse_count=Count('votes'))` | [A] | `annotate()` + `Count()` not taught. Note: the actual code at `reports/views.py:47-49` uses plain `Count('votes')` without a `filter=Q(...)` argument — the filtered version was planned but not implemented. |
 | `csv` module used in `export_csv()` | [A] | `csv` module in views explicitly NOT TAUGHT |
 | `HttpResponse(content_type='text/csv')` | [A] | `HttpResponse` with Content-Disposition explicitly NOT TAUGHT |
 | `response['Content-Disposition'] = 'attachment; ...'` | [A] | Content-Disposition header pattern not taught |
@@ -196,8 +196,8 @@ File does not exist. The `User` model is defined in `core/models.py` and referen
 **For `annotate(team_count=Count('teams'))`:**
 "I needed to show how many teams each department has on one page. I could have looped through each department and called `dept.teams.count()` separately, but Riagul told me in standup that would be slow — one SQL query per department. I found `annotate` in the Django docs under 'Aggregation' — it adds a computed field to each row in the queryset so the count comes back in the same query."
 
-**For `annotate(endorse_count=Count('votes', filter=Q(...)))`:**
-"This one was trickier — I only wanted to count endorsement votes, not support votes. The Django docs showed you can pass a `filter=` argument to `Count` to count only the rows that match a condition. It took me a while to get the syntax right."
+**For `annotate(endorse_count=Count('votes'))`:**
+"This counts all votes for each team and lets me order by the count to show the most-endorsed teams at the top. I found `annotate` in the Django aggregation docs. Note: the code uses `Count('votes')` without a filter — I count all vote types since the project only implemented one type."
 
 **For CSV export with `HttpResponse` and `Content-Disposition`:**
 "I Googled 'Django export CSV' and the Django docs have a whole page on this. You return an `HttpResponse` with `content_type='text/csv'` instead of rendering a template. The `Content-Disposition: attachment` header tells the browser to download the response as a file rather than displaying it. Then `csv.writer` from Python's standard library formats each team as a comma-separated row."

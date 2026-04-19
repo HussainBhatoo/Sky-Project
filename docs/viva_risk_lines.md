@@ -118,26 +118,8 @@ departments = Department.objects.prefetch_related('teams').annotate(
 
 ---
 
-### 7 — core/admin.py, lines 49–70
-**Function:** `DepartmentAdmin.save_model()` and `DepartmentAdmin.delete_model()`
-**Code:**
-```python
-def save_model(self, request, obj, form, change):
-    super().save_model(request, obj, form, change)
-    action = 'UPDATE' if change else 'CREATE'
-    AuditLog.objects.create(
-        actor_user=request.user,
-        action_type=action,
-        entity_type='Department',
-        entity_id=obj.pk,
-        change_summary=f"Department '{obj.department_name}' was {action.lower()}d via admin."
-    )
-```
-**Student:** Maurya Patel
-**Risk:** MEDIUM
-**Why a marker would ask:** Overriding built-in Django admin methods is not taught. Marker will ask when Django calls `save_model` and what `change` means.
-
-**What to say:** "Django's admin panel calls `save_model` instead of just calling `obj.save()` directly — it gives you a hook to add extra logic when something is saved through the admin. The `change` parameter is True if we're updating an existing record, False if it's a new one. I call `super().save_model(...)` first so the actual save still happens, then I write a row to AuditLog so there's a record of who did it. `delete_model` works the same way — Django calls it before the delete so I can log it first."
+### 7 — REMOVED (code no longer exists)
+`DepartmentAdmin.save_model()` and `DepartmentAdmin.delete_model()` overrides were removed from `core/admin.py`. The current file uses standard `@admin.register()` with `list_display`/`search_fields` only. If a marker asks about admin-level audit logging, the honest answer is: "Those overrides were removed when we found that the signal-based system in `core/signals.py` already logs Team and Meeting events automatically. Department changes via admin are not individually logged — a known gap."
 
 ---
 
@@ -186,9 +168,9 @@ The whole file uses `post_save` and `post_delete` on Team and Meeting, which is 
 `calendar.monthrange()` is not a lecture topic; the offset math is dense.
 "`monthrange(year, month)` returns a tuple: the weekday of the 1st (0=Monday, 6=Sunday) and the total number of days in the month. I use the first number to pad the start of the grid with blank cells — if the 1st is a Wednesday, I need two blank cells before it (Monday, Tuesday) so it lands in the right column. The `% 7` is because we want Sunday as day 0 on our grid, not Monday."
 
-**3. core/admin.py — `save_model()` and `delete_model()` overrides**
-Overriding built-in Django admin methods is not taught.
-"Django admin calls `save_model` instead of just `obj.save()` so you can add extra behaviour around the save. The `change` boolean tells you if it's an update (True) or a create (False). I call `super()` first so the normal save still happens, then write to AuditLog with the actor — `request.user` gives me who did it, which the signals can't access without the request object."
+**3. core/signals.py — actor_user is NULL on signal-written AuditLog rows**
+Signal receivers at `core/signals.py:13-65` do not call `get_current_user()` from `core/middleware.py`. This means every signal-generated AuditLog row has `actor_user=NULL`.
+"The signals write the log entry automatically but they don't have access to the HTTP request — they fire from the ORM layer. The `core/middleware.py` file provides a `get_current_user()` function using thread-locals, but I didn't wire it into the signals in the final version. As a result, signal-generated entries show as 'System' in the audit log. Direct view-level writes (login, logout, message send) do have the actor set correctly."
 
 ---
 
