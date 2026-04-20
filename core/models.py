@@ -55,12 +55,10 @@ class TeamMember(models.Model):
     # Entity 4: TeamMember
     member_id = models.AutoField(primary_key=True)
     team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='members')
-    full_name = models.CharField(max_length=100)
-    role_title = models.CharField(max_length=100)
-    email = models.EmailField()
-
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='team_memberships', default=1)
+    
     def __str__(self):
-        return f"{self.full_name} ({self.role_title})"
+        return f"{self.user.get_full_name() or self.user.username} (Team Member)"
 
 class Dependency(models.Model):
     # Entity 5: Dependency

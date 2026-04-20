@@ -91,7 +91,7 @@ def team_detail(request, team_id):
             team_id=team_id,
         )
 
-        members = TeamMember.objects.filter(team=team).order_by('full_name')
+        members = TeamMember.objects.filter(team=team).select_related('user').order_by('user__first_name', 'user__last_name')
         contacts = ContactChannel.objects.filter(team=team)
 
 

@@ -36,27 +36,173 @@ from .models import (
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ['username', 'email', 'first_name', 'last_name', 'is_staff']
+    list_display = ['username', 'email', 'first_name', 'last_name', 'is_staff', 'is_active']
     search_fields = ['username', 'email', 'first_name', 'last_name']
+    list_filter = ['is_staff', 'is_superuser', 'is_active', 'groups']
+    ordering = ('-date_joined',)
+    
+    fieldsets = (
+        ('Authentication', {'fields': ('username', 'password')}),
+        ('Personal Info', {'fields': ('first_name', 'last_name', 'email')}),
+        ('Permissions', {
+            'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
+            'description': 'Manage administrative access and system roles.'
+        }),
+        ('Important Dates', {
+            'fields': ('last_login', 'date_joined'),
+            'classes': ('collapse',),
+        }),
+    )
+    
+    readonly_fields = ('last_login', 'date_joined')
+    filter_horizontal = ('groups', 'user_permissions')
 
 @admin.register(Department)
 class DepartmentAdmin(admin.ModelAdmin):
     list_display = ['department_name', 'department_lead_name']
     search_fields = ['department_name', 'department_lead_name']
 
+from django import forms
+from django.contrib.admin.widgets import FilteredSelectMultiple
+
+class TeamAdminForm(forms.ModelForm):
+    upstream_dependencies = forms.ModelMultipleChoiceField(
+        queryset=Team.objects.all(),
+        required=False,
+        widget=FilteredSelectMultiple('Upstream Teams', is_stacked=False),
+        help_text='Teams that rely on this team.'
+    )
+    downstream_dependencies = forms.ModelMultipleChoiceField(
+        queryset=Team.objects.all(),
+        required=False,
+        widget=FilteredSelectMultiple('Downstream Teams', is_stacked=False),
+        help_text='Teams that this team relies on.'
+    )
+
+    class Meta:
+        model = Team
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and self.instance.pk:
+            # Exclude current team from selection
+            self.fields['upstream_dependencies'].queryset = Team.objects.exclude(pk=self.instance.pk)
+            self.fields['downstream_dependencies'].queryset = Team.objects.exclude(pk=self.instance.pk)
+            
+            # Map existing Dependency objects back into initial form data
+            self.fields['upstream_dependencies'].initial = Dependency.objects.filter(
+                to_team=self.instance, dependency_type='upstream'
+            ).values_list('from_team_id', flat=True)
+            
+            self.fields['downstream_dependencies'].initial = Dependency.objects.filter(
+                from_team=self.instance, dependency_type='downstream'
+            ).values_list('to_team_id', flat=True)
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        
+        def save_m2m():
+            # Still call the parent save_m2m if exists
+            self._save_m2m()
+            
+            if not instance.pk:
+                return # Cannot save many-to-many objects before instance has a primary key
+
+            # Synchronize Upstream Dependencies
+            current_upstream = set(Dependency.objects.filter(
+                to_team=instance, dependency_type='upstream'
+            ).values_list('from_team_id', flat=True))
+            
+            submitted_upstream = set(
+                t.pk for t in self.cleaned_data.get('upstream_dependencies', [])
+            )
+            
+            # Create new
+            for pk in submitted_upstream - current_upstream:
+                Dependency.objects.create(
+                    from_team_id=pk, to_team=instance, dependency_type='upstream'
+                )
+            # Delete old
+            Dependency.objects.filter(
+                to_team=instance, 
+                from_team_id__in=(current_upstream - submitted_upstream),
+                dependency_type='upstream'
+            ).delete()
+                
+            # Synchronize Downstream Dependencies
+            current_downstream = set(Dependency.objects.filter(
+                from_team=instance, dependency_type='downstream'
+            ).values_list('to_team_id', flat=True))
+            
+            submitted_downstream = set(
+                t.pk for t in self.cleaned_data.get('downstream_dependencies', [])
+            )
+            
+            for pk in submitted_downstream - current_downstream:
+                Dependency.objects.create(
+                    from_team=instance, to_team_id=pk, dependency_type='downstream'
+                )
+            Dependency.objects.filter(
+                from_team=instance,
+                to_team_id__in=(current_downstream - submitted_downstream),
+                dependency_type='downstream'
+            ).delete()
+
+        if commit:
+            instance.save()
+            save_m2m()
+        else:
+            self.save_m2m = save_m2m
+            
+        return instance
+
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
+    form = TeamAdminForm
     list_display = ['team_name', 'department', 'team_leader_name', 'project_name']
     list_filter = ['department']
     search_fields = ['team_name', 'team_leader_name', 'project_name']
     readonly_fields = ('created_at',)
+    
+    fieldsets = (
+        (None, {
+            'fields': (
+                'department', 'team_name', 'mission', 'lead_email', 'team_leader_name',
+                'work_stream', 'project_name', 'project_codebase', 'status'
+            )
+        }),
+        ('Dependencies', {
+            'fields': ('upstream_dependencies', 'downstream_dependencies'),
+        }),
+        ('Metadata', {
+            'fields': ('tech_tags', 'created_at')
+        })
+    )
+
+class TeamMemberAdminForm(forms.ModelForm):
+    team = forms.ModelChoiceField(
+        queryset=Team.objects.all().order_by('team_name'),
+        label='Team',
+        help_text='Select the team this member belongs to.'
+    )
+    user = forms.ModelChoiceField(
+        queryset=User.objects.all().order_by('first_name', 'last_name', 'username'),
+        label='Team Member (User)',
+        help_text='Select an existing Sky user to add as a team member.'
+    )
+
+    class Meta:
+        model = TeamMember
+        fields = ['team', 'user']
+
 
 @admin.register(TeamMember)
 class TeamMemberAdmin(admin.ModelAdmin):
-    list_display = ['full_name', 'role_title', 'team', 'email']
+    form = TeamMemberAdminForm
+    list_display = ['user', 'team']
     list_filter = ['team']
-    search_fields = ['full_name', 'email', 'team__team_name']
-    autocomplete_fields = ['team']
+    search_fields = ['user__username', 'user__first_name', 'user__last_name', 'user__email', 'team__team_name']
 
 @admin.register(Dependency)
 class DependencyAdmin(admin.ModelAdmin):

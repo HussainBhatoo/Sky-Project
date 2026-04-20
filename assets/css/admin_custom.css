@@ -77,19 +77,48 @@ body {
 }
 
 /* Button Styling */
-.button, input[type=submit], input[type=button], .submit-row input, a.button {
+.button, input[type=submit], input[type=button], input[type=reset], button,
+.submit-row input, .submit-row a.deletelink, a.button, a.historylink, .object-tools a,
+#changelist .actions button.button, .add-btn {
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     background: var(--sky-primary) !important;
     border: none !important;
     border-radius: 8px !important;
     color: #fff !important;
     font-weight: 600 !important;
-    padding: 10px 20px !important;
+    padding: 0 20px !important;
+    height: 35px !important;
+    line-height: 1 !important;
     transition: all 0.3s ease !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    vertical-align: middle !important;
+    box-sizing: border-box !important;
+    text-align: center !important;
+    /* Font baseline adjustments */
+    padding-top: 1px !important;
 }
 
-.button:hover, input[type=submit]:hover {
+.button:hover, input[type=submit]:hover, button:hover, .submit-row input:hover, a.button:hover, .add-btn:hover {
     background: var(--sky-primary-dark) !important;
     transform: translateY(-1px);
+}
+
+.submit-row a.deletelink {
+    background: #dc3545 !important; /* Keep delete red */
+}
+.submit-row a.deletelink:hover {
+    background: #c82333 !important;
+}
+
+/* Fix for icons sitting too low */
+.nav-link i, .add-btn i {
+    display: flex !important;
+    align-items: center !important;
 }
 
 /* Django Table Form Hardening */
@@ -106,6 +135,23 @@ body {
 }
 
 /* Sidebar Parity */
+.nav-link {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    height: 48px !important;
+}
+
+/* Ensure Django Admin Select2 elements and wrappers do not collapse */
+.select2-container, .admin-autocomplete, .related-widget-wrapper select {
+    min-width: 280px !important;
+}
+
+/* Ensure Django FilteredSelectMultiple has proper width */
+.selector-available select, .selector-chosen select {
+    min-width: 250px !important;
+}
+
 .nav-link.active {
     background: #ffffff !important;
     color: var(--sky-primary-dark) !important;
@@ -121,4 +167,13 @@ html body .sidebar::after {
     height: 0 !important;
     opacity: 0 !important;
     visibility: hidden !important;
+}
+
+/* Header Buttons */
+.sky-employee-btn {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 1 !important;
+    padding: 0 15px !important;
 }

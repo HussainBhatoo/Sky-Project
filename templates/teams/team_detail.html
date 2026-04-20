@@ -153,16 +153,16 @@
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Role</th>
+                <th>Username</th>
                 <th>Email</th>
             </tr>
         </thead>
         <tbody>
             {% for member in members %}
             <tr>
-                <td style="font-weight: 600;">{{ member.full_name }}</td>
-                <td style="color: var(--muted-foreground);">{{ member.role_title }}</td>
-                <td><a href="mailto:{{ member.email }}">{{ member.email }}</a></td>
+                <td style="font-weight: 600;">{{ member.user.get_full_name|default:member.user.username }}</td>
+                <td style="color: var(--muted-foreground);">{{ member.user.username }}</td>
+                <td><a href="mailto:{{ member.user.email }}">{{ member.user.email }}</a></td>
             </tr>
             {% endfor %}
         </tbody>
