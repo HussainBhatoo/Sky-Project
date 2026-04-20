@@ -79,6 +79,6 @@
 
 ## Group Work
 While modules were owned individually, we worked collaboratively on:
-- **Core Models:** Developing the shared 10-entity schema in `core/models.py`.
+- **Core Models:** Developing the shared 14-entity schema in `core/models.py`.
 - **Seed Data:** Populating `db.sqlite3` with 46 teams from the module registry brief.
 -  **Documentation Audit:** Reviewing all reports and reflections to ensure 100% rubric compliance.

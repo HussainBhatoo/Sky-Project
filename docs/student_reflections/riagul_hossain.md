@@ -5,7 +5,7 @@
 | Date | From | Feedback Received | Action Taken |
 |------|------|-------------------|--------------|
 | 2026-03-12 | Maurya | Add a way to disband teams without deleting them. | Implemented 'Disband Team' status toggle. |
-| 2026-03-18 | Lucas | Team member data needs to be richer. | Reviewed TeamMember fields; confirmed role_title and email provide sufficient data for the registry. |
+| 2026-03-18 | Lucas | Team member data needs to be richer. | Reviewed TeamMember fields; initially confirmed `role_title` and `email` as sufficient. Subsequently (April 2026) refactored model to use a direct `ForeignKey` to the `User` model (migration 0011), removing standalone fields entirely and sourcing all identity data from the linked User object. |
 | 2026-03-25 | Hussain | Need to validate team names. | Added server-side regex for team naming. |
 | 2026-04-02 | Suliman | Team list is too long to scroll. | Implemented Pagination and Search filters. |
 | 2026-04-08 | Maurya | Need audit logs for team creation. | Connected model signals to AuditLog. |

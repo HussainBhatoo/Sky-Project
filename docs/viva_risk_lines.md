@@ -199,9 +199,9 @@ Signal receivers at `core/signals.py:13-65` do not call `get_current_user()` fro
 Dense branching for new/draft/reply/edit is complex.
 "The compose view handles four situations: a blank new message, editing a draft, replying to a message, and saving to drafts. I check GET params first — `?reply_to=` means it's a reply, and `message_id` in the URL means it's editing a draft. On POST, I check the `action` hidden field — if it's 'draft' I save with `message_status='draft'`, otherwise I save as 'sent'. I could have split this into multiple views but that felt like more duplication."
 
-**3. messages_app/views.py — `inbox()` filtering on `team__members__email`**
+**3. messages_app/views.py — `inbox()` filtering on `team__members__user`**
 Spanning multiple models via double-underscore is [E] but could be flagged.
-"I filter messages by `team__members__email=request.user.email` — this spans two FK relationships. `team__members` gets to the TeamMember rows that belong to each message's team, and then `email` checks if the current user's email matches. The `.distinct()` prevents duplicates if someone is in multiple teams that received the same message. I found this double-underscore lookup style in the Django queryset docs."
+"After migration 0011, `TeamMember` no longer stores a standalone `email` field — member identity comes from the linked `User` FK. So the inbox filter was updated to `team__members__user=request.user`, which traverses Team → TeamMember → User to check if the current user is a member of any team that received each message. The `.distinct()` still prevents duplicates if the user is in multiple teams that got the same message. I found this double-underscore traversal style in the Django queryset docs."
 
 ---
 

@@ -69,8 +69,8 @@ Open your browser and navigate to the local host address:
 ## 4. Administrative & User Access
 
 ### Default Authentication
-- **Administrator**: `admin` / `Admin1234!`
-- **Standard User**: `testuser` / `Test1234!`
+- **Administrator**: `admin` / `Sky2026!`
+- **Standard User**: `testuser` / `Sky2026!`
 
 ### Manual Superuser Creation
 To create a custom administrative account for the Admin Hub:

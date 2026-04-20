@@ -20,7 +20,7 @@
 3. [Deadlines & Submission Requirements](#3-deadlines--submission-requirements)
 4. [Marks Breakdown](#4-marks-breakdown)
 5. [What We Are Building — Full Feature List](#5-what-we-are-building--full-feature-list)
-6. [Database Models — All 15 Entities](#6-database-models--all-15-entities)
+6. [Database Models — All 14 Entities](#6-database-models--all-14-entities)
 7. [CWK1 Screens to Implement in CWK2](#7-cwk1-screens-to-implement-in-cwk2)
 8. [Tech Stack](#8-tech-stack)
 9. [Project Folder Structure](#9-project-folder-structure)
@@ -82,7 +82,7 @@ https://trello.com/invite/b/696e18dddc44e139524ec21f/ATTI20f3cc8f34b260cf8cf6781
 | Name | Student No | GitHub Branch | Individual Feature |
 |------|-----------|---------------|-------------------|
 | **Maurya Patel** ← YOU | W2112200 | `feat/schedule` | Schedule (Student 4) + GROUP LEAD |
-| Abdul-lateef Hussain | - | `feat/reports` | Reports (Student 5) |
+| Hussain Bhatoo | - | `feat/reports` | Reports (Student 5) |
 | Lucas Garcia Korotkov | - | `feat/organisation` | Organisation (Student 2) |
 | Mohammed Suliman Roshid | - | `feat/messages` | Messages (Student 3) |
 | Riagul Hossain | - | `feat/teams` | Teams (Student 1) |
@@ -96,7 +96,7 @@ https://trello.com/invite/b/696e18dddc44e139524ec21f/ATTI20f3cc8f34b260cf8cf6781
 |--------|-----------|
 | Maurya | ERD Leader, Main UI Leader, Group Lead |
 | Lucas | Written ERD documentation leader, Storyboard leader |
-| Abdul-lateef | SQLite database draft/implementation, Feedback |
+| Hussain | SQLite database draft/implementation, Feedback |
 | Mohammed | UML use case diagram, Test plans (positive) |
 | Riagul | First ERD draft, Storyboard design, Low-fi wireframe first draft |
 
@@ -276,28 +276,25 @@ Implementation: Django signals tracking User, Action Type (LOGIN/LOGOUT/CREATE/U
 
 ---
 
-## 6. DATABASE MODELS — ALL 15 ENTITIES
+## 6. DATABASE MODELS — ALL 14 ENTITIES
 
-Based on final ERD from CWK1 (designed by Maurya, implemented by Abdul-lateef).
+Based on final ERD from CWK1 (designed by Maurya, implemented collaboratively). Note: `TimeTrack` (removed in migration 0009) and `DepartmentVote` (removed in migration 0010) are not included — both were superseded by `AuditLog` and `Vote` respectively.
 
 ### Entity 1: User (extends Django AbstractUser)
 ```
-user_id (PK, auto)
-username (CharField)
-user_email (EmailField)
-password (hashed by Django)
-first_name (CharField)
-last_name (CharField)
-date_joined (auto)
-is_active (BooleanField)
+# No custom fields — inherits all Django AbstractUser defaults:
+# id, username, email, password (hashed), first_name, last_name,
+# date_joined, is_active, is_staff, is_superuser, groups, user_permissions
 ```
-→ Relationships: performs AuditLog entries, sends Messages, creates Meetings
+→ Relationships: performs AuditLog entries, sends Messages, creates Meetings.
+Setting AUTH_USER_MODEL = 'core.User' enables future custom fields without migration rework.
 
 ### Entity 2: Department
 ```
 department_id (PK, auto)
-department_name (CharField)
-department_lead_name (CharField)
+department_name (CharField max_length=100)
+department_lead_name (CharField max_length=100)
+specialization (CharField max_length=150, blank/null)
 description (TextField)
 ```
 → Relationships: has many Teams
@@ -305,26 +302,28 @@ description (TextField)
 ### Entity 3: Team
 ```
 team_id (PK, auto)
-department_id (FK → Department)
+department (FK → Department, CASCADE)
 team_name (CharField)
-team_leader_name (CharField)
+mission (CharField, blank=True)
+lead_email (CharField)
+team_leader_name (CharField, blank=True)
 work_stream (CharField)
 project_name (CharField)
 project_codebase (CharField)
-created_at (DateTimeField)
-updated_at (DateTimeField)
+status (CharField, default='Active')
+tech_tags (CharField, blank=True)
+created_at (DateTimeField, auto_now_add)
+updated_at (DateTimeField, auto_now)
 ```
-  receives Messages, has Meetings
+→ Relationships: receives Messages, has Meetings, has TeamMembers, ContactChannels, StandupInfo, RepositoryLinks, WikiLinks, BoardLinks
 
 ### Entity 4: TeamMember
 ```
 member_id (PK, auto)
-team_id (FK → Team)
-full_name (CharField)
-role_title (CharField)
-email (EmailField)
+team_id (FK → Team, CASCADE)
+user_id (FK → User, CASCADE)
 ```
-→ Junction: resolves many-to-many between Team and User for org purposes
+→ **Refactored in migration 0011 (April 2026).** Legacy fields `full_name (CharField)`, `role_title (CharField)`, and `email (EmailField)` were removed. The model now links to the system `User` model directly — member identity (name, username, email) is read from the linked User object at runtime. This enforces data integrity: only existing Sky system users can be team members. The Django admin form was updated to provide a clean user-selection dropdown.→ Junction: resolves Team–User association for org purposes
 
 ### Entity 5: Dependency
 ```
@@ -416,9 +415,11 @@ change_summary (TextField)
 ### Entity 14: Vote (Peer Recognition)
 ```
 vote_id (PK, auto)
-voter_id (FK → User)
-team_id (FK → Team)
-voted_at (DateTimeField)
+voter (FK → User, CASCADE, related_name='votes')
+team (FK → Team, CASCADE, related_name='votes')
+vote_type (CharField: choices support/endorse, default='support')
+voted_at (DateTimeField, auto_now_add)
+Meta: unique_together = ('voter', 'team')  ← prevents duplicate votes
 ```
 
 
@@ -498,7 +499,7 @@ sky-team-registry/              ← Root (cloned from GitHub)
     urls.py                 ← Master URL routing
     wsgi.py
 
- core/                       ← Shared models (ALL 15 entities live here)
+ core/                       ← Shared models (ALL 14 entities live here)
     models.py               ← User, Team, Department, Meeting, etc.
     admin.py                ← Django admin customisation (8 menu items)
     migrations/
@@ -513,21 +514,22 @@ sky-team-registry/              ← Root (cloned from GitHub)
         profile.html
         registration/forgot_password.html
 
- teams/                      ← Student 1 (Lucas)
+ teams/                      ← Student 1 (Riagul)
     views.py
     urls.py
     templates/teams/
-        teams_list.html
+        team_list.html
         team_detail.html
 
- organisation/               ← Student 2 (Mohammed)
+ organisation/               ← Student 2 (Lucas)
     views.py
     urls.py
     templates/organisation/
-        departments.html
         org_chart.html
+        department_detail.html
+        dependencies.html
 
- messages_app/               ← Student 3 (Riagul)
+ messages_app/               ← Student 3 (Suliman)
     views.py
     urls.py
     templates/messages_app/
@@ -539,9 +541,7 @@ sky-team-registry/              ← Root (cloned from GitHub)
     forms.py
     urls.py
     templates/schedule/
-        schedule_home.html  ← Upcoming meetings + calendar
-        schedule_form.html  ← Create/edit meeting form
-        meeting_detail.html
+        calendar.html  ← Single template for monthly, weekly, and create form
 
  reports/                    ← Student 5
     views.py
@@ -588,10 +588,10 @@ sky-team-registry/              ← Root (cloned from GitHub)
 ```
 main          ← Protected. Only fully working code goes here.
 develop       ← Integration branch. Everyone merges here first.
-feat/accounts    ← GROUP: Login/Register/Auth (Abdul-lateef leads)
-feat/teams       ← Student 1: Lucas
-feat/organisation← Student 2: Mohammed
-feat/messages    ← Student 3: Riagul
+feat/accounts    ← GROUP: Login/Register/Auth
+feat/teams       ← Student 1: Riagul
+feat/organisation← Student 2: Lucas
+feat/messages    ← Student 3: Suliman
 feat/schedule    ← Student 4: Maurya (YOU)
 feat/reports     ← Student 5
 ```
@@ -673,7 +673,7 @@ LOGOUT_REDIRECT_URL = 'accounts:login'
 ```
 
 #### Step 1.3 — All Models in core/models.py
-(See Section 6 above for all 15 models)
+(See Section 6 above for all 14 models)
 ```bash
 python manage.py makemigrations
 python manage.py migrate
@@ -721,7 +721,7 @@ urlpatterns = [
 
 ### Phase 2 — GROUP Work (Maurya leads, assign teammates)
 
-#### Step 2.1 — Login / Register / Auth (Abdul-lateef leads)
+#### Step 2.1 — Login / Register / Auth (Hussain Bhatoo leads)
 Files: `accounts/views.py`, `accounts/forms.py`, `accounts/urls.py`
 - Login view with form validation
 - Register view with Django UserCreationForm extended
@@ -752,7 +752,7 @@ class TeamAdmin(admin.ModelAdmin):
     search_fields = ['team_name', 'team_leader_name']
     list_filter = ['department']
 
-# Register all 15 models similarly
+# Register all 14 models similarly
 # Customise admin site header
 admin.site.site_header = "Sky Engineering Registry Admin"
 admin.site.site_title = "Sky Admin"
@@ -777,112 +777,63 @@ Each team needs min 5 team members.
 
 #### Step 2.5 — Audit Log System (Maurya sets up) [COMPLETED]
 Use Django signals in `core/signals.py`:
-- implemented Main actor detection via `RequestUserMiddleware`.
-- 100% signal coverage for all 15 database entities.
+- Signal coverage for Team and Meeting models (4 receivers total).
+- `RequestUserMiddleware` is installed but signals do not call `get_current_user()` — actor_user is NULL on signal-written rows. View-level writes (login, logout, messages, votes) include the actor.
 - Searchable UI with Q-filtering for Action, Entity, and Keywords.
 
 ---
 
 ### Phase 3 — Maurya's Individual Feature: Schedule App
 
+**IMPLEMENTED STATE (as of April 2026):**
+
 Files in `schedule/`:
 ```
 schedule/
  __init__.py
  apps.py
- models.py       ← Import Meeting from core.models (no new models needed)
- views.py        ← All schedule views
- forms.py        ← MeetingForm
- urls.py         ← URL patterns
- templates/
-     schedule/
-         schedule_home.html   ← Main page
-         schedule_form.html   ← Create/Edit form
-         meeting_detail.html  ← Single meeting view
+ models.py       ← Empty stub — Meeting model lives in core/models.py
+ views.py        ← 4 FBVs + 1 helper
+ forms.py        ← MeetingForm with clean() cross-field validation
+ urls.py         ← 4 URL patterns
+ templates/schedule/
+     calendar.html  ← Single template serves monthly, weekly, and create form
 ```
 
-#### schedule/forms.py
+#### Actual URL patterns (schedule/urls.py)
 ```python
-from django import forms
-from core.models import Meeting
-
-class MeetingForm(forms.ModelForm):
-    class Meta:
-        model = Meeting
-        fields = ['meeting_title', 'team', 'start_datetime', 'end_datetime',
-                  'platform_type', 'meeting_link', 'agenda_text']
-        widgets = {
-            'start_datetime': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
-            'end_datetime': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
-            'agenda_text': forms.Textarea(attrs={'rows': 4}),
-        }
-```
-
-#### schedule/views.py
-```python
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect, get_object_or_404
-from core.models import Meeting
-from .forms import MeetingForm
-from datetime import datetime, timedelta
-import calendar
-
-@login_required
-def schedule_home(request):
-    # Upcoming meetings (sorted by start_datetime)
-    upcoming = Meeting.objects.filter(
-        start_datetime__gte=datetime.now()
-    ).order_by('start_datetime')
-    # Calendar data for current month
-    # Weekly view data
-    context = {
-        'upcoming_meetings': upcoming,
-        'current_month': datetime.now().strftime('%B %Y'),
-    }
-    return render(request, 'schedule/schedule_home.html', context)
-
-@login_required
-def schedule_create(request):
-    if request.method == 'POST':
-        form = MeetingForm(request.POST)
-        if form.is_valid():
-            meeting = form.save(commit=False)
-            meeting.created_by = request.user
-            meeting.save()
-            return redirect('schedule_home')
-    else:
-        form = MeetingForm()
-    return render(request, 'schedule/schedule_form.html', {'form': form})
-
-@login_required
-def meeting_detail(request, pk):
-    meeting = get_object_or_404(Meeting, pk=pk)
-    return render(request, 'schedule/meeting_detail.html', {'meeting': meeting})
-
-@login_required
-def schedule_edit(request, pk):
-    meeting = get_object_or_404(Meeting, pk=pk)
-    # Edit view
-
-@login_required
-def schedule_delete(request, pk):
-    meeting = get_object_or_404(Meeting, pk=pk)
-    # Delete view
-```
-
-#### schedule/urls.py
-```python
-from django.urls import path
-from . import views
-
 urlpatterns = [
-    path('', views.schedule_home, name='schedule_home'),
-    path('create/', views.schedule_create, name='schedule_create'),
-    path('<int:pk>/', views.meeting_detail, name='meeting_detail'),
-    path('<int:pk>/edit/', views.schedule_edit, name='schedule_edit'),
-    path('<int:pk>/delete/', views.schedule_delete, name='schedule_delete'),
+    path('', views.schedule_calendar, name='calendar'),          # /schedule/
+    path('weekly/', views.schedule_weekly, name='weekly'),       # /schedule/weekly/
+    path('create/', views.schedule_create, name='create'),       # /schedule/create/
+    path('delete/<int:meeting_id>/', views.schedule_delete, name='delete'),
 ]
 ```
+
+#### Actual views (schedule/views.py)
+```python
+# Helper: builds calendar grid context (uses Python calendar module)
+def _build_calendar_context(year, month, meetings): ...
+
+@login_required
+def schedule_calendar(request):   # GET — monthly view + team filter + show_form flag
+
+@login_required
+def schedule_weekly(request):     # GET — weekly view with week_offset param
+
+@login_required
+def schedule_create(request):     # GET → redirect to /?new=true; POST → save meeting
+
+@login_required
+def schedule_delete(request, meeting_id):  # POST → delete; GET → no-op redirect
+```
+
+#### Key inter-app wiring
+"Schedule Meeting" button on team_detail.html:
+```html
+<a href="{% url 'schedule:create' %}?team_id={{ team.team_id }}">Schedule Meeting</a>
+```
+This GET triggers a redirect to `/schedule/?new=true&team_id=N`, which opens the calendar with the form pre-filled for that team (`schedule_calendar` reads the `team_id` GET param).
 
 ---
 
@@ -910,7 +861,7 @@ Once all individual apps are working on their own branches:
 | **Sat 11 Apr** | Day 1 | GitHub repo created, Django project setup, all models, superuser, push to GitHub | **Maurya** |
 | **Sun 12 Apr** | Day 2 | All teammates clone repo, confirm it runs, check out their branches | **All** |
 | **Mon 13 Apr** | Day 3 | base.html + Sky CSS design system + login page layout | **Maurya** |
-| **Tue 14 Apr** | Day 4 | Login/Register/Dashboard working end-to-end | **Maurya + Abdul-lateef** |
+| **Tue 14 Apr** | Day 4 | Login/Register/Dashboard working end-to-end | **Maurya + Hussain** |
 | **Wed 15 Apr** | Day 5 | Populate database with Sky Excel data (6 depts, teams, members) | **Lucas** |
 | **Thu 16 Apr** | Day 6 | Everyone's app: skeleton URL/view/template working | **All** |
 | **Fri 17 Apr** | Day 7 | Everyone's app: 50% functionality done | **All** |
@@ -974,7 +925,7 @@ Start logging NOW from day 1. Example instances:
 - Feedback received from teammate on schedule form layout
 - Feedback received from tutor at tutorial
 - Feedback given to Lucas on teams app
-- Feedback given to Mohammed on organisation app
+- Feedback given to Lucas on organisation app
 - Feedback from industry mentor session
 - etc.
 
@@ -1068,8 +1019,8 @@ Topics to cover with HARVARD REFERENCES:
 - [ ] Video recorded (5-10 minutes showing full app)
 - [ ] Video link included in BOTH templates
 - [ ] README with all usernames and passwords:
-  - Regular user: testuser / TestPass123
-  - Admin: admin / Admin1234!
+  - Regular user: testuser / Sky2026!
+  - Admin: admin / Sky2026!
 - [ ] Submitted on Blackboard before 30 April 2026, 1pm
 - [ ] Trello board updated throughout the project period
 
@@ -1250,10 +1201,10 @@ DATABASES = {
 The final production review revealed opportunities to expand the data architecture and visualization capabilities to achieve 100% compliance with all project goals.
 
 ### 1. Database Evolution (CW1 -> CW2)
-The registry was expanded from the original design to a total of 15 entities, integrating social signals and compliance tracking.
+The registry was expanded from the original 3-entity design to a total of **14 entities**, integrating social signals and compliance tracking.
 - **Vote Model**: Implemented for team endorsements (Rubric 1.14).
-- **TimeTrack Model**: Implemented for milestone compliance (Rubric 1.14).
-- **Team Model Enhancements**: Integrated Main descriptive fields (`mission`, `tech_tags`, `status`).
+- **AuditLog Model**: Serves as the primary time-tracking and compliance entity; `TimeTrack` was removed (migration 0009) as AuditLog already covered this requirement.
+- **Team Model Enhancements**: Integrated descriptive fields (`mission`, `tech_tags`, `status`).
 
 ### 2. UI Polish & Interactivity
 - **Organisation Detail pages**: Individual profiles for Departments with linked Org Chart nodes.
@@ -1261,13 +1212,13 @@ The registry was expanded from the original design to a total of 15 entities, in
 - **Messaging Sent/Drafts logic**: Fully operational tabbed inbox with state persistence.
 
 ### 3. Registry Admin Setup
-- Registered all compliance models (`AuditLog`, `Vote`, `TimeTrack`) in the standard admin site.
+- Registered all 14 models in the standard admin site via `@admin.register()` decorators in `core/admin.py`.
 - Corrected field mappings to ensure 100% audit logging accuracy.
 
 ---
 
 ## 🛠️ Verification Checklist (Post-Audit)
-- [x] All 15 database entities implemented with valid relations and accessible via Admin.
+- [x] All 14 database entities implemented with valid relations and accessible via Admin.
 - [x] Dashboards show real-time metrics for all new metrics (Votes/Milestones).
 - [x] Global Search includes deep indexing for tech tags and missions.
 - [x] Audit Log records every Team/Dept mutation.
@@ -1364,163 +1315,28 @@ from core.models import Team, Department, TeamMember, Meeting, Message, AuditLog
 
 
 @login_required
-def generate_excel_report(request):
-    """Generate an Excel report — downloaded by browser"""
-
-    # 1. Create workbook in memory
-    wb = openpyxl.Workbook()
-
-    # Sheet 1: Summary 
-    ws_summary = wb.active
-    ws_summary.title = "Summary"
-
-    # Header styling
-    header_fill = PatternFill("solid", fgColor="000FF5")  # Sky blue
-    header_font = Font(color="FFFFFF", bold=True)
-
-    ws_summary['A1'] = "Sky Engineering Team Registry Report"
-    ws_summary['A1'].font = Font(bold=True, size=16)
-    ws_summary['A2'] = f"Generated: {datetime.now().strftime('%d/%m/%Y %H:%M')}"
-    ws_summary['A2'].font = Font(italic=True)
-
-    ws_summary['A4'] = "Metric"
-    ws_summary['B4'] = "Count"
-    for cell in ['A4', 'B4']:
-        ws_summary[cell].fill = header_fill
-        ws_summary[cell].font = header_font
-
-    summary_rows = [
-        ("Total Departments", Department.objects.count()),
-        ("Total Teams", Team.objects.count()),
-        ("Total Team Members", TeamMember.objects.count()),
-        ("Teams Without Managers", Team.objects.filter(team_leader_name='').count()),
-        ("Total Meetings Scheduled", Meeting.objects.count()),
-        ("Total Messages Sent", Message.objects.count()),
-    ]
-    for i, (label, value) in enumerate(summary_rows, start=5):
-        ws_summary[f'A{i}'] = label
-        ws_summary[f'B{i}'] = value
-
-    ws_summary.column_dimensions['A'].width = 35
-    ws_summary.column_dimensions['B'].width = 15
-
-    # Sheet 2: All Teams 
-    ws_teams = wb.create_sheet("All Teams")
-    headers = ['Team Name', 'Department', 'Team Leader', 'No. of Members',
-               'No. of Upstream Deps', 'No. of Downstream Deps']
-    ws_teams.append(headers)
-    for cell in ws_teams[1]:
-        cell.fill = header_fill
-        cell.font = header_font
-
+def export_csv(request):
+    """CSV export — real implementation in reports/views.py"""
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = f'attachment; filename="sky_teams_export_{timezone.now().strftime("%Y%m%d")}.csv"'
+    writer = csv.writer(response)
+    writer.writerow(['Team ID', 'Team Name', 'Department', 'Leader', 'Work Stream', 'Status'])
     for team in Team.objects.select_related('department').all():
-        member_count = TeamMember.objects.filter(team=team).count()
-        upstream = team.dependencies_from.filter(dependency_type='upstream').count()
-        downstream = team.dependencies_from.filter(dependency_type='downstream').count()
-        ws_teams.append([
-            team.team_name,
-            team.department.department_name,
-            team.team_leader_name or 'No Manager',
-            member_count,
-            upstream,
-            downstream
-        ])
-
-    for col in ws_teams.columns:
-        ws_teams.column_dimensions[col[0].column_letter].width = 22
-
-    # Sheet 3: Teams Without Managers 
-    ws_no_mgr = wb.create_sheet("No Manager")
-    ws_no_mgr.append(['Team Name', 'Department'])
-    for cell in ws_no_mgr[1]:
-        cell.fill = PatternFill("solid", fgColor="DD1717")
-        cell.font = header_font
-
-    for team in Team.objects.filter(team_leader_name='').select_related('department'):
-        ws_no_mgr.append([team.team_name, team.department.department_name])
-
-    # Sheet 4: Departments 
-    ws_depts = wb.create_sheet("Departments")
-    ws_depts.append(['Department Name', 'Lead', 'No. of Teams', 'Description'])
-    for cell in ws_depts[1]:
-        cell.fill = header_fill
-        cell.font = header_font
-
-    for dept in Department.objects.all():
-        team_count = Team.objects.filter(department=dept).count()
-        ws_depts.append([
-            dept.department_name,
-            dept.department_lead_name,
-            team_count,
-            dept.description
-        ])
-
-    # 2. Save to BytesIO buffer
-    buffer = io.BytesIO()
-    wb.save(buffer)
-    buffer.seek(0)
-
-    # 3. Send as download response
-    response = HttpResponse(
-        buffer,
-        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    )
-    response['Content-Disposition'] = (
-        f'attachment; filename="sky_registry_{datetime.now().strftime("%Y%m%d")}.xlsx"'
-    )
+        writer.writerow([team.team_id, team.team_name, team.department.department_name,
+                         team.team_leader_name or 'No Manager', team.work_stream, team.status])
     return response
 ```
 
-### reports/urls.py
+**NOTE:** Excel (openpyxl) and PDF export were planned but not implemented. The current `reports/views.py` provides:
+- `reports_home(request)` → `reports/reports_home.html` with dashboard stats
+- `export_csv(request)` → CSV download via `HttpResponse`
+
+### reports/urls.py (actual)
 ```python
-from django.urls import path
-from . import views
-
 urlpatterns = [
-    path('', views.reports_dashboard, name='reports_dashboard'),
-    path('excel/', views.generate_excel_report, name='generate_excel'),
+    path('', views.reports_home, name='reports_home'),
+    path('export/csv/', views.export_csv, name='export_csv'),
 ]
-```
-
-### reports/templates/reports/reports.html
-```html
-{% extends 'base.html' %}
-{% block title %}Reports{% endblock %}
-{% block content %}
-<div class="reports-container">
-    <h1>Reports</h1>
-
-    <!-- Stat Cards -->
-    <div class="stat-cards">
-        <div class="card">
-            <h3>{{ total_teams }}</h3>
-            <p>Total Teams</p>
-        </div>
-        <div class="card">
-            <h3>{{ total_departments }}</h3>
-            <p>Departments</p>
-        </div>
-        <div class="card">
-            <h3>{{ total_members }}</h3>
-            <p>Team Members</p>
-        </div>
-        <div class="card warning">
-            <h3>{{ teams_without_managers }}</h3>
-            <p>Teams Without Managers</p>
-        </div>
-    </div>
-
-    <!-- Download Buttons -->
-    <div class="report-actions">
-        <a href="{% url 'generate_pdf' %}" class="btn btn-primary">
-             Download PDF Report
-        </a>
-        <a href="{% url 'generate_excel' %}" class="btn btn-secondary">
-             Download Excel Report
-        </a>
-    </div>
-</div>
-{% endblock %}
 ```
 
 ---
@@ -1686,12 +1502,17 @@ class Command(BaseCommand):
             slug = team_name.lower().replace(' ', '')
             for i, (role, short) in enumerate(member_templates):
                 fn, ln = next(name_cycle)
-                TeamMember.objects.create(
-                    team=team_obj,
-                    full_name=f"{fn} {ln}",
-                    role_title=role,
-                    email=f"{fn.lower()}.{ln.lower()}@sky.uk",
-                )
+                # NOTE: After migration 0011, TeamMember requires a User FK.
+                # The populate_data command was updated to look up or create
+                # matching User objects rather than writing free-text full_name/email.
+                # The seeding block below shows the pre-refactor approach for
+                # historical reference only.
+                # TeamMember.objects.create(
+                #     team=team_obj,
+                #     full_name=f"{fn} {ln}",
+                #     role_title=role,
+                #     email=f"{fn.lower()}.{ln.lower()}@sky.uk",
+                # )
 
         # Dependencies 
         dependencies = [

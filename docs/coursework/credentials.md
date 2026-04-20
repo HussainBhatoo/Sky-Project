@@ -49,12 +49,6 @@ Then open: **http://127.0.0.1:8000/accounts/login/**
 
 ---
 
-## Signup domain restriction
-
-Self-registration requires a `@sky.com` or `@sky.uk` email address. Enforced by `accounts/forms.py:25` (`clean_email()`). Use one of the pre-created accounts above to skip this.
-
----
-
 ## Note on inconsistent legacy docs
 
 Older credential docs (`DEMO_CREDENTIALS.md`, `PREVIEW_GUIDE.md`) referenced stale passwords (`Admin1234!`, `TestPass123!`, `Test1234!`). Those have been corrected to `Sky2026!`. The `db.sqlite3` included in submission uses `Sky2026!` for all accounts.

@@ -17,8 +17,15 @@ Computer Science students over roughly 6 weeks.
 - **Maurya Patel**: Scheduling & Project Management (Lead)
 - **Hussain Bhatoo**: Reporting & Data Analysis
 
+## For the Marker
+- Login URL: `http://127.0.0.1:8000/accounts/login/`
+- Admin: `admin` / `Sky2026!`
+- Test user: `testuser` / `Sky2026!`
+- Start: `pip install -r requirements.txt` → `python manage.py runserver`
+- Full credential table: `docs/coursework/credentials.md`
+
 ## Core Features
-- **Dynamic Registry**: Live tracking of 46 engineering teams, 6 departments, and 230 members.
+- **Dynamic Registry**: Live tracking of 46 engineering teams across 6 departments.
 - **Resource Management**: Registry of verified GitHub Repos, Digital Wikis, and Agile Boards.
 - **Professional Reporting**: Interactive `Chart.js` visual analytics for departmental breakdown and 'Top Endorsed' teams.
 - **Data Portability**: Automated management gap analysis and CSV exports for external audits.

@@ -81,6 +81,4 @@ No migrations or populate_data needed.
 
 ---
 
-Note: All email addresses must end in
-@sky.com or @sky.uk to register.
-Passwords must be at least 8 characters.
+Note: Passwords must be at least 8 characters and satisfy complexity rules.

@@ -33,7 +33,7 @@ High-level organisational unit. Fields: `department_id` (AutoField PK), `departm
 Primary unit of engineering delivery. FK to Department (CASCADE). Fields: `team_id`, `department`, `team_name`, `mission`, `lead_email`, `team_leader_name`, `work_stream`, `project_name`, `project_codebase`, `status` (default 'Active'), `tech_tags`, `created_at` (auto\_now\_add), `updated_at` (auto\_now).
 
 #### Entity 4: TeamMember (`core/models.py:54`)
-Engineers assigned to a team. FK to Team (CASCADE). Fields: `member_id`, `team`, `full_name`, `role_title`, `email`.
+Engineers assigned to a team. Two FKs: `team` (FK→Team, CASCADE) and `user` (FK→User, CASCADE). Fields: `member_id`, `team`, `user`. Refactored in migration 0011 (April 2026) — the legacy `full_name`, `role_title`, and `email` columns were removed. Member identity is now read directly from the linked `User` object, eliminating data duplication and ensuring that only existing Sky system users can be assigned to a team. The admin "Add Team Member" form provides a clean dropdown to select any registered user.
 
 #### Entity 5: Dependency (`core/models.py:65`)
 Self-referential team relationships. Two FKs to Team: `from_team` and `to_team`. Field: `dependency_type` (choices: upstream/downstream). Enables the dependency graph visualised by Lucas's Organisation module.
@@ -75,11 +75,12 @@ The `AuditLog` entity occupies a special position: it records all CREATE/UPDATE/
 
 ### 1.4 Migration Strategy
 
-The project has 10 migrations in `core/migrations/`. Two models were deliberately removed during development:
+The project has **11 migrations** in `core/migrations/`. Two models were deliberately removed during development:
 - `DepartmentVote` — created in migration 0005, removed in migration 0010. Removed because `Vote` already satisfied the team endorsement requirement.
 - `TimeTrack` — created in migration 0004, removed in migration 0009. Removed because `AuditLog` already satisfied the time-tracking requirement without needing a separate entity.
 
-These clean deletions demonstrate intentional, iterative schema management — entities were added then removed once we identified redundancy.
+One major schema refactor was applied post-completion:
+- **Migration 0011** (April 2026) — `TeamMember` model refactored: `full_name`, `role_title`, and `email` CharField/EmailField columns removed; a `ForeignKey` to `User` was added. This enforces identity integrity — team members must be existing Sky system users. The admin form was simultaneously updated to provide a clean user-selection dropdown.
 
 ### 1.5 Why 14 Entities?
 
@@ -138,7 +139,7 @@ All five student apps extend `base.html` and use shared partials `_top_navbar.ht
 
 ### 3.1 Authentication
 
-Every business view (all non-auth views) uses the `@login_required` decorator. Unauthenticated requests are redirected to `/accounts/login/?next=<path>` via `LOGIN_URL = 'accounts:login'` in `settings.py`. The `accounts` app uses Django's built-in `LoginView` subclassed as `SkyLoginView`, and `UserCreationForm` extended as `UserSignupForm` with Sky corporate email domain validation.
+Every business view (all non-auth views) uses the `@login_required` decorator. Unauthenticated requests are redirected to `/accounts/login/?next=<path>` via `LOGIN_URL = 'accounts:login'` in `settings.py`. The `accounts` app uses Django's built-in `LoginView` subclassed as `SkyLoginView`, and `UserCreationForm` extended as `UserSignupForm` with robust password complexity validation.
 
 ### 3.2 CSRF Protection
 
@@ -146,7 +147,7 @@ Django's CSRF middleware is enabled by default in `MIDDLEWARE` (`sky_registry/se
 
 ### 3.3 Input Validation
 
-- Signup: `clean_email()` in `accounts/forms.py:25` raises `ValidationError` if the email domain is not `@sky.com` or `@sky.uk`.
+- Signup: `UserSignupForm` in `accounts/forms.py` validates that the password meets string complexity rules via Django password validators.
 - Meeting form: `MeetingForm.clean()` in `schedule/forms.py:68-78` validates that `end_datetime > start_datetime`.
 - Django's built-in validators for `URLField`, `EmailField`, and `CharField` with `choices` provide baseline validation on all model fields.
 - All four Django password validators are active (`AUTH_PASSWORD_VALIDATORS` in `settings.py`).
@@ -182,7 +183,7 @@ These would be fixed with: loading `SECRET_KEY` from environment variables, sett
 
 **Audit trail:** The `AuditLog` model satisfies Article 5(2) GDPR accountability requirement. Every CREATE/UPDATE/DELETE action is recorded with timestamp, actor reference (SET\_NULL to survive user deletion), entity type, and a summary. The audit log is accessible to administrators at `/dashboard/audit/`.
 
-**Corporate email domain validation:** Signup is restricted to `@sky.com` or `@sky.uk` email addresses. This reduces the risk of unauthorised registration and limits the data stored to verified Sky employees only.
+**Password Complexity:** Signup mandates strict password policies through Django's built-in password validators, reducing the risk of unauthorized registration via simple or common passwords.
 
 **User deletion safety:** AuditLog uses `on_delete=SET_NULL` on the `actor_user` FK. This means deleting a user account does not cascade-delete the historical audit record — the record persists with `actor_user=NULL`, satisfying both the right to erasure (user account deleted) and the legitimate business interest in retaining audit history.
 

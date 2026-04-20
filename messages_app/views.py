@@ -18,9 +18,10 @@ def inbox(request):
     Displays all messages officially 'sent' by any user, ordered by most recent.
     """
     try:
-        # Improved Filter: Show messages sent TO teams where the user is a member
+        # Filter: Show messages sent TO teams where the current user is a member.
+        # After migration 0011, TeamMember uses a User FK — traverse via team__members__user.
         all_messages = Message.objects.filter(
-            team__members__email=request.user.email,
+            team__members__user=request.user,
             message_status='sent'
         ).select_related(
             'sender_user', 'team'

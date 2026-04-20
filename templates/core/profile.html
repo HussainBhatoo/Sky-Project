@@ -39,7 +39,7 @@
                 <label for="email">Email Address</label>
                 <input type="email" name="email" id="email" class="form-control" value="{{ user.email }}" required>
                 <div style="font-size: 0.75rem; color: var(--muted-foreground); margin-top: 0.4rem; display: flex; align-items: center; gap: 0.3rem;">
-                    <i class='bx bx-info-circle'></i> Must be a valid @sky.uk domain.
+                    <i class='bx bx-info-circle'></i> Use a valid business or personal email address.
                 </div>
             </div>
             
@@ -58,7 +58,7 @@
     <div class="card">
         <div style="text-align: center; margin-bottom: 1.5rem;">
             <div class="avatar-circle" style="width: 80px; height: 80px; font-size: 2rem; margin: 0 auto 1rem auto;">
-                {{ user.username|slice:":1"|upper }}
+                {% if user.first_name %}{{ user.first_name|slice:":1"|upper }}{% else %}{{ user.username|slice:":1"|upper }}{% endif %}
             </div>
             <h3 style="color: var(--sky-header-blue); margin-bottom: 0.25rem;">{{ user.get_full_name|default:user.username }}</h3>
             <span class="chip chip-department">@{{ user.username }}</span>

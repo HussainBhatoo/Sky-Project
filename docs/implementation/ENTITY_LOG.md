@@ -15,7 +15,7 @@ The following 14 entities form the finalized production system, ensuring complia
 | **01** | **User** | Authentication & SSO. Extended with `audit_actions` for traceability. | ✅ Hardened |
 | **02** | **Department** | Organisational grouping with specialization tracking. | ✅ Enhanced |
 | **03** | **Team** | Team profiles. Includes `mission`, `tech_tags`, and lifecycle `status`. | ✅ Main |
-| **04** | **TeamMember** | Registry of engineers. Hardened relational integrity with Team model. | ✅ Stable |
+| **04** | **TeamMember** | Registry of engineers. Direct FK to `User` model — identity sourced from User, not manual text input. Hardened relational integrity with Team model. | ✅ Refactored |
 | **05** | **Dependency** | Upstream/Downstream links. Integrated into visual Org Chart. | ✅ Integrated |
 | **06** | **ContactChannel**| Multi-channel communication links (Slack/Teams/Email). | ✅ Stable |
 | **07** | **StandupInfo** | Dedicated entity for persistent team daily sync details. | ✅ Restored |
@@ -78,7 +78,7 @@ The database schema has been expanded to 14 entities to meet the Coursework 2 ru
 |---|---|---|---|
 | Department | name, lead_name, description | `specialization` | Added for richer search/filter |
 | Team | name, dept_FK, leader, work_stream, project | `mission`, `lead_email`, `status`, `tech_tags`, `created_at`, `updated_at` | Rich profile fields for Sky registry |
-| TeamMember | team_FK, name, role | `email` | Required for inbox team-membership filter |
+| TeamMember | team_FK, name, role | `user` (FK→User) — migration 0011 | Removed `email`, `full_name`, `role_title` fields; User FK enforces identity integrity. Team member must be an existing system user. |
 | Dependency | — | Entire model new | Upstream/downstream team relationships |
 | ContactChannel | — | Entire model new | Multi-channel communication metadata |
 | StandupInfo | — | Entire model new | OneToOne team sync schedule |
@@ -99,10 +99,11 @@ CW1 had 3 entities. CW2 adds 11 new entities (10 brand new + User as AbstractUse
 
 | Feature | Evolution | Impact |
 | :--- | :--- | :--- |
-| **Scaling** | 3 entities -> 14 entities | Meets rubric requirements. |
+| **Scaling** | 3 entities → 14 entities | Meets rubric requirements. |
 | **Traceability** | View-level & Signal-based AuditLog | 100% Administrative Transparency. Immutable Audit Trail implemented. |
-| **UX/Admin** | Autocomplete & Search Optimization | Admin panel hardened for high-scale data entry (500+ records). |
-| **Visualisation** | Text lists -> Interactive Org Charts | Main UX matching Sky Spectrum standards. |
+| **UX/Admin** | ModelChoiceField dropdowns replace broken autocomplete widgets | Admin panel hardened for reliable data entry; Team Member creation now user-linked, not manual text. |
+| **Visualisation** | Text lists → Interactive Org Charts | Main UX matching Sky Spectrum standards. |
+| **Schema Integrity** | Migration 0011: TeamMember User FK | Eliminated data duplication; team members must be existing system users. |
 
 ---
 © 2026 Sky Registry Audit Team. INTERNAL USE ONLY.

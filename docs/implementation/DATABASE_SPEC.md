@@ -11,7 +11,7 @@ All models are defined in `core/models.py`. Per-app `models.py` files are empty 
 | 1 | **User** | core / accounts | Custom authentication model (`AbstractUser` subclass). No custom fields — inherits username, email, password, first_name, last_name from Django. |
 | 2 | **Department** | core / organisation | High-level organisational units (e.g. xTV_Web, Mobile). Fields: `department_id`, `department_name`, `department_lead_name`, `specialization`, `description`. |
 | 3 | **Team** | core / teams | Primary units of delivery within Departments. Fields: `team_id`, `department` (FK), `team_name`, `mission`, `lead_email`, `team_leader_name`, `work_stream`, `project_name`, `project_codebase`, `status` (default Active), `tech_tags`, `created_at`, `updated_at`. |
-| 4 | **TeamMember** | core / teams | Individual employees assigned to a Team. Fields: `member_id`, `team` (FK), `full_name`, `role_title`, `email`. |
+| 4 | **TeamMember** | core / teams | Individual employees assigned to a Team. Fields: `member_id`, `team` (FK→Team, CASCADE), `user` (FK→User, CASCADE). Refactored in migration 0011 — `full_name`, `role_title`, and `email` CharField/EmailField columns removed; identity data is now read from the linked `User` object (`user.get_full_name()`, `user.username`, `user.email`). Role is implicitly "Team Member". |
 | 5 | **Dependency** | core / organisation | Relational mapping between teams (Upstream/Downstream). Fields: `dependency_id`, `from_team` (FK→Team), `to_team` (FK→Team), `dependency_type` (choices: upstream/downstream). |
 | 6 | **ContactChannel** | core / teams | Multi-channel communication links. Fields: `channel_id`, `team` (FK), `channel_type` (slack/teams/email), `channel_value`. |
 | 7 | **StandupInfo** | core / teams | Team-specific standup times (one per team). Fields: `standup_id`, `team` (**OneToOneField**), `standup_time` (TimeField), `standup_link` (URLField). |
@@ -30,7 +30,7 @@ All models are defined in `core/models.py`. Per-app `models.py` files are empty 
 | Type | Relationship |
 |---|---|
 | FK | Department (1) → Team (N): `Team.department = FK(Department, CASCADE)` |
-| FK | Team (1) → TeamMember (N): `TeamMember.team = FK(Team, CASCADE)` |
+| FK×2 | TeamMember: `team` (FK→Team, CASCADE), `user` (FK→User, CASCADE) — migrated in 0011, replacing `full_name`/`role_title`/`email` fields |
 | FK×2 | Dependency self-referential: `from_team` and `to_team` both FK → Team |
 | FK | Team (1) → ContactChannel (N) |
 | **OneToOne** | Team (1) → StandupInfo (1): `StandupInfo.team = OneToOneField(Team)` — only model with a O2O |
@@ -44,7 +44,7 @@ All models are defined in `core/models.py`. Per-app `models.py` files are empty 
 
 ### Narrative ERD description
 
-At the top level, `Department` contains `Team` (one-to-many). Each team has five satellite tables attached via FK: `TeamMember` (staff roster), `ContactChannel` (Slack/email links), `RepositoryLink`, `WikiLink`, and `BoardLink`. The `StandupInfo` relationship is OneToOne — a team can have at most one standup config.
+At the top level, `Department` contains `Team` (one-to-many). Each team has five satellite tables attached via FK: `TeamMember` (staff roster — members are linked to the system `User` model via a direct FK, added in migration 0011), `ContactChannel` (Slack/email links), `RepositoryLink`, `WikiLink`, and `BoardLink`. The `StandupInfo` relationship is OneToOne — a team can have at most one standup config.
 
 Cross-entity activity flows through `Message` (User→Team communication), `Meeting` (User creates a meeting for a Team), and `Vote` (User endorses a Team). Both `Message` and `Meeting` carry dual FKs — to the acting `User` and to the target `Team`. The `AuditLog` entity records all CREATE/UPDATE/DELETE mutations system-wide; its FK to `User` uses `SET_NULL` so historical records survive if the acting user's account is deleted.
 
@@ -54,4 +54,4 @@ Database is in **3rd Normal Form (3NF)**. Redundancy is eliminated by separating
 
 ## Migration history
 
-10 migrations in `core/migrations/`. Iterative design: `DepartmentVote` was added (0005) and then cleanly removed (0010); `TimeTrack` was added (0004) and removed (0009). Both removals prove disciplined schema management — models were kept only when they served a distinct purpose not already covered by `Vote` and `AuditLog`.
+**11 migrations** in `core/migrations/`. Iterative design: `DepartmentVote` was added (0005) and removed (0010); `TimeTrack` was added (0004) and removed (0009). Migration 0011 (April 2026) refactored `TeamMember` — dropped `full_name`, `role_title`, `email` CharField/EmailField columns and added a `ForeignKey` to `User`. All three changes demonstrate disciplined schema management — models and fields are only kept when they serve a distinct, non-redundant purpose.

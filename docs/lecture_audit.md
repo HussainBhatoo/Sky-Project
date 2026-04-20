@@ -17,7 +17,7 @@
 | `User(AbstractUser)` | [A] | AbstractUser replacement was explicitly listed as NOT TAUGHT — lectures only covered a Profile model with OneToOneField to User |
 | `Department` model | [L] | Basic CharField/TextField/AutoField — matches lecture examples |
 | `Team` model | [E] | ForeignKey (taught), `auto_now_add`/`auto_now` and `help_text` are findable in Django docs |
-| `TeamMember` model | [L] | Basic ForeignKey + CharFields — exactly lecture level |
+| `TeamMember` model | [E] | Refactored (migration 0011): now has two FKs — `team` (FK→Team) and `user` (FK→User). Two ForeignKeys to different models is findable in docs; the admin form uses `ModelChoiceField` which is also [E]. Pre-refactor had basic CharFields, which was [L]. |
 | `Dependency` model | [E] | Two FKs to the same model + choices list — not shown in lectures but findable in docs |
 | `ContactChannel` model | [E] | Choices list and ForeignKey — findable in docs |
 | `Message` model | [E] | Choices list, null=True DateTimeField — findable |
@@ -229,7 +229,7 @@ File does not exist. The `User` model is defined in `core/models.py` and referen
 
 | Function / Component | Classification | Reason |
 |---|---|---|
-| `inbox()` | [E] | `.select_related()`, `.distinct()`, filtering on `team__members__email` — findable in docs |
+| `inbox()` | [E] | `.select_related()`, `.distinct()`, filtering on `team__members__user` (FK traversal to User) — findable in docs |
 | `sent_messages()` | [L/E] | Filter on `sender_user`, `order_by` — close to taught |
 | `draft_messages()` | [E] | Same pattern as sent; `message_status='draft'` flag is [E] |
 | `message_detail()` | [E] | `request.META.get('HTTP_REFERER')` for tab awareness is [E] — not taught but findable |

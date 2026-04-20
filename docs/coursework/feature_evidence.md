@@ -11,14 +11,16 @@ Status legend:
 
 ## Authentication
 
-| Feature | Owner | View | Template | Models | URL | Status |
-|---|---|---|---|---|---|---|
-| Login | GROUP | `accounts/views.py:9` `SkyLoginView` | `registration/login.html` | User | `/accounts/login/` | WORKING |
-| Signup | GROUP | `accounts/views.py:29` `signup_view` | `registration/signup.html` | User | `/accounts/signup/` | WORKING |
-| Logout | GROUP | `accounts/views.py:52` `logout_view` | redirect | — | `/accounts/logout/` | KNOWN-ISSUE: accepts GET as well as POST (`@require_POST` missing) |
-| Forgot Password | GROUP (Maurya lead) | `accounts/views.py:45` `SkyForgotPasswordView` | `registration/forgot_password.html` | — | `/accounts/forgot-password/` | PARTIAL: renders placeholder page; no email sent |
-| Password Change | GROUP | Django `PasswordChangeView` | `registration/password_change_form.html` | User | `/accounts/password-change/` | WORKING |
-| Profile Edit | GROUP | `core/views.py:80` `profile_view` | `core/profile.html` | User | `/dashboard/profile/` | WORKING |
+| Feature | Owner | View | Template | Models | URL | Status | Evidence |
+|---|---|---|---|---|---|---|---|
+| Login | GROUP | `accounts/views.py:9` `SkyLoginView` | `registration/login.html` | User | `/accounts/login/` | WORKING | Fixed 19 Apr 2026 |
+| Signup | GROUP | `accounts/views.py:29` `signup_view` | `registration/signup.html` | User | `/accounts/signup/` | WORKING | Fixed 19 Apr 2026 |
+| Logout | GROUP | `accounts/views.py:52` `logout_view` | redirect | — | `/accounts/logout/` | KNOWN-ISSUE: accepts GET as well as POST (`@require_POST` missing) | |
+| Forgot Password | GROUP (Maurya lead) | `accounts/views.py:45` `SkyForgotPasswordView` | `registration/forgot_password.html` | — | `/accounts/forgot-password/` | PARTIAL: renders placeholder page; no email sent | |
+| Password Change | GROUP | Django `PasswordChangeView` | `registration/password_change_form.html` | User | `/accounts/password-change/` | WORKING | Fixed 19 Apr 2026 |
+| Profile Edit | GROUP | `core/views.py:80` `profile_view` | `core/profile.html` | User | `/dashboard/profile/` | WORKING | Fixed 19 Apr 2026 |
+| User Accounts (Admin) | GROUP | Django Admin | Django Admin | User | `/admin/core/user/` | WORKING | Admin /admin/core/user/ link restored. Was 404 due to hardcoded wrong path. Now WORKING. Fixed 19 Apr 2026 |
+| Permission Groups (Admin) | GROUP | Django Admin | Django Admin | Group | `/admin/auth/group/` | WORKING | Link restored. Fixed 19 Apr 2026 |
 
 ---
 

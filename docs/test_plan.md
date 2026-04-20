@@ -122,9 +122,9 @@ This file is internal documentation only. The actual test evidence goes in the W
 | G-01 | Home page redirect | Not logged in | Visit / | Redirected to /accounts/login/ | Redirect to login page | PASS |
 | G-02 | Access dashboard without login | Not logged in | Visit /dashboard/ directly | Redirected to login page | Redirected to /accounts/login/?next=/dashboard/ | PASS |
 | G-03 | Access teams without login | Not logged in | Visit /teams/ directly | Redirected to login page | Redirected to login | PASS |
-| G-04 | Self-register new account | Not logged in | Fill signup form with valid @sky.com details | Account created, logged in, redirected to dashboard | Account created, dashboard loads | PASS |
+| G-04 | Self-register new account | Not logged in | Fill signup form | Account created, logged in, redirected to dashboard | Account created, dashboard loads | PASS |
 | G-05 | Register with existing email | Not logged in | Enter already-registered email | Error shown, registration blocked | Django UserCreationForm shows duplicate username/email error | PASS |
-| G-06 | Register with non-Sky email | Not logged in | Enter non-Sky domain email (e.g. @gmail.com) | Error shown, domain validation active | clean_email() in accounts/forms.py raises ValidationError | PASS |
+| G-06 | Register with weak password | Not logged in | Enter weak password | Error shown, password complexity validation active | Password validators properly block weak passwords | PASS |
 | G-07 | Login with correct credentials | Registered user | Enter correct username and password | Logged in, dashboard loads | Dashboard loads | PASS |
 | G-08 | Login with wrong password | Registered user | Enter wrong password | Error message shown, not logged in | Django auth shows "Please enter a correct username and password" | PASS |
 | G-09 | Login with unregistered username | Anyone | Enter username not in system | Error message shown | Same auth error shown | PASS |
@@ -139,12 +139,13 @@ This file is internal documentation only. The actual test evidence goes in the W
 | G-18 | Audit log records team delete | Logged in as admin | Delete a team via admin panel | DELETE entry appears in audit log | Signal fires on post_delete | PASS (actor_user NULL) |
 | G-19 | Admin panel access — superuser | Logged in as superuser | Visit /admin/ | Admin panel loads with all model sections | Admin panel loads with all 14 models registered | PASS |
 | G-20 | Admin panel access — regular user | Logged in as regular user | Visit /admin/ | Access denied or redirected | Django admin shows "You don't have permission" page | PASS |
-| G-21 | Add team via admin | Superuser | Create new team in admin | Team appears on /teams/ page | Team visible on teams list | PASS |
-| G-22 | Delete team via admin | Superuser | Delete team in admin | Team removed from /teams/ page | Team removed; CASCADE deletes related TeamMembers etc. | PASS |
-| G-23 | CSRF protection | Any user | Inspect any form submission | All forms contain {% csrf_token %} | All POST forms verified to have csrf_token (see security audit in docs) | PASS |
-| G-24 | Audit log records message send | Logged in | Send message to a team | Message audit log entry appears | AuditLog.objects.create() called in messages_app/views.py:193 | PASS |
-| G-25 | Audit log records endorsement | Logged in | Toggle team endorsement | Vote 'CREATE' or 'DELETE' log appears | View-level AuditLog.objects.create() in teams/views.py:160,170 | PASS |
-| G-26 | All nav links work | Logged in | Click every sidebar nav link | All pages load without 404 or 500 error | All 8 sidebar nav links load correctly | PASS |
-| G-27 | Consistent UI across pages | Logged in | Visit teams, org, messages, schedule, reports | Same navbar, sidebar, colour scheme on all pages | All pages extend base.html; consistent Sky Spectrum design | PASS |
-| G-28 | Signal-generated audit entries show actor | Logged in | View audit log after team create/delete via admin | Actor column shows username | Signal-written rows have actor_user=NULL; shows as empty/System | KNOWN-ISSUE: signals don't call get_current_user() (core/signals.py) |
-| G-29 | Global Search Debounce | Logged in | Type in global search navbar | Results appear in dropdown | JSON endpoint responds to GET; debounce implemented in JS | PASS |
+| G-21 | Manage users via admin | Superuser | Click User Accounts in admin | User list loads correctly without 404 | User list loads correctly, users can be edited securely | PASS |
+| G-22 | Add team via admin | Superuser | Create new team in admin | Team appears on /teams/ page | Team visible on teams list | PASS |
+| G-23 | Delete team via admin | Superuser | Delete team in admin | Team removed from /teams/ page | Team removed; CASCADE deletes related TeamMembers etc. | PASS |
+| G-24 | CSRF protection | Any user | Inspect any form submission | All forms contain {% csrf_token %} | All POST forms verified to have csrf_token (see security audit in docs) | PASS |
+| G-25 | Audit log records message send | Logged in | Send message to a team | Message audit log entry appears | AuditLog.objects.create() called in messages_app/views.py:193 | PASS |
+| G-26 | Audit log records endorsement | Logged in | Toggle team endorsement | Vote 'CREATE' or 'DELETE' log appears | View-level AuditLog.objects.create() in teams/views.py:160,170 | PASS |
+| G-27 | All nav links work | Logged in | Click every sidebar nav link | All pages load without 404 or 500 error | All 8 sidebar nav links load correctly | PASS |
+| G-28 | Consistent UI across pages | Logged in | Visit teams, org, messages, schedule, reports | Same navbar, sidebar, colour scheme on all pages | All pages extend base.html; consistent Sky Spectrum design | PASS |
+| G-29 | Signal-generated audit entries show actor | Logged in | View audit log after team create/delete via admin | Actor column shows username | Signal-written rows have actor_user=NULL; shows as empty/System | KNOWN-ISSUE: signals don't call get_current_user() (core/signals.py) |
+| G-30 | Global Search Debounce | Logged in | Type in global search navbar | Results appear in dropdown | JSON endpoint responds to GET; debounce implemented in JS | PASS |
