@@ -39,8 +39,8 @@ Status legend:
 | Feature | Owner | View | Template | Models | URL | Status |
 |---|---|---|---|---|---|---|
 | Team list | Riagul | `teams/views.py:21` `team_list` | `teams/team_list.html` | Team, Dept | `/teams/` | WORKING |
-| Team detail | Riagul | `teams/views.py:78` `team_detail` | `teams/team_detail.html` | Team, Member, Dependency, ContactChannel, StandupInfo, Repo, Wiki, Board | `/teams/<team_id>/` | WORKING |
-| Vote/Endorse team | Riagul | `teams/views.py:142` `vote_team` | redirect | Vote | `/teams/<team_id>/vote/` | KNOWN-ISSUE: accepts GET (state change via GET; `@require_POST` missing) |
+| Team detail | Riagul | `teams/views.py:78` `team_detail` | `teams/team_detail.html` | Team, Member, Dependency, ContactChannel, StandupInfo, Repo, Wiki, Board | `/teams/<team_id>/` | WORKING (Bi-directional counts verified) |
+| Vote/Endorse team | Riagul | `teams/views.py:142` `vote_team` | redirect | Vote | `/teams/<team_id>/vote/` | WORKING |
 | Disband team | Riagul | `teams/views.py:184` `disband_team` | redirect | Team | `/teams/<team_id>/disband/` | WORKING (superuser only) |
 | Team milestones timeline | Riagul | `teams/views.py:116-119` | `team_detail.html` section | AuditLog | (embedded in team_detail) | KNOWN-ISSUE: `entity_type='Team Milestone'` filter never matches — no code writes milestones; always empty |
 
@@ -112,7 +112,7 @@ Status legend:
 |---|---|---|---|
 | Department | 6 | 6 | ✅ |
 | Team | 46 | 46 | ✅ |
-| TeamMember | 0 | ~230 | ⚠️ Empty — populate_data.py doesn't create members |
+| TeamMember | 96 | ~96 | ✅ Populated via master seeding script |
 | Meeting | varies | — | ✅ |
 | AuditLog | auto-generated | — | ✅ |
 | Vote | varies | — | ✅ |

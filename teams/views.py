@@ -32,10 +32,29 @@ def team_list(request):
         status_filter = request.GET.get('status', '')
 
         teams = Team.objects.select_related('department').annotate(
-            member_count=Count('members'),
-            upstream_count=Count('dependencies_to', filter=Q(dependencies_to__dependency_type='upstream')),
-            downstream_count=Count('dependencies_from', filter=Q(dependencies_from__dependency_type='downstream')),
+            member_count=Count('members', distinct=True),
+            # Upstream: 
+            # 1. This team is target (to_team) and record is 'upstream'
+            # 2. This team is source (from_team) and record is 'downstream'
+            up_1=Count('dependencies_to', filter=Q(dependencies_to__dependency_type='upstream'), distinct=True),
+            up_2=Count('dependencies_from', filter=Q(dependencies_from__dependency_type='downstream'), distinct=True),
+            
+            # Downstream:
+            # 1. This team is source (from_team) and record is 'upstream'
+            # 2. This team is target (to_team) and record is 'downstream'
+            down_1=Count('dependencies_from', filter=Q(dependencies_from__dependency_type='upstream'), distinct=True),
+            down_2=Count('dependencies_to', filter=Q(dependencies_to__dependency_type='downstream'), distinct=True),
         ).order_by('team_name')
+
+        # Add them together in a separate loop or with ExpressionWrapper if preferred, 
+        # but the template expects .upstream_count and .downstream_count.
+        # Let's perform a simple addition in the queryset for performance.
+        from django.db.models import F
+        teams = teams.annotate(
+            upstream_count=F('up_1') + F('up_2'),
+            downstream_count=F('down_1') + F('down_2')
+        )
+
 
         if search_query:
             teams = teams.filter(
@@ -95,13 +114,29 @@ def team_detail(request, team_id):
         contacts = ContactChannel.objects.filter(team=team)
 
 
-        upstream_deps = Dependency.objects.filter(
-            to_team=team, dependency_type='upstream'
-        ).select_related('from_team')
+        upstream_deps_qs = Dependency.objects.filter(
+            Q(to_team=team, dependency_type='upstream') |
+            Q(from_team=team, dependency_type='downstream')
+        ).select_related('from_team', 'to_team')
 
-        downstream_deps = Dependency.objects.filter(
-            from_team=team, dependency_type='downstream'
-        ).select_related('to_team')
+        upstream_deps = []
+        for dep in upstream_deps_qs:
+            if dep.to_team == team and dep.dependency_type == 'upstream':
+                upstream_deps.append(dep.from_team)
+            elif dep.from_team == team and dep.dependency_type == 'downstream':
+                upstream_deps.append(dep.to_team)
+
+        downstream_deps_qs = Dependency.objects.filter(
+            Q(from_team=team, dependency_type='upstream') |
+            Q(to_team=team, dependency_type='downstream')
+        ).select_related('from_team', 'to_team')
+
+        downstream_deps = []
+        for dep in downstream_deps_qs:
+            if dep.from_team == team and dep.dependency_type == 'upstream':
+                downstream_deps.append(dep.to_team)
+            elif dep.to_team == team and dep.dependency_type == 'downstream':
+                downstream_deps.append(dep.from_team)
 
         tech_tags = [tag.strip() for tag in team.tech_tags.split(',') if tag.strip()] if team.tech_tags else []
 

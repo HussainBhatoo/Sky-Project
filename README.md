@@ -6,8 +6,8 @@ Coursework 2 — submitted April 2026
 
 A Django web app that replaces Sky's Excel
 team registry spreadsheet with a searchable
-database portal. Covers 46 engineering teams
-across 6 departments. Built by 5 Year 2
+database portal. Covers 16 engineering teams
+across 4 departments. Built by 5 Year 2
 Computer Science students over roughly 6 weeks.
 
 ## The Team
@@ -25,7 +25,7 @@ Computer Science students over roughly 6 weeks.
 - Full credential table: `docs/coursework/credentials.md`
 
 ## Core Features
-- **Dynamic Registry**: Live tracking of 46 engineering teams across 6 departments.
+- **Dynamic Registry**: Live tracking of 16 engineering teams across 4 departments.
 - **Resource Management**: Registry of verified GitHub Repos, Digital Wikis, and Agile Boards.
 - **Professional Reporting**: Interactive `Chart.js` visual analytics for departmental breakdown and 'Top Endorsed' teams.
 - **Data Portability**: Automated management gap analysis and CSV exports for external audits.
@@ -38,7 +38,7 @@ Computer Science students over roughly 6 weeks.
    .venv\Scripts\activate
    ```
 2. **Setup**: `pip install -r requirements.txt`
-3. **Database**: `python manage.py migrate` followed by `python manage.py populate_data`
+3. **Database**: `python manage.py migrate` (Database comes pre-populated with 16 teams)
 4. **Run**: `python manage.py runserver`
 
 ---

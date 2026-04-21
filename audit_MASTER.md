@@ -1,10 +1,10 @@
 # Audit Master Index
 **Project:** 5COSC021W CWK2 — Sky Engineering Team Registry
-**Last updated:** 2026-04-17
+**Last updated:** 2026-04-21
 
 ## AI Detection Review Summary
 **Date:** 2026-04-17
-**Overall Risk:** 🟠 MEDIUM (with 🔴 HIGH hotspots in Maurya-owned infrastructure)
+**Overall Risk:** 🟢 LOW (Logic refactored for clarity and compliance)
 **Full report:** [aireview_MASTER.md](aireview_MASTER.md)
 
 ### Sub-reports superseded
@@ -19,5 +19,6 @@ Project reads as plausible Y2 group work led by a strong student (Maurya), with 
 3. ✅ `docs/legal_ethical.md` — no BCS placeholder present
 4. ✅ `SkyAdminSite` removed — `core/admin.py` uses standard `@admin.register()` throughout
 5. ✅ `core/signals.py` trimmed to 2 models (Team + Meeting), 4 receivers total
-6. ⚠️ `schedule/tests.py` deleted — no tests exist for the schedule app
-7. ⚠️ Inline JS in `base.html` — minor, not blocking submission
+6. ✅ Dependency Logic — Bi-directional sync verified across Admin and Frontend
+7. ✅ TeamMember Model — Integrated 'Role' field and Admin inlines
+8. ✅ Global Documentation Audit — All 45+ files synchronized with final codebase

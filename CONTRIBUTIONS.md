@@ -16,6 +16,7 @@
 **Implemented:** 
 - Team gallery with grid/list toggle and department filtering.
 - Team profile pages with mission statements, tech badges, and linked actions.
+- Bi-directional dependency tracking logic (upstream/downstream synchronization).
 - Team voting/endorsement logic using `get_or_create`.
 - Team disband functionality (superuser restricted) and cross-app schedule/message triggers.
 
@@ -80,5 +81,5 @@
 ## Group Work
 While modules were owned individually, we worked collaboratively on:
 - **Core Models:** Developing the shared 14-entity schema in `core/models.py`.
-- **Seed Data:** Populating `db.sqlite3` with 46 teams from the module registry brief.
+- **Seed Data:** Populating `db.sqlite3` with 16 engineering teams.
 -  **Documentation Audit:** Reviewing all reports and reflections to ensure 100% rubric compliance.

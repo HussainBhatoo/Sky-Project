@@ -33,10 +33,10 @@ High-level organisational unit. Fields: `department_id` (AutoField PK), `departm
 Primary unit of engineering delivery. FK to Department (CASCADE). Fields: `team_id`, `department`, `team_name`, `mission`, `lead_email`, `team_leader_name`, `work_stream`, `project_name`, `project_codebase`, `status` (default 'Active'), `tech_tags`, `created_at` (auto\_now\_add), `updated_at` (auto\_now).
 
 #### Entity 4: TeamMember (`core/models.py:54`)
-Engineers assigned to a team. Two FKs: `team` (FK→Team, CASCADE) and `user` (FK→User, CASCADE). Fields: `member_id`, `team`, `user`. Refactored in migration 0011 (April 2026) — the legacy `full_name`, `role_title`, and `email` columns were removed. Member identity is now read directly from the linked `User` object, eliminating data duplication and ensuring that only existing Sky system users can be assigned to a team. The admin "Add Team Member" form provides a clean dropdown to select any registered user.
+Engineers assigned to a team. Two FKs: `team` (FK→Team, CASCADE) and `user` (FK→User, CASCADE). Fields: `member_id`, `team`, `user`, `role`. Refactored in migration 0011 (April 2026) — legacy contact columns were removed and identity was moved to the `User` model. In migration 0014, a explicit `role` field was added to allow team-specific designations (e.g., 'Lead Backend Engineer', 'Product Owner') while maintaining identity integrity via the link to the system `User` object.
 
 #### Entity 5: Dependency (`core/models.py:65`)
-Self-referential team relationships. Two FKs to Team: `from_team` and `to_team`. Field: `dependency_type` (choices: upstream/downstream). Enables the dependency graph visualised by Lucas's Organisation module.
+Self-referential team relationships. Two FKs to Team: `from_team` and `to_team`. Field: `dependency_type` (choices: upstream/downstream). Logic was enhanced in migration 0015 to support bi-directional synchronization — adding an upstream dependency for Team A on Team B automatically creates a downstream record for Team B from Team A, ensuring project architecture is always consistent.
 
 #### Entity 6: ContactChannel (`core/models.py:82`)
 Multi-channel communication metadata per team. FK to Team. Fields: `channel_id`, `channel_type` (slack/teams/email), `channel_value` (the actual URL or address).
@@ -75,12 +75,14 @@ The `AuditLog` entity occupies a special position: it records all CREATE/UPDATE/
 
 ### 1.4 Migration Strategy
 
-The project has **11 migrations** in `core/migrations/`. Two models were deliberately removed during development:
+The project has **15 migrations** in `core/migrations/`.
 - `DepartmentVote` — created in migration 0005, removed in migration 0010. Removed because `Vote` already satisfied the team endorsement requirement.
 - `TimeTrack` — created in migration 0004, removed in migration 0009. Removed because `AuditLog` already satisfied the time-tracking requirement without needing a separate entity.
 
 One major schema refactor was applied post-completion:
-- **Migration 0011** (April 2026) — `TeamMember` model refactored: `full_name`, `role_title`, and `email` CharField/EmailField columns removed; a `ForeignKey` to `User` was added. This enforces identity integrity — team members must be existing Sky system users. The admin form was simultaneously updated to provide a clean user-selection dropdown.
+- **Migration 0011** — `TeamMember` model refactored: contact columns removed; `ForeignKey` to `User` added.
+- **Migration 0014** — `TeamMember` model extended with `role` field for team-specific designations.
+- **Migration 0015** — `Dependency` counts and bi-directional logic finalized.
 
 ### 1.5 Why 14 Entities?
 
@@ -103,7 +105,7 @@ Stat cards show live counts (teams, departments, messages, meetings). A grid/lis
 Gallery view with grid/list toggle, department filter, and search bar. Team cards show name, department badge, mission snippet, and tech tags. Detail pages (`/teams/<id>/`) show full profile: mission, leader, contacts, standup info, members, repo/wiki/board links, dependencies, and the "Schedule Meeting" inter-app button.
 
 **Organisation (`/organisation/`)**
-Tabbed view: Departments tab shows list of departments with team counts; Org Chart tab renders an SVG dependency graph. Department detail pages show linked teams and specialisations. Dependencies page (`/organisation/dependencies/`) shows upstream/downstream relationships in side-by-side columns with double-click navigation.
+Tabbed view: Departments tab shows list of departments with team counts; Org Chart tab renders an SVG dependency graph. Department detail pages show linked teams and specialisations. Dependencies page (`/organisation/dependencies/`) shows upstream/downstream relationships in side-by-side columns with bi-directional logic synchronization (counts are reconciled between teams).
 
 **Messages (`/messages/`)**
 Unified hub with three tabs: Inbox, Sent, Drafts. The Compose view handles four states (new, draft edit, reply, forward) in a single FBV. Message detail shows quoted original text on replies. IDOR protection ensures only the sender can delete their own message.
@@ -227,7 +229,7 @@ These would be addressed in a production version with a privacy policy, a GDPR s
 - `core/models.py` — all 14 entities designed and reviewed collaboratively
 - `sky_registry/settings.py` and `sky_registry/urls.py` — set up by Maurya, reviewed by group
 - `templates/base.html`, `_top_navbar.html`, `_sidebar.html` — designed by Maurya, extended by all
-- `core/management/commands/populate_data.py` — written by Maurya (Maurya was named as author in file header)
+- `core/management/commands/populate_data.py` — written by Maurya (Used for internal seeding and removed for final submission)
 - `db.sqlite3` — seeded from Sky Excel data file via `populate_data` command
 
 ---

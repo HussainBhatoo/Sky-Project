@@ -132,7 +132,7 @@ Custom management commands using `BaseCommand` were explicitly listed as NOT TAU
 ### Plain answers for viva questions
 
 **"What is BaseCommand and why did you use it?"**
-BaseCommand is a base class that Django gives you to build commands you can run from the terminal with `python manage.py`. We used it because we needed to load 46 teams from the Excel file into the database before we could demo the project. It was easier to run one command than to open a Django shell and paste Python code every time we needed to reset the data.
+BaseCommand is a base class that Django gives you to build commands you can run from the terminal with `python manage.py`. We used it because we needed to load 16 teams from the Excel file into the database before we could demo the project. It was easier to run one command than to open a Django shell and paste Python code every time we needed to reset the data.
 
 **"Explain transaction.atomic()"**
 It wraps all the database writes in one transaction. A transaction is like a group promise to the database — either all the changes go through or none of them do. We used it so that if something broke halfway through the import (like a bad row in the Excel sheet), the database would go back to how it was before we started. Without it, we might end up with some departments created but no teams, which would break the app.

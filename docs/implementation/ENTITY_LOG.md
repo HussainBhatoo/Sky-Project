@@ -78,7 +78,7 @@ The database schema has been expanded to 14 entities to meet the Coursework 2 ru
 |---|---|---|---|
 | Department | name, lead_name, description | `specialization` | Added for richer search/filter |
 | Team | name, dept_FK, leader, work_stream, project | `mission`, `lead_email`, `status`, `tech_tags`, `created_at`, `updated_at` | Rich profile fields for Sky registry |
-| TeamMember | team_FK, name, role | `user` (FK→User) — migration 0011 | Removed `email`, `full_name`, `role_title` fields; User FK enforces identity integrity. Team member must be an existing system user. |
+| TeamMember | team_FK, name, role | `user` (FK→User), `role` (CharField) | Removed legacy `email` and `full_name` fields; User FK enforces identity integrity and the new `role` field allows for team-specific designations. |
 | Dependency | — | Entire model new | Upstream/downstream team relationships |
 | ContactChannel | — | Entire model new | Multi-channel communication metadata |
 | StandupInfo | — | Entire model new | OneToOne team sync schedule |

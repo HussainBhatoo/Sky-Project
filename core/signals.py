@@ -9,6 +9,7 @@
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from .models import AuditLog, Team, Meeting
+from .middleware import get_current_user
 
 @receiver(post_save, sender=Team)
 def log_team_save(sender, instance, created, **kwargs):
@@ -24,6 +25,7 @@ def log_team_save(sender, instance, created, **kwargs):
         action_type=action,
         entity_type='Team',
         entity_id=instance.pk,
+        actor_user=get_current_user(),
         change_summary=summary
     )
 
@@ -36,6 +38,7 @@ def log_team_delete(sender, instance, **kwargs):
         action_type='DELETE',
         entity_type='Team',
         entity_id=instance.pk,
+        actor_user=get_current_user(),
         change_summary=f"Team '{instance.team_name}' was deleted."
     )
 
@@ -49,6 +52,7 @@ def log_meeting_save(sender, instance, created, **kwargs):
         action_type=action,
         entity_type='Meeting',
         entity_id=instance.pk,
+        actor_user=get_current_user(),
         change_summary=f"Meeting '{instance.meeting_title}' was {action.lower()}d."
     )
 
@@ -61,5 +65,6 @@ def log_meeting_delete(sender, instance, **kwargs):
         action_type='DELETE',
         entity_type='Meeting',
         entity_id=instance.pk,
+        actor_user=get_current_user(),
         change_summary=f"Meeting '{instance.meeting_title}' was deleted."
     )

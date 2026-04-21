@@ -22,7 +22,8 @@ The following models and configurations have been preserved from the legacy cust
 - Group: Standard registration
 """
 
-from django.contrib import admin
+from django import forms
+from django.contrib import admin, messages
 from django.contrib.auth.models import Group
 from .models import (
     User, Department, Team, TeamMember, Dependency, 
@@ -90,14 +91,33 @@ class TeamAdminForm(forms.ModelForm):
             self.fields['upstream_dependencies'].queryset = Team.objects.exclude(pk=self.instance.pk)
             self.fields['downstream_dependencies'].queryset = Team.objects.exclude(pk=self.instance.pk)
             
-            # Map existing Dependency objects back into initial form data
-            self.fields['upstream_dependencies'].initial = Dependency.objects.filter(
+            # Map existing Dependency objects back into initial form data (Bi-directional)
+            # Upstream means:
+            # 1. to_team=self and type=upstream (from_team is the provider)
+            # 2. from_team=self and type=downstream (to_team is the provider)
+            up_from_to = Dependency.objects.filter(
                 to_team=self.instance, dependency_type='upstream'
             ).values_list('from_team_id', flat=True)
             
-            self.fields['downstream_dependencies'].initial = Dependency.objects.filter(
+            up_from_from = Dependency.objects.filter(
                 from_team=self.instance, dependency_type='downstream'
             ).values_list('to_team_id', flat=True)
+            
+            self.fields['upstream_dependencies'].initial = list(up_from_to) + list(up_from_from)
+            
+            # Downstream means:
+            # 1. from_team=self and type=upstream (to_team is the consumer)
+            # 2. to_team=self and type=downstream (from_team is the consumer)
+            down_from_from = Dependency.objects.filter(
+                from_team=self.instance, dependency_type='upstream'
+            ).values_list('to_team_id', flat=True)
+            
+            down_from_to = Dependency.objects.filter(
+                to_team=self.instance, dependency_type='downstream'
+            ).values_list('from_team_id', flat=True)
+            
+            self.fields['downstream_dependencies'].initial = list(down_from_from) + list(down_from_to)
+
 
     def save(self, commit=True):
         instance = super().save(commit=False)
@@ -109,45 +129,66 @@ class TeamAdminForm(forms.ModelForm):
             if not instance.pk:
                 return # Cannot save many-to-many objects before instance has a primary key
 
-            # Synchronize Upstream Dependencies
-            current_upstream = set(Dependency.objects.filter(
-                to_team=instance, dependency_type='upstream'
-            ).values_list('from_team_id', flat=True))
+            # Bi-directional Synchronization
+            from django.db.models import Q
             
-            submitted_upstream = set(
-                t.pk for t in self.cleaned_data.get('upstream_dependencies', [])
+            # 1. Handle Upstream (Providers)
+            # Find all current records where THIS team is the CONSUMER
+            # (Either target of 'upstream' or source of 'downstream')
+            current_upstream_recs = Dependency.objects.filter(
+                Q(to_team=instance, dependency_type='upstream') |
+                Q(from_team=instance, dependency_type='downstream')
             )
             
-            # Create new
-            for pk in submitted_upstream - current_upstream:
-                Dependency.objects.create(
-                    from_team_id=pk, to_team=instance, dependency_type='upstream'
-                )
-            # Delete old
-            Dependency.objects.filter(
-                to_team=instance, 
-                from_team_id__in=(current_upstream - submitted_upstream),
-                dependency_type='upstream'
-            ).delete()
+            # Extract the actual provider IDs
+            current_upstream_ids = set()
+            for dep in current_upstream_recs:
+                if dep.to_team == instance and dep.dependency_type == 'upstream':
+                    current_upstream_ids.add(dep.from_team_id)
+                else:
+                    current_upstream_ids.add(dep.to_team_id)
+            
+            submitted_upstream_ids = set(t.pk for t in self.cleaned_data.get('upstream_dependencies', []))
+            
+            # Create NEW upstream (defaulting to (Other, Self, 'upstream'))
+            for pk in submitted_upstream_ids - current_upstream_ids:
+                Dependency.objects.create(from_team_id=pk, to_team=instance, dependency_type='upstream')
+            
+            # Delete REMOVED upstream
+            for pk in current_upstream_ids - submitted_upstream_ids:
+                Dependency.objects.filter(
+                    Q(to_team=instance, from_team_id=pk, dependency_type='upstream') |
+                    Q(from_team=instance, to_team_id=pk, dependency_type='downstream')
+                ).delete()
+
+            # 2. Handle Downstream (Consumers)
+            # Find all current records where THIS team is the PROVIDER
+            # (Either source of 'upstream' or target of 'downstream')
+            current_downstream_recs = Dependency.objects.filter(
+                Q(from_team=instance, dependency_type='upstream') |
+                Q(to_team=instance, dependency_type='downstream')
+            )
+            
+            current_downstream_ids = set()
+            for dep in current_downstream_recs:
+                if dep.from_team == instance and dep.dependency_type == 'upstream':
+                    current_downstream_ids.add(dep.to_team_id)
+                else:
+                    current_downstream_ids.add(dep.from_team_id)
+                    
+            submitted_downstream_ids = set(t.pk for t in self.cleaned_data.get('downstream_dependencies', []))
+            
+            # Create NEW downstream (defaulting to (Self, Other, 'upstream'))
+            for pk in submitted_downstream_ids - current_downstream_ids:
+                Dependency.objects.create(from_team=instance, to_team_id=pk, dependency_type='upstream')
                 
-            # Synchronize Downstream Dependencies
-            current_downstream = set(Dependency.objects.filter(
-                from_team=instance, dependency_type='downstream'
-            ).values_list('to_team_id', flat=True))
-            
-            submitted_downstream = set(
-                t.pk for t in self.cleaned_data.get('downstream_dependencies', [])
-            )
-            
-            for pk in submitted_downstream - current_downstream:
-                Dependency.objects.create(
-                    from_team=instance, to_team_id=pk, dependency_type='downstream'
-                )
-            Dependency.objects.filter(
-                from_team=instance,
-                to_team_id__in=(current_downstream - submitted_downstream),
-                dependency_type='downstream'
-            ).delete()
+            # Delete REMOVED downstream
+            for pk in current_downstream_ids - submitted_downstream_ids:
+                Dependency.objects.filter(
+                    Q(from_team=instance, to_team_id=pk, dependency_type='upstream') |
+                    Q(to_team=instance, from_team_id=pk, dependency_type='downstream')
+                ).delete()
+
 
         if commit:
             instance.save()
@@ -156,29 +197,6 @@ class TeamAdminForm(forms.ModelForm):
             self.save_m2m = save_m2m
             
         return instance
-
-@admin.register(Team)
-class TeamAdmin(admin.ModelAdmin):
-    form = TeamAdminForm
-    list_display = ['team_name', 'department', 'team_leader_name', 'project_name']
-    list_filter = ['department']
-    search_fields = ['team_name', 'team_leader_name', 'project_name']
-    readonly_fields = ('created_at',)
-    
-    fieldsets = (
-        (None, {
-            'fields': (
-                'department', 'team_name', 'mission', 'lead_email', 'team_leader_name',
-                'work_stream', 'project_name', 'project_codebase', 'status'
-            )
-        }),
-        ('Dependencies', {
-            'fields': ('upstream_dependencies', 'downstream_dependencies'),
-        }),
-        ('Metadata', {
-            'fields': ('tech_tags', 'created_at')
-        })
-    )
 
 class TeamMemberAdminForm(forms.ModelForm):
     team = forms.ModelChoiceField(
@@ -194,29 +212,55 @@ class TeamMemberAdminForm(forms.ModelForm):
 
     class Meta:
         model = TeamMember
-        fields = ['team', 'user']
+        fields = ['team', 'user', 'role']
+
+class TeamMemberInline(admin.TabularInline):
+    model = TeamMember
+    form = TeamMemberAdminForm
+    extra = 1
 
 
 @admin.register(TeamMember)
 class TeamMemberAdmin(admin.ModelAdmin):
     form = TeamMemberAdminForm
-    list_display = ['user', 'team']
+    list_display = ['user', 'role', 'team']
     list_filter = ['team']
     search_fields = ['user__username', 'user__first_name', 'user__last_name', 'user__email', 'team__team_name']
 
+class DependencyAdminForm(forms.ModelForm):
+    from_team = forms.ModelChoiceField(
+        queryset=Team.objects.all().order_by('team_name'),
+        label='Source Team (Provides Support)',
+        help_text='The team that is the origin of the dependency (the "provider").'
+    )
+    to_team = forms.ModelChoiceField(
+        queryset=Team.objects.all().order_by('team_name'),
+        label='Target Team (Receives Support)',
+        help_text='The team that depends on the source team (the "consumer").'
+    )
+
+    class Meta:
+        model = Dependency
+        fields = ['from_team', 'to_team', 'dependency_type']
+
 @admin.register(Dependency)
 class DependencyAdmin(admin.ModelAdmin):
+    form = DependencyAdminForm
     list_display = ['from_team', 'to_team', 'dependency_type']
     list_filter = ['dependency_type']
     search_fields = ['from_team__team_name', 'to_team__team_name']
-    autocomplete_fields = ['from_team', 'to_team']
+
+    def save_model(self, request, obj, form, change):
+        if obj.from_team == obj.to_team:
+            messages.error(request, "A team cannot depend on itself.")
+            return
+        super().save_model(request, obj, form, change)
 
 @admin.register(ContactChannel)
 class ContactChannelAdmin(admin.ModelAdmin):
     list_display = ['team', 'channel_type', 'channel_value']
     list_filter = ['channel_type']
     search_fields = ['team__team_name', 'channel_type']
-    autocomplete_fields = ['team']
 
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
@@ -230,14 +274,12 @@ class MeetingAdmin(admin.ModelAdmin):
     list_filter = ['platform_type', 'team']
     search_fields = ['meeting_title', 'agenda_text', 'team__team_name']
     readonly_fields = ('created_at',)
-    autocomplete_fields = ['team']
 
 @admin.register(Vote)
 class VoteAdmin(admin.ModelAdmin):
     list_display = ['voter', 'team', 'vote_type', 'voted_at']
     list_filter = ['vote_type', 'team']
     search_fields = ['voter__username', 'team__team_name']
-    autocomplete_fields = ['voter', 'team']
 
 @admin.register(AuditLog)
 class AuditLogAdmin(admin.ModelAdmin):
@@ -255,25 +297,21 @@ class AuditLogAdmin(admin.ModelAdmin):
 class StandupInfoAdmin(admin.ModelAdmin):
     list_display = ['team', 'standup_time', 'standup_link']
     search_fields = ['team__team_name']
-    autocomplete_fields = ['team']
 
 @admin.register(RepositoryLink)
 class RepositoryLinkAdmin(admin.ModelAdmin):
     list_display = ['repo_name', 'team', 'repo_url']
     search_fields = ['repo_name', 'team__team_name']
-    autocomplete_fields = ['team']
 
 @admin.register(WikiLink)
 class WikiLinkAdmin(admin.ModelAdmin):
     list_display = ['team', 'wikki_description', 'wikki_link']
     search_fields = ['wikki_description', 'team__team_name']
-    autocomplete_fields = ['team']
 
 @admin.register(BoardLink)
 class BoardLinkAdmin(admin.ModelAdmin):
     list_display = ['board_type', 'team', 'board_url']
     search_fields = ['board_type', 'team__team_name']
-    autocomplete_fields = ['team']
 
 
 # Re-registering standard Group model to default admin site

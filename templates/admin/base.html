@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% block admin_title %}{{ title }} | Sky Admin{% endblock %}{% endblock %}</title>
+    {% block extrahead %}{% endblock %}
+    {% block blockbots %}{% endblock %}
     
     <!-- Django Admin Base CSS (Loaded First) -->
     <link rel="stylesheet" href="{% block stylesheet %}{% static 'admin/css/base.css' %}{% endblock %}">

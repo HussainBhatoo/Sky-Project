@@ -18,14 +18,15 @@ def log_team_save(sender, instance, created, **kwargs):
         action_type=action,
         entity_type='Team',
         entity_id=instance.pk,
+        actor_user=get_current_user(),
         change_summary=f"Team '{instance.team_name}' was {action.lower()}d."
     )
 ```
 **Student:** Maurya Patel
-**Risk:** HIGH
-**Why a marker would ask:** Signals beyond a single Profile post_save are not taught. Four receivers across two models is an architectural choice — marker will ask why you used signals instead of just logging inside the views.
+**Risk:** MEDIUM
+**Why a marker would ask:** Signals beyond a single Profile post_save are not taught. Also, how do you capture the user from a signal?
 
-**What to say:** "I used signals so the audit logging happens automatically every time a Team or Meeting is saved or deleted, without having to remember to add logging code into each view. I know lectures only showed signals for Profile creation, but the Django docs explain that post_save and post_delete work the same way for any model. The `created` flag in `log_team_save` tells me whether it's a new team or an update — that's how I set the action to CREATE or UPDATE."
+**What to say:** "I used signals so the audit logging happens automatically. I also implemented `get_current_user()` using thread-safe middleware because signals don't natively have access to `request`. This ensures the `actor_user` field is always populated with the person who made the change. It's a professional-grade pattern for audit trails."
 
 ---
 
@@ -88,16 +89,16 @@ first_day_offset = (first_weekday + 1) % 7
 **Code:**
 ```python
 teams = Team.objects.select_related('department').annotate(
-    member_count=Count('members'),
-    upstream_count=Count('dependencies_to', filter=Q(dependencies_to__dependency_type='upstream')),
-    downstream_count=Count('dependencies_from', filter=Q(dependencies_from__dependency_type='downstream')),
+    member_count=Count('members', distinct=True),
+    upstream_count=Count('dependencies_to', filter=Q(dependency_type='upstream'), distinct=True),
+    downstream_count=Count('dependencies_from', filter=Q(dependency_type='downstream'), distinct=True),
 ).order_by('team_name')
 ```
 **Student:** Riagul Hossain
 **Risk:** HIGH
-**Why a marker would ask:** Three annotations in one queryset with `filter=Q(...)` arguments is advanced ORM — not lecture content. Marker will ask what each annotation does.
+**Why a marker would ask:** Three annotations in one queryset with `filter=Q(...)` and `distinct=True` is advanced ORM. Marker will ask why `distinct=True` is needed.
 
-**What to say:** "`annotate` adds extra fields to each team object from the database in a single query. `Count('members')` counts how many TeamMember rows are linked to each team. The `upstream_count` and `downstream_count` use `filter=Q(...)` so they only count dependencies of the right type — upstream or downstream. Without `annotate` I'd have to do a separate query for each of those numbers per team, which would be slow."
+**What to say:** "I used `annotate` to fetch counts in one query, but because I have multiple relationships joined at once, it would multiply the rows in the internal SQL JOIN. `distinct=True` tells the database to count unique primary keys only, preventing inflated numbers. I also refactored the logic in Migration 0015 to be bi-directional."
 
 ---
 
@@ -152,7 +153,7 @@ with transaction.atomic():
 **Risk:** MEDIUM
 **Why a marker would ask:** `transaction.atomic()` is not taught. Marker will ask what happens if you remove it and why you clear the tables first.
 
-**What to say:** "`transaction.atomic()` wraps all those database operations in a single transaction. A transaction means: either all of them succeed, or if anything goes wrong in the middle, all the changes get rolled back and the database stays as it was. We clear the tables first so that running the command twice doesn't duplicate all 46 teams. Without `transaction.atomic()`, if the command failed halfway through, we'd be left with some departments but no teams, which would break the app."
+**What to say:** "`transaction.atomic()` wraps all those database operations in a single transaction. A transaction means: either all of them succeed, or if anything goes wrong in the middle, all the changes get rolled back and the database stays as it was. We clear the tables first so that running the command twice doesn't duplicate all 16 teams. Without `transaction.atomic()`, if the command failed halfway through, we'd be left with some departments but no teams, which would break the app."
 
 
 
@@ -225,7 +226,7 @@ Not taught explicitly — marker may ask why `.exists()` instead of `.count()`.
 
 **1. organisation/views.py — `annotate(team_count=Count('teams'), vote_count=Count('votes'))`**
 `annotate()` + `Count()` not taught.
-"`annotate` adds computed fields to each Department object without me having to loop through them in Python. `Count('teams')` counts the teams in each department, `Count('votes')` counts the endorsement votes. Both come back in one SQL query. If I used a Python loop with `dept.teams.count()` instead, it would be one extra query per department — slow with 6+ departments."
+"`annotate` adds computed fields to each Department object without me having to loop through them in Python. `Count('teams')` counts the teams in each department, `Count('votes')` counts the endorsement votes. Both come back in one SQL query. If I used a Python loop with `dept.teams.count()` instead, it would be one extra query per department — slow with 4+ departments."
 
 **2. organisation/views.py — `dependencies()` building `team_id_map`**
 Dict comprehension is [E].

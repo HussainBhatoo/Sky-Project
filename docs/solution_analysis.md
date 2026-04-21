@@ -20,7 +20,7 @@ This includes: `select_related()`, `prefetch_related()`, `Q` object filtering (t
 ### 3. What percentage is [A]?
 **Approximately 30%**
 
-This includes all items in the KEEP/SIMPLIFY/REMOVE tables below: signal receivers beyond Profile, populate_data BaseCommand, all `annotate()+Count()` calls, CSV export, Python calendar module, IDOR protection, `AbstractUser` replacement, `AuditLog` model, custom middleware in settings, and `has_add_permission`/`has_delete_permission` overrides in Admin.
+This includes all items in the KEEP/SIMPLIFY/REMOVE tables below: signal receivers beyond Profile, populate_data BaseCommand, all `annotate()+Count()` calls, CSV export, Python calendar module, IDOR protection, `AbstractUser` replacement, `AuditLog` model, custom middleware in settings, bi-directional dependency sync logic in `admin.py`, and `has_add_permission`/`has_delete_permission` overrides in Admin.
 
 ### 4. Which student has the most [A] items?
 **Maurya Patel — by a large margin.**
@@ -63,7 +63,9 @@ These items should stay in the code but the owning student must be able to expla
 | `_build_calendar_context()` calendar module | schedule/views.py | Maurya | "`calendar.monthrange(year, month)` returns two numbers: which weekday the 1st falls on (Monday=0) and how many days are in the month. I use the weekday number to add blank padding cells at the start of the grid so day 1 lands in the right column. The `(first_weekday + 1) % 7` converts from Monday=0 to Sunday=0 because our grid header starts on Sunday." |
 | CSV export — `HttpResponse` + Content-Disposition | reports/views.py | Hussain | "I return an `HttpResponse` with `content_type='text/csv'` instead of rendering a template. `Content-Disposition: attachment` tells the browser it's a file download. `csv.writer` formats each team as a comma-separated row. I found this exact pattern in the Django docs under 'Outputting CSV with Django'." |
 | IDOR guard in `delete_message()` | messages_app/views.py | Suliman | "IDOR is Insecure Direct Object Reference — without this check anyone could delete any message by guessing IDs in the URL. Adding `sender_user=request.user` to the lookup means Django only finds the message if it belongs to the current user. Any other ID returns a 404." |
-| `populate_data.py` — BaseCommand + `transaction.atomic()` | core/management/ | Maurya | "`BaseCommand` lets me make a command I can run with `python manage.py populate_data`. `transaction.atomic()` wraps all the database writes in one transaction — if anything fails halfway through, the database rolls back to where it was before. We needed this to load 46 teams from the Excel file." |
+| `populate_data.py` — BaseCommand + `transaction.atomic()` | core/management/ | Maurya | "`BaseCommand` lets me make a command I can run with `python manage.py populate_data`. `transaction.atomic()` wraps all the database writes in one transaction — if anything fails halfway through, the database rolls back to where it was before. We needed this to load 16 teams from the Excel file." |
+| Bi-directional Sync | core/admin.py | Riagul | "Dependencies are bi-directional. If Team A depends on Team B, then Team B has Team A as a downstream. I overrode `save_model` and `delete_model` in the DependencyAdmin to ensure that when a link is created or deleted, the inverse link is automatically managed in the database so the counts always match." |
+| `member_count` (distinct) | teams/views.py | Riagul | "Because a team can have multiple upstreams and downstreams, joining these tables in one query can cause 'duplicate' rows in the results. I used `distinct=True` inside the `Count()` aggregation — this is a production-standard fix for the 'Cartesian product' problem in SQL joins." |
 
 ---
 
@@ -73,10 +75,10 @@ These items are needed for the spec/rubric but the current implementation is mor
 
 | Item | File | Student | Simpler version |
 |---|---|---|---|
-| `annotate(team_count=Count('teams'))` | reports/views.py | Hussain | Replace with a Python loop: `dept_stats = [{'dept': d, 'team_count': d.teams.count()} for d in Department.objects.all()]`. One extra query per department, but only 6 departments — no noticeable speed difference. Much easier to explain. |
+| `annotate(team_count=Count('teams'))` | reports/views.py | Hussain | Replace with a Python loop: `dept_stats = [{'dept': d, 'team_count': d.teams.count()} for d in Department.objects.all()]`. One extra query per department, but only 4 departments — no noticeable speed difference. Much easier to explain. |
 | `annotate(member_count=Count('members'))` in export_csv | reports/views.py | Hussain | Same — in the loop, use `team.members.count()` instead of an annotation. Slightly slower but trivially explainable. |
 | `annotate(endorse_count=Count('votes'))` | reports/views.py | Hussain | Replace with: `endorsed_teams = sorted(Team.objects.all(), key=lambda t: t.votes.count(), reverse=True)[:5]`. No annotation needed — the count happens in Python per team. |
-| Triple `annotate()` with filter in `team_list()` | teams/views.py | Riagul | Replace with separate `.count()` calls after fetching the team: `member_count = team.members.count()`. Or simply don't show dependency counts in the list view — they are shown in the detail view already. |
+| Triple `annotate()` with filter in `team_list()` | teams/views.py | Riagul | **Resolved.** Now uses `Q` objects and `distinct=True` to accurately count upstreams and downstreams in a single pass. Student must explain `distinct=True` to prevent double-counting members. |
 | `annotate(team_count=..., vote_count=...)` in `org_chart()` | organisation/views.py | Lucas | Replace with: for each department, use `dept.teams.count()` and `dept.votes.count()` in the template via Django's template `count` filter, or compute in the view loop. |
 | `annotate(member_count=Count('members'))` in `department_detail()` | organisation/views.py | Lucas | Replace with: `teams = Team.objects.filter(department=department)` and then for each team in the template, use `{{ team.members.count }}`. Django will do an extra query per team but with small numbers it is fine. |
 | `SkySignupView` | accounts/views.py | Maurya (lead) | Has been converted to a plain function-based view: `signup_view` (`accounts/views.py:29`). This is exactly the pattern taught in lectures and removes a major risk. |

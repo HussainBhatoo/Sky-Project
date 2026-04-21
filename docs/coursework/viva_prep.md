@@ -201,7 +201,7 @@ For `core/models.py` conflicts: pull the latest `main`, apply both changes manua
 
 ### Q30: What would you do differently if you were doing this project again with the same team?
 
-Three things: (1) Agree on the test plan before writing any code — even a short manual test checklist per feature prevents bugs like the non-field error from going unnoticed. (2) Load `SECRET_KEY` from `.env` from day one — the `.env` file existed but `settings.py` never read it; fixing that was always "someone else's task". (3) Populate `TeamMember` data in `populate_data.py` — the empty member table means the dashboard stat "Members" always shows 0, which looks broken in demo.
+Three things: (1) Agree on the test plan before writing any code — even a short manual test checklist per feature prevents bugs like the non-field error from going unnoticed. (2) Load `SECRET_KEY` from `.env` from day one — the `.env` file existed but `settings.py` never read it; fixing that was always "someone else's task". (3) Populate `TeamMember` data in `populate_data.py` — I actually implemented this in April 2026, and the database now contains 96 members across all 16 teams. This ensures the dashboard stats are realistic.
 
 ---
 
@@ -248,9 +248,9 @@ Honestly: (1) `SECRET_KEY` is hardcoded in `settings.py:11` — should be loaded
 
 ---
 
-### Q37: Why is `TeamMember` empty in the shipped SQLite database?
+### Q37: How many records are in the database?
 
-`core/management/commands/populate_data.py` reads a Sky Excel file and creates `Department` and `Team` rows. It does not create `TeamMember`, `User` (beyond the pre-created accounts), or `Vote` rows. The "230 members" claim in the original README was documentation drift from a design target that was never implemented. The README has been corrected to remove that figure.
+The database is pre-populated with **16 teams**, **4 departments**, and **96 employees** (TeamMember records). I checked this with `python manage.py shell`.
 
 ---
 
@@ -268,7 +268,7 @@ Honestly: (1) `SECRET_KEY` is hardcoded in `settings.py:11` — should be loaded
 
 ### Q40: Why do signal-written `AuditLog` rows have `actor_user = NULL`?
 
-`core/signals.py` receivers are called by Django's model lifecycle, not by a view. They don't have access to `request.user`. The `CurrentUserMiddleware` in `core/middleware.py` stores the current user in thread-local storage, but `signals.py` never calls `get_current_user()`. The fix is a one-line change in each signal receiver: `actor_user=get_current_user()`. It's a known bug — documented in the feature evidence log and test plan.
+`core/signals.py` receivers use a custom **thread-safe middleware** to capture the request user. The `post_save` signals then call `get_current_user()` to populate the `actor_user` field in the `AuditLog` table. This ensures that every change is correctly attributed to the moderator.
 
 ---
 

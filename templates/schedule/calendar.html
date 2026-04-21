@@ -10,6 +10,17 @@
   Student 4: Maurya Patel
 -->
 
+{% if messages %}
+<div class="messages-container animate-slide-up" style="margin-bottom: 1.5rem;">
+    {% for message in messages %}
+    <div class="card shadow-sm" style="border-left: 4px solid {% if message.tags == 'success' %}var(--sky-positive){% elif message.tags == 'error' %}var(--sky-negative){% else %}var(--sky-primary){% endif %}; padding: 1rem 1.25rem; display: flex; align-items: center; gap: 0.75rem; background: var(--card);">
+        <i class='bx {% if message.tags == "success" %}bx-check-circle{% elif message.tags == "error" %}bx-error-circle{% else %}bx-info-circle{% endif %}' style="font-size: 1.25rem; color: {% if message.tags == 'success' %}var(--sky-positive){% elif message.tags == 'error' %}var(--sky-negative){% else %}var(--sky-primary){% endif %};"></i>
+        <span style="font-weight: 600; color: var(--sky-header-blue);">{{ message }}</span>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
 <div class="flex-between mb-2 animate-slide-up">
     <div>
         <h1 class="spectrum-text" style="font-size: 2rem; letter-spacing: -0.02em;">Schedule</h1>
@@ -38,8 +49,18 @@
     <h3 style="color: var(--sky-header-blue); margin-bottom: 1.5rem;">
         <i class='bx bx-calendar-plus' style="margin-right: 0.5rem;"></i> New Meeting
     </h3>
-    <form method="post" action="{% url 'schedule:create' %}{% if prefill_team_id %}?team_id={{ prefill_team_id }}{% endif %}">
+    <form method="post" action="{% url 'schedule:create' %}{% if selected_team or month_offset or active_view %}?{% endif %}{% if selected_team %}team_id={{ selected_team }}{% endif %}{% if month_offset %}{% if selected_team %}&{% endif %}month_offset={{ month_offset }}{% endif %}{% if active_view == 'weekly' %}{% if selected_team or month_offset %}&{% endif %}active_view=weekly&week_offset={{ week_offset }}{% endif %}">
         {% csrf_token %}
+
+        {% if form.non_field_errors %}
+        <div class="card mb-2" style="background: rgba(221, 23, 23, 0.05); border-color: var(--sky-negative); padding: 0.75rem;">
+            {% for error in form.non_field_errors %}
+            <p style="color: var(--sky-negative); font-size: 0.85rem; margin: 0; font-weight: 600;">
+                <i class='bx bx-error-circle'></i> {{ error }}
+            </p>
+            {% endfor %}
+        </div>
+        {% endif %}
 
         {% for field in form %}
         <div class="form-group">
@@ -69,7 +90,7 @@
     <div>
         <h3 style="color: var(--sky-header-blue); margin-bottom: 0.5rem;">
             <i class='bx bx-list-ul' style="margin-right: 0.5rem;"></i> 
-            {% if active_view == 'weekly' %}Weekly Schedule{% else %}Upcoming Meetings{% endif %}
+            {% if active_view == 'weekly' %}Weekly Schedule{% else %}Meetings in {{ month_name }} {{ year }}{% endif %}
         </h3>
         {% if active_view == 'weekly' %}
         <div class="flex-between mb-1">
@@ -172,6 +193,20 @@
                 </div>
                 {% endfor %}
             </div>
+            
+            {% if not active_view or active_view == 'monthly' %}
+            <div class="flex-between mt-1" style="padding-top: 0.5rem; border-top: 1px solid var(--border);">
+                <a href="?month_offset={{ month_offset|add:'-1' }}{% if selected_team %}&team_id={{ selected_team }}{% endif %}" class="btn btn-ghost" style="padding: 0.25rem; font-size: 0.75rem;">
+                    <i class='bx bx-chevron-left'></i>
+                </a>
+                <span style="font-size: 0.7rem; color: var(--muted-foreground); font-weight: 600; text-transform: uppercase;">
+                    Navigate
+                </span>
+                <a href="?month_offset={{ month_offset|add:'1' }}{% if selected_team %}&team_id={{ selected_team }}{% endif %}" class="btn btn-ghost" style="padding: 0.25rem; font-size: 0.75rem;">
+                    <i class='bx bx-chevron-right'></i>
+                </a>
+            </div>
+            {% endif %}
         </div>
 
         <!-- Quick Filter by Team -->

@@ -70,11 +70,11 @@
             <h4 style="color: var(--sky-header-blue); margin-bottom: 1rem;">Upstream Dependencies ({{ upstream_deps|length }})</h4>
             {% if upstream_deps %}
             <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                {% for dep in upstream_deps %}
-                <a href="{% url 'teams:team_detail' dep.from_team.team_id %}" style="text-decoration: none; color: inherit; display: flex; align-items: center; justify-content: space-between; padding: 0.75rem; border: 1px solid var(--border); border-radius: 10px; transition: background 0.2s;" onmouseover="this.style.background='var(--sky-tint-5)'" onmouseout="this.style.background='transparent'">
+                {% for team_obj in upstream_deps %}
+                <a href="{% url 'teams:team_detail' team_obj.team_id %}" style="text-decoration: none; color: inherit; display: flex; align-items: center; justify-content: space-between; padding: 0.75rem; border: 1px solid var(--border); border-radius: 10px; transition: background 0.2s;" onmouseover="this.style.background='var(--sky-tint-5)'" onmouseout="this.style.background='transparent'">
                     <div>
-                        <div style="font-size: 0.9rem; font-weight: 600;">{{ dep.from_team.team_name }}</div>
-                        <div style="font-size: 0.75rem; color: var(--muted-foreground);">{{ dep.from_team.department.department_name }} · {{ dep.from_team.team_leader_name|default:"—" }}</div>
+                        <div style="font-size: 0.9rem; font-weight: 600;">{{ team_obj.team_name }}</div>
+                        <div style="font-size: 0.75rem; color: var(--muted-foreground);">{{ team_obj.department.department_name }} · {{ team_obj.team_leader_name|default:"—" }}</div>
                     </div>
                     <span class="chip chip-upstream">Upstream</span>
                 </a>
@@ -92,11 +92,11 @@
             <h4 style="color: var(--sky-header-blue); margin-bottom: 1rem;">Downstream Dependencies ({{ downstream_deps|length }})</h4>
             {% if downstream_deps %}
             <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                {% for dep in downstream_deps %}
-                <a href="{% url 'teams:team_detail' dep.to_team.team_id %}" style="text-decoration: none; color: inherit; display: flex; align-items: center; justify-content: space-between; padding: 0.75rem; border: 1px solid var(--border); border-radius: 10px; transition: background 0.2s;" onmouseover="this.style.background='var(--sky-tint-5)'" onmouseout="this.style.background='transparent'">
+                {% for team_obj in downstream_deps %}
+                <a href="{% url 'teams:team_detail' team_obj.team_id %}" style="text-decoration: none; color: inherit; display: flex; align-items: center; justify-content: space-between; padding: 0.75rem; border: 1px solid var(--border); border-radius: 10px; transition: background 0.2s;" onmouseover="this.style.background='var(--sky-tint-5)'" onmouseout="this.style.background='transparent'">
                     <div>
-                        <div style="font-size: 0.9rem; font-weight: 600;">{{ dep.to_team.team_name }}</div>
-                        <div style="font-size: 0.75rem; color: var(--muted-foreground);">{{ dep.to_team.department.department_name }} · {{ dep.to_team.team_leader_name|default:"—" }}</div>
+                        <div style="font-size: 0.9rem; font-weight: 600;">{{ team_obj.team_name }}</div>
+                        <div style="font-size: 0.75rem; color: var(--muted-foreground);">{{ team_obj.department.department_name }} · {{ team_obj.team_leader_name|default:"—" }}</div>
                     </div>
                     <span class="chip chip-downstream">Downstream</span>
                 </a>
@@ -138,8 +138,8 @@
         if (!focusTeam) return;
 
         // Build upstream/downstream lists from template data
-        var upstreamNames = [{% for dep in upstream_deps %}'{{ dep.from_team.team_name|escapejs }}',{% endfor %}];
-        var downstreamNames = [{% for dep in downstream_deps %}'{{ dep.to_team.team_name|escapejs }}',{% endfor %}];
+        var upstreamNames = [{% for team_obj in upstream_deps %}'{{ team_obj.team_name|escapejs }}',{% endfor %}];
+        var downstreamNames = [{% for team_obj in downstream_deps %}'{{ team_obj.team_name|escapejs }}',{% endfor %}];
 
         if (upstreamNames.length === 0 && downstreamNames.length === 0) {
             graphContainer.innerHTML = '<div class="empty-state"><i class="bx bx-git-repo-forked"></i><p class="empty-title">No dependencies to display</p><p class="empty-desc">This team has no upstream or downstream dependencies.</p></div>';

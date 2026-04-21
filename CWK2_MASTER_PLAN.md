@@ -322,8 +322,9 @@ updated_at (DateTimeField, auto_now)
 member_id (PK, auto)
 team_id (FK → Team, CASCADE)
 user_id (FK → User, CASCADE)
+role (CharField max_length=100, default='Engineer')
 ```
-→ **Refactored in migration 0011 (April 2026).** Legacy fields `full_name (CharField)`, `role_title (CharField)`, and `email (EmailField)` were removed. The model now links to the system `User` model directly — member identity (name, username, email) is read from the linked User object at runtime. This enforces data integrity: only existing Sky system users can be team members. The Django admin form was updated to provide a clean user-selection dropdown.→ Junction: resolves Team–User association for org purposes
+→ **Refactored in migration 0011-0015 (April 2026).** Legacy fields `full_name` and `email` were removed in favour of a direct `User` FK. A dedicated `role` field was added in migration 0014 to allow for team-specific designations (e.g., 'Lead iOS Engineer', 'Scrum Master'). The model enforces data integrity: only existing Sky system users can be team members. The Django admin form uses inlines for streamlined role assignment.→ Junction: resolves Team–User association for org purposes
 
 ### Entity 5: Dependency
 ```
@@ -332,7 +333,7 @@ from_team_id (FK → Team)
 to_team_id (FK → Team)
 dependency_type (CharField: upstream/downstream)
 ```
-→ Self-referencing on Team. Represents upstream/downstream relationships between teams.
+→ Self-referencing on Team. Represents dependencies between teams. **Refactored logic:** The system now treats these bi-directionally in the Registry UI (`teams/views.py`) and Admin Panel (`core/admin.py`), ensuring that if Team A is an upstream of Team B, Team B automatically appears as a downstream of Team A in all relevant counts and views.
 
 ### Entity 6: ContactChannel
 ```
@@ -1102,7 +1103,7 @@ The original Sky Excel file (`Agile Project Module UofW - Team Registry.xlsx`) c
 
 ### Data Entry Task (Lucas)
 Create a management command `populate_data.py` that:
-1. Creates all 6 departments
+1. Creates all 4 departments
 2. Creates 3+ teams per department from the Excel data
 3. Creates 5+ team members per team (can be fictional engineers)
 4. Creates dependencies between teams based on Excel data

@@ -58,7 +58,7 @@ to create a new account.
 6. Login with any account above
 
 The database (db.sqlite3) is included.
-All 46 teams are pre-loaded.
+All 16 teams are pre-loaded.
 No migrations or populate_data needed.
 
 ---

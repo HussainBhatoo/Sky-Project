@@ -34,6 +34,7 @@ def org_chart(request):
             'departments': departments,
             'query': query,
             'total_departments': departments.count(),
+            'total_teams': Team.objects.all().count(),
         }
         return render(request, 'organisation/org_chart.html', context)
     except Exception as e:
@@ -66,13 +67,35 @@ def dependencies(request):
         all_deps = []
 
         if focus_team:
-            upstream_deps = Dependency.objects.filter(
-                to_team=focus_team, dependency_type='upstream'
+            # Bi-directional Upstream: 
+            # 1. Records where target is focus_team and type is 'upstream'
+            # 2. Records where source is focus_team and type is 'downstream'
+            upstream_deps_qs = Dependency.objects.filter(
+                Q(to_team=focus_team, dependency_type='upstream') |
+                Q(from_team=focus_team, dependency_type='downstream')
             ).select_related('from_team', 'to_team')
 
-            downstream_deps = Dependency.objects.filter(
-                from_team=focus_team, dependency_type='downstream'
+            upstream_deps = []
+            for dep in upstream_deps_qs:
+                if dep.to_team == focus_team and dep.dependency_type == 'upstream':
+                    upstream_deps.append(dep.from_team)
+                elif dep.from_team == focus_team and dep.dependency_type == 'downstream':
+                    upstream_deps.append(dep.to_team)
+
+            # Bi-directional Downstream:
+            # 1. Records where source is focus_team and type is 'upstream'
+            # 2. Records where target is focus_team and type is 'downstream'
+            downstream_deps_qs = Dependency.objects.filter(
+                Q(from_team=focus_team, dependency_type='upstream') |
+                Q(to_team=focus_team, dependency_type='downstream')
             ).select_related('from_team', 'to_team')
+
+            downstream_deps = []
+            for dep in downstream_deps_qs:
+                if dep.from_team == focus_team and dep.dependency_type == 'upstream':
+                    downstream_deps.append(dep.to_team)
+                elif dep.to_team == focus_team and dep.dependency_type == 'downstream':
+                    downstream_deps.append(dep.from_team)
 
             all_deps = Dependency.objects.select_related('from_team', 'to_team').all()
 

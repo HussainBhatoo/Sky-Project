@@ -153,6 +153,7 @@
         <thead>
             <tr>
                 <th>Name</th>
+                <th>Role</th>
                 <th>Username</th>
                 <th>Email</th>
             </tr>
@@ -161,6 +162,13 @@
             {% for member in members %}
             <tr>
                 <td style="font-weight: 600;">{{ member.user.get_full_name|default:member.user.username }}</td>
+                <td>
+                    {% if member.role %}
+                    <span class="chip chip-tech" style="font-size: 0.75rem; background: rgba(0, 102, 255, 0.1); color: var(--sky-primary); border: none;">{{ member.role }}</span>
+                    {% else %}
+                    <span style="color: var(--muted-foreground); font-size: 0.85rem;">Member</span>
+                    {% endif %}
+                </td>
                 <td style="color: var(--muted-foreground);">{{ member.user.username }}</td>
                 <td><a href="mailto:{{ member.user.email }}">{{ member.user.email }}</a></td>
             </tr>
@@ -181,9 +189,9 @@
         <h4 style="color: var(--sky-header-blue); margin-bottom: 1rem;">Upstream Dependencies</h4>
         {% if upstream_deps %}
         <div class="flex flex-wrap gap-1">
-            {% for dep in upstream_deps %}
-            <a href="{% url 'teams:team_detail' dep.from_team.team_id %}" class="chip chip-upstream chip-clickable" style="text-decoration: none;">
-                {{ dep.from_team.team_name }}
+            {% for team_obj in upstream_deps %}
+            <a href="{% url 'teams:team_detail' team_obj.team_id %}" class="chip chip-upstream chip-clickable" style="text-decoration: none;">
+                {{ team_obj.team_name }}
             </a>
             {% endfor %}
         </div>
@@ -197,9 +205,9 @@
         <h4 style="color: var(--sky-header-blue); margin-bottom: 1rem;">Downstream Dependencies</h4>
         {% if downstream_deps %}
         <div class="flex flex-wrap gap-1">
-            {% for dep in downstream_deps %}
-            <a href="{% url 'teams:team_detail' dep.to_team.team_id %}" class="chip chip-downstream chip-clickable" style="text-decoration: none;">
-                {{ dep.to_team.team_name }}
+            {% for team_obj in downstream_deps %}
+            <a href="{% url 'teams:team_detail' team_obj.team_id %}" class="chip chip-downstream chip-clickable" style="text-decoration: none;">
+                {{ team_obj.team_name }}
             </a>
             {% endfor %}
         </div>

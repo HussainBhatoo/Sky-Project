@@ -56,9 +56,10 @@ class TeamMember(models.Model):
     member_id = models.AutoField(primary_key=True)
     team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='members')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='team_memberships', default=1)
+    role = models.CharField(max_length=100, blank=True, default='', help_text="e.g. Lead Engineer, Product Owner")
     
     def __str__(self):
-        return f"{self.user.get_full_name() or self.user.username} (Team Member)"
+        return f"{self.user.get_full_name() or self.user.username} ({self.role or 'Team Member'})"
 
 class Dependency(models.Model):
     # Entity 5: Dependency

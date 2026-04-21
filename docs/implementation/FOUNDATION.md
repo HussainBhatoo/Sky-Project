@@ -19,6 +19,6 @@ This document captures shared infrastructure that all modules depend on.
 - `core/views.py`
 
 ## Baseline data
-- 6 departments
-- 46 teams
+- 4 departments
+- 16 teams
 - shared test credentials documented in root docs

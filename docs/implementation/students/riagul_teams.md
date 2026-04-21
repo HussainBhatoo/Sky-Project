@@ -6,12 +6,14 @@ Build and manage the central Teams Registry. This module covers team listing, de
 ## Deliverables
 - Teams gallery with search and department filtering.
 - Team profile page with mission, tech badges, status, and linked actions.
-- Business logic for ORM filtering and tag parsing.
+- Business logic for bi-directional dependency tracking (Upstream/Downstream sync).
+- Team member role implementation and admin inline configuration.
 - Integration with Schedule (`?team_id=...`) and Messages.
 
 ## Database contribution
 - Primary custodian of **Team** enhancements (`mission`, `tech_tags`, `status`).
-- Co-owner of **Vote** usage (endorsement flow, Rubric 1.14).
+- Lead implementer of **Dependency** model and bi-directional sync logic.
+- Owner of **TeamMember** role field addition and identity integration.
 - Reference: [Entity Evolution](../ENTITY_LOG.md)
 
 ## Build map

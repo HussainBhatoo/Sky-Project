@@ -5,16 +5,17 @@
 | Date | From | Feedback Received | Action Taken |
 |------|------|-------------------|--------------|
 | 2026-03-12 | Maurya | Add a way to disband teams without deleting them. | Implemented 'Disband Team' status toggle. |
-| 2026-03-18 | Lucas | Team member data needs to be richer. | Reviewed TeamMember fields; initially confirmed `role_title` and `email` as sufficient. Subsequently (April 2026) refactored model to use a direct `ForeignKey` to the `User` model (migration 0011), removing standalone fields entirely and sourcing all identity data from the linked User object. |
+| 2026-03-18 | Lucas | Team member data needs to be richer. | Reviewed TeamMember fields; initially confirmed `role_title` and `email` as sufficient. Subsequently (April 2026) refactored model to use a direct `ForeignKey` to the `User` model (migrations 0011-0014), removed standalone fields, and re-introduced a team-specific `role` field to maintain positioning while sourcing identity from the User object. |
 | 2026-03-25 | Hussain | Need to validate team names. | Added server-side regex for team naming. |
 | 2026-04-02 | Suliman | Team list is too long to scroll. | Implemented Pagination and Search filters. |
 | 2026-04-08 | Maurya | Need audit logs for team creation. | Connected model signals to AuditLog. |
 | 2026-04-12 | Lucas | Grid/List view is confusing. | Unified the toggle logic with the dashboard. |
 | 2026-04-16 | Team | Ensure team IDs are not guessable. | Verified URL parameter usage; IDs are integer PKs and protected by @login_required on all views. |
+| 2026-04-18 | Lucas | Upstream counts don't match Downstream. | Refactored dependency logic (migration 0015) to use bi-directional `Q` filters and distinct counts. |
 
 ## 2. Mentor Reflection
 ### 2.1 What was the most significant technical challenge?
-Managing the one-to-many relationship between Departments and Teams (a Team has one Department via ForeignKey) while ensuring that member counts remained accurate in real-time via ORM annotations.
+Implementing bi-directional dependency synchronization (migration 0015) using advanced Django `Q` objects and `.distinct()` annotations. This ensured that upstream and downstream relationships were always perfectly mirrored and counted correctly on both sides.
 
 ### 2.2 How did you manage team communication?
 Attended all weekly standups and contributed technical documentation for the Team module API.
