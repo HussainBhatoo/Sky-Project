@@ -58,7 +58,7 @@
     <div class="card">
         <div style="text-align: center; margin-bottom: 1.5rem;">
             <div class="avatar-circle" style="width: 80px; height: 80px; font-size: 2rem; margin: 0 auto 1rem auto;">
-                {% if user.first_name %}{{ user.first_name|slice:":1"|upper }}{% else %}{{ user.username|slice:":1"|upper }}{% endif %}
+                {% if user.first_name %}{{ user.first_name|first|upper }}{% else %}{{ user.username|first|upper }}{% endif %}{% if user.last_name %}{{ user.last_name|first|upper }}{% endif %}
             </div>
             <h3 style="color: var(--sky-header-blue); margin-bottom: 0.25rem;">{{ user.get_full_name|default:user.username }}</h3>
             <span class="chip chip-department">@{{ user.username }}</span>

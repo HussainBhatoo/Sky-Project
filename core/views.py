@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.urls import reverse
 from django.db.models import Q
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import Team, Department, TeamMember, AuditLog, Meeting, Message
 from datetime import datetime
 
@@ -43,6 +43,7 @@ def dashboard(request):
     return render(request, 'dashboard.html', context)
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def audit_log(request):
     """
     Displays a comprehensive history of all system-wide actions.

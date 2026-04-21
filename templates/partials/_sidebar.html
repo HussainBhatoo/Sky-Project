@@ -51,11 +51,13 @@
             </a>
         </li>
 
+        {% if user.is_superuser %}
         <li class="nav-item">
             <a href="{% url 'core:audit_log' %}" class="nav-link {% if 'audit' in request.path %}active{% endif %}">
                 <i class='bx bx-clipboard' ></i> <span class="nav-label">Audit Log</span>
             </a>
         </li>
+        {% endif %}
 
         {% if user.is_superuser %}
         <li class="nav-divider"></li>

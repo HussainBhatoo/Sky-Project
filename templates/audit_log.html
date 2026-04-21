@@ -15,7 +15,6 @@
     {% endif %}
 </div>
 
-<div class="spectrum-bar"></div>
 
 <div class="card glass-card" style="padding: 2rem;">
     <!-- Enhanced Search & Filter Bar -->
@@ -76,7 +75,7 @@
                         {% if log.actor_user %}
                         <div style="display: flex; align-items: center; gap: 8px;">
                             <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--sky-spectrum-diagonal); font-size: 0.8rem; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700;">
-                                {{ log.actor_user.username|first|upper }}
+                                {% if log.actor_user.first_name %}{{ log.actor_user.first_name|first|upper }}{% else %}{{ log.actor_user.username|first|upper }}{% endif %}{% if log.actor_user.last_name %}{{ log.actor_user.last_name|first|upper }}{% endif %}
                             </div>
                             <span style="font-weight: 600;">{{ log.actor_user.username }}</span>
                         </div>
