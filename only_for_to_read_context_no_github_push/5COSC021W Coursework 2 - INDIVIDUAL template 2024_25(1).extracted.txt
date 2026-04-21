@@ -1,0 +1,64 @@
+5COSC021W Coursework 2 - INDIVIDUAL template 2025_26
+Use this template to structure the individual part of coursework2. Ensure that the correct information is in each white box. The advice for each box is basic guidance to help you focus your answer.
+YOU MUST USE THIS TEMPLATE FOR THE INDIVIDUAL PART OF COURSEWORK 2.
+The current size of the boxes is not indicating how much you should write; change their size as you need.
+When you save the file, put your name and registration number in the file name, eg ‘5COSC003W_cwk2_Individual_Kelly_Garret_12345678.doc’.
+Sections in the template that don’t have any text will receive no marks. The code files are used to ensure that what is written in the template is supported with what was implemented. However, code files only will not receive any marks and will not be used as submission of part of the template. Similarly, templates submission without the submission of code files will receive no marks.
+In order for the tutors to be able to assess your work you must:
+Submit a zipped  project folder of the COMPLETE working project (i.e. the parts of each group member incorporated in one program, not just your part). If you have not been able to incorporate your part with that of the group, then submit only your part – it should be able to run though by itself. The folder should include all the necessary files (including databases) to run as a project on Django and SQLite.
+-          Make sure that the submitted project will run using the software provided by the   University. Contact your tutor if you have any problems with this.
+-          Make sure that the project folder should contain all files necessary to run the program e.g. databases etc.
+-          Make sure that file I/O code does not use absolute file paths.
+-          Make sure that the submission contains all usernames and passwords necessary to test the program.
+Include a link to a video describing/running  the complete application  – each team can produce one video, but all submissions must include the link that video. If your work is not integrated with that of the group, you can upload your own video of your work.
+Surname
+Forename
+Registration No:
+By submitting this coursework you agree to the following:
+I confirm that I understand what plagiarism is and have read and understood the section on Assessment Offences in the Essential Information for Students.  The work that I have submitted is entirely my own.  Any work from other authors is duly referenced and acknowledged.
+I confirm
+List here the team name and the other members of your group
+Code – Code functionality – individual element as agreed and integration to application - maintainability applied (25 marks)
+Guidance:
+Include here the names of the files that make up the individual element of your application. Where necessary you may have to include files that were co-authored with other members of your team (eg for the database etc)
+Explain what each file does and the functionality of the code. Detail whether all the code in the file is your own product or a product with other team members. Include the names of the other authors where applicable. Authorship information should also be commented at the beginning of each of your files.
+Comment on the maintainability of your code. Reflect on your coding standards and conventions used, discuss code reusability and use of comments. All text in the template must be specific to your application and supported with examples from your implementation.
+Explain how your code was integrated with the code of other members of the group so that to produce one application
+Marking of this section will also include assessment on the submitted files, the overall functionality of your work, as well as defence of your work during the demonstration in order to ensure that what is written in this template is supported by the implementation that was submitted.
+Use more than one page!
+Your code – Code Quality – version control (5 marks)
+Guidance:
+Comment on your version control and how you ensured that your work was compatible with that of your group members. Support your text with examples from your version control history.
+Marking of this section will also include assessment on the submitted files, the overall functionality of your work, as well as defence of your work during the demonstration.
+Your code –  Code Quality – output of test plans (10 marks)
+Guidance:
+List your test plan and the output  for your individual part and that of  the overall application once you integrated with the elements of your group members.
+Marking of this section will also include assessment on the submitted files, the overall functionality of your work, as well as deference of your work during the demonstration.
+Professional conduct – Communication (10 marks)
+Seeking and using feedback
+Guidance: List here, in a table, constructive feedback you have received from your team-mates, industry mentors and your tutor  on your work and how you used it.
+Feedback: Be descriptive and specific – but do not use quotations
+Date Received: when was the feedback given
+Source: Who gave you the feedback
+How you used it: How did it inform your actions/changes
+Feedback
+Date received
+Given By
+How you used it
+Giving constructive feedback
+Guidance: List here, in a table, the CONSTRUCTIVE feedback you have given to your team-mates and what was the problem you were trying to solve.
+Feedback: Be descriptive and specific – but do not use quotations. Evidence of this should also be in the group’s Trello or other tool used by the group
+Date Given: when was the feedback given
+Source: To whom did you give the feedback
+The problem you were trying to solve: What did you see as the issue?
+Feedback
+Date given
+Given to
+The problem you were trying to solve
+Professional Conduct – Reflection on the mentor and industry input - (10 marks)
+Guidance: Reflect here on the guidance that you have received from both the industry mentors and the Engineers of the company. Reflection on both the understanding/information received on the industry/profession and the specifically on the application implemented. Be specific, but do not use quotations or names of individuals.  In particular
+What challenges related to the cwk did you discuss with the mentor, reflect on guidance provided and describe on how guidance was applied to the challenge.
+Describe two other topics that were discussed with the mentor, reflect on response received, and how may have influenced cwk work or personal/professional matters related to future employment.
+What is the most important guidance that you received from the visiting sky engineer related to the cwk?
+How did  you apply the advice you received to the cwk?
+How will you apply the advice in future studies or employment?

@@ -207,8 +207,8 @@
 .avatar-circle {
     width: 36px;
     height: 36px;
-    background: white;
-    color: var(--sky-primary);
+    background: var(--sky-primary);
+    color: #fff;
     border-radius: 50%;
     display: flex;
     align-items: center;

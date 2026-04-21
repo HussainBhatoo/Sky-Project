@@ -74,10 +74,10 @@
                     <td style="padding: 1.25rem 1.5rem;">
                         {% if log.actor_user %}
                         <div style="display: flex; align-items: center; gap: 8px;">
-                            <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--sky-spectrum-diagonal); font-size: 0.8rem; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700;">
+                            <div class="avatar-circle" style="width: 32px; height: 32px; font-size: 0.8rem;">
                                 {% if log.actor_user.first_name %}{{ log.actor_user.first_name|first|upper }}{% else %}{{ log.actor_user.username|first|upper }}{% endif %}{% if log.actor_user.last_name %}{{ log.actor_user.last_name|first|upper }}{% endif %}
                             </div>
-                            <span style="font-weight: 600;">{{ log.actor_user.username }}</span>
+                            <span style="font-weight: 600; color: var(--sky-header-blue);">{{ log.actor_user.get_full_name|default:log.actor_user.username }}</span>
                         </div>
                         {% else %}
                         <span style="font-style: italic; color: var(--text-muted); opacity: 0.6;">System (Automatic)</span>
